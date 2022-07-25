@@ -11,6 +11,10 @@ header {
     background-color: #5FBEBB;
 }
 
+.bg-main {
+    background-color: #5FBEBB;
+}
+
 .form-join {
     max-width: 400px;
     padding: 15px;
