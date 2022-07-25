@@ -1,0 +1,258 @@
+<!DOCTYPE html>
+<html lang="ko" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.2.0/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-gH2yIJqKdNHPEq0n4Mqa/HGKIhSkIHeL5AyhkYV8i59U5AR6csBvApHHNl/vI1Bx" crossorigin="anonymous">
+    <link rel="stylesheet" href="../../static/css/style.css">
+    <link href="../../static/icon/favicon.ico" rel="shortcut icon" type="image/x-icon">
+    <title>배달의 민족</title>
+</head>
+<body>
+<!-- header -->
+<header class="p-3">
+    <div class="container">
+        <div class="d-flex flex-wrap align-items-center justify-content-center justify-content-lg-start">
+            <a href="#" class="d-flex align-items-center mb-2 mb-lg-0 ms-3 text-white text-decoration-none">
+                <img src="../../static/img/logo.png" alt="main_icon" height="20"/>
+            </a>
+
+            <ul class="nav col-12 col-lg-auto me-lg-auto mb-2 ms-2 justify-content-center mb-md-0">
+                <li><a href="#" class="nav-link px-2 text-white">Home</a></li>
+                <li><a href="#" class="nav-link px-2 text-white">찜</a></li>
+                <li><a href="#" class="nav-link px-2 text-white">주문내역</a></li>
+                <li><a href="#" class="nav-link px-2 text-white">마이페이지</a></li>
+                <li><a href="#" class="nav-link px-2 text-white">About</a></li>
+            </ul>
+
+            <form class="col-12 col-lg-auto mb-3 mb-lg-0 me-lg-3" role="search">
+                <input type="search" class="form-control form-control-dark text-bg-light" placeholder="Search..." aria-label="Search">
+            </form>
+
+            <ul class="nav pe-2">
+                <li class="nav-item"><a href="#" class="nav-link link-light px-2">Login</a></li>
+                <li class="nav-item"><a href="#" class="nav-link link-light px-2">Sign up</a></li>
+            </ul>
+        </div>
+    </div>
+</header>
+
+<article>
+    <div class="container px-4 py-5">
+        <div>
+            <!-- top info -->
+            <section>
+                <div class="container text-center">
+                    <div class="row bg-main text-white" style="height: 100px;">
+                        <div class="align-self-center fs-1 bg-main" style="width: 200px;">
+                            MY배민
+                        </div>
+                        <div class="col border-start">
+                            <div class="row align-self-center text-start p-2">
+                                할인쿠폰
+                            </div>
+                            <div class="row align-self-center text-start fs-1 ps-3">
+                                0장
+                            </div>
+                        </div>
+                        <div class="col border-start">
+                            <div class="row align-self-center text-start p-2">
+                                리뷰작성
+                            </div>
+                            <div class="row align-self-center text-start fs-1 ps-3">
+                                0개
+                            </div>
+                        </div>
+                        <div class="col border-start">
+                            <div class="row border-bottom h-50">
+                                <div class="col align-self-center text-start">
+                                    포인트
+                                </div>
+                                <div class="col align-self-center text-end">
+                                    0 원
+                                </div>
+                            </div>
+                            <div class="row h-50">
+                                <div class="col align-self-center text-start">
+                                    페이
+                                </div>
+                                <div class="col align-self-center text-end">
+                                    0 원
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </section>
+
+            <section>
+                <div class="container text-center">
+                    <!-- sidebar start -->
+                    <div class="row">
+                        <div class="border text-start bg-secondary bg-opacity-10" style="width: 200px; height: 500px;">
+                            <nav class="nav flex-column mt-4">
+                                <div class="border-bottom">
+                                    <label class="nav-link text-dark">MY 배달</label>
+                                    <a class="nav-link" aria-current="page" href="#">주문내역</a>
+                                </div>
+                                <div class="border-bottom">
+                                    <label class="nav-link text-dark">MY 혜택</label>
+                                    <a class="nav-link" aria-current="page" href="#">포인트</a>
+                                    <a class="nav-link" aria-current="page" href="#">쿠폰함</a>
+                                </div>
+                                <div class="border-bottom">
+                                    <label class="nav-link text-dark">MY 활동</label>
+                                    <a class="nav-link" aria-current="page" href="#">리뷰관리</a>
+                                    <a class="nav-link" aria-current="page" href="#">찜 리스트</a>
+                                </div>
+                                <div>
+                                    <label class="nav-link text-dark">MY 정보</label>
+                                    <a class="nav-link" aria-current="page" href="#">개인정보확인/수정</a>
+                                    <a class="nav-link" aria-current="page" href="#">페이</a>
+                                </div>
+                            </nav>
+                        </div>
+                        <!-- sidebar end -->
+                        <div class="col text-start">
+                            <h4 class="m-4">쿠폰함</h4>
+                            <!-- 쿠폰내역시작 -->
+                            <div class="m-4 bg-secondary border" style="--bs-bg-opacity: .1;">
+                                <div class="row" style="height: 150px;">
+                                    <div class="col border-end">
+                                        <div class="m-3 ms-4 h-25 fs-4">
+                                            사용가능 쿠폰
+                                        </div>
+                                        <div class="text-end align-self-bottom fs-1 mt-4">
+                                            0개
+                                        </div>
+                                    </div>
+                                    <div class="col">
+                                        <div class="m-3 h-25 fs-4">
+                                            마감임박 할인쿠폰 > 24시간 이내
+                                        </div>
+                                        <div class="text-end align-self-bottom fs-1 mt-4 me-3">
+                                            0개
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="row border-top m-2" style="height: 125px;">
+                                    <div class="text-center fs-4 mt-5" style="width: 250px;">
+                                        할인쿠폰 교환권 등록
+                                    </div>
+                                    <div class="col mt-5">
+                                        <form method="post">
+                                            <div class="row g-3">
+                                                <div class="col">
+                                                    <input type="text" class="form-control" aria-label="First name" maxlength="4">
+                                                </div>
+                                                <div class="col">
+                                                    <input type="text" class="form-control" aria-label="First name" maxlength="4">
+                                                </div>
+                                                <div class="col">
+                                                    <input type="text" class="form-control" aria-label="First name" maxlength="4">
+                                                </div>
+                                                <div class="col">
+                                                    <input type="text" class="form-control" aria-label="First name" maxlength="4">
+                                                </div>
+                                                <div class="col">
+                                                    <button class="w-100 btn custom-btn" id="btn_login" type="submit">입력하기</button>
+                                                </div>
+                                            </div>
+                                        </form>
+                                    </div>
+                                </div>
+                            </div>
+                            <!-- 쿠폰내역끝 -->
+                            <!-- 쿠폰리스트시작 -->
+                            <div class="m-4">
+                                <ul class="nav nav-tabs" id="myTab" role="tablist">
+                                    <li class="nav-item" role="presentation">
+                                        <button class="nav-link active" id="home-tab" data-bs-toggle="tab" data-bs-target="#home-tab-pane" type="button" role="tab" aria-controls="home-tab-pane" aria-selected="true">사용가능</button>
+                                    </li>
+                                    <li class="nav-item" role="presentation">
+                                        <button class="nav-link" id="profile-tab" data-bs-toggle="tab" data-bs-target="#profile-tab-pane" type="button" role="tab" aria-controls="profile-tab-pane" aria-selected="false">사용완료 / 기간만료</button>
+                                    </li>
+                                </ul>
+                                <div class="tab-content" id="myTabContent">
+                                    <!-- 사용가능 -->
+                                    <div class="tab-pane fade show active mt-3" id="home-tab-pane" role="tabpanel" aria-labelledby="home-tab" tabindex="0">
+                                        <table class="table text-center">
+                                            <thead>
+                                            <tr>
+                                                <th scope="col">쿠폰명</th>
+                                                <th scope="col">할인액(율)</th>
+                                                <th scope="col">최소주문금액</th>
+                                                <th scope="col">유효기간</th>
+                                                <th scope="col">쿠폰종류</th>
+                                            </tr>
+                                            </thead>
+                                            <tbody class="table-group-divider">
+                                            <tr>
+                                                <th scope="row" class="fw-bold">BBQ XX점 쿠폰</th>
+                                                <td>1,000원</td>
+                                                <td>20,000원</td>
+                                                <td>2022.08.03 까지</td>
+                                                <td class="fw-bold">쿠폰</td>
+                                            </tr>
+                                            </tbody>
+                                        </table>
+                                    </div>
+                                    <!-- 사용완료 / 기간만료 -->
+                                    <div class="tab-pane fade mt-3" id="profile-tab-pane" role="tabpanel" aria-labelledby="profile-tab" tabindex="0">
+                                        <p>미사용, 기간만료 쿠폰은 최근 6개월 내역만, 조회 가능합니다</p>
+                                        <table class="table text-center">
+                                            <thead>
+                                            <tr>
+                                                <th scope="col">쿠폰명</th>
+                                                <th scope="col">할인액(율)</th>
+                                                <th scope="col">사용조건</th>
+                                                <th scope="col">유효기간</th>
+                                                <th scope="col">사용여부</th>
+                                            </tr>
+                                            </thead>
+                                            <tbody class="table-group-divider">
+                                            <tr>
+                                                <th scope="row" class="fw-bold">BBQ XX점 쿠폰</th>
+                                                <td>1,000원</td>
+                                                <td>20,000원</td>
+                                                <td>2022.08.03 까지</td>
+                                                <td class="fw-bold">기간만료</td>
+                                            </tr>
+                                            <tr>
+                                                <th scope="row" class="fw-bold">BBQ XX점 쿠폰</th>
+                                                <td>1,000원</td>
+                                                <td>20,000원</td>
+                                                <td>2022.08.03 까지</td>
+                                                <td class="fw-bold">사용완료</td>
+                                            </tr>
+                                            </tbody>
+                                        </table>
+                                    </div>
+                                </div>
+                            </div>
+                            <!-- 쿠폰리스트종료 -->
+                        </div>
+                    </div>
+                </div>
+            </section>
+        </div>
+    </div>
+</article>
+
+<!-- footer -->
+<div class="container">
+    <footer class="py-3 my-4">
+        <ul class="nav justify-content-center border-bottom pb-3 mb-3">
+            <li class="nav-item"><a href="#" class="nav-link px-2 text-muted">Home</a></li>
+            <li class="nav-item"><a href="#" class="nav-link px-2 text-muted">찜</a></li>
+            <li class="nav-item"><a href="#" class="nav-link px-2 text-muted">주문내역</a></li>
+            <li class="nav-item"><a href="#" class="nav-link px-2 text-muted">마이페이지</a></li>
+            <li class="nav-item"><a href="#" class="nav-link px-2 text-muted">About</a></li>
+        </ul>
+        <p class="text-center text-muted">&copy; 2022 Company, Inc</p>
+    </footer>
+</div>
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.2.0/dist/js/bootstrap.bundle.min.js" integrity="sha384-A3rJD856KowSb7dwlZdYEkO39Gagi7vIsF0jrRAoQmDKKtQBHUuLZ9AsSv4jD4Xa" crossorigin="anonymous"></script>
+</body>
+
+</html>
