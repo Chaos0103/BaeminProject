@@ -3,9 +3,9 @@
     src: url("../fonts/BMHANNAPro.ttf");
 }
 
-* {
-    font-family: "hanna", sans-serif;
-}
+/** {*/
+/*    font-family: "hanna", sans-serif;*/
+/*}*/
 
 header {
     background-color: #5FBEBB;
