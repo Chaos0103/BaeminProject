@@ -30,12 +30,131 @@
             </form>
 
             <ul class="nav pe-2">
-                <li class="nav-item"><a href="#" class="nav-link link-light px-2">Login</a></li>
-                <li class="nav-item"><a href="#" class="nav-link link-light px-2">Sign up</a></li>
+                <li class="nav-item me-3"><a href="#" class="nav-link link-light px-2">Logout</a></li>
+                <li class="nav-item">
+                    <button type="button" class="btn btn-outline-secondary position-relative" data-bs-toggle="modal" data-bs-target="#cartList">
+                        <img src="../../static/icon/cart.svg" alt="cart">
+                        <span class="position-absolute top-0 start-100 translate-middle badge rounded-pill bg-danger">
+                            1
+                        <span class="visually-hidden">unread messages</span>
+                        </span>
+                    </button>
+                </li>
             </ul>
         </div>
     </div>
 </header>
+
+<section>
+    <!-- Modal -->
+    <div class="modal fade" id="cartList" data-bs-backdrop="static" data-bs-keyboard="false" tabindex="-1" aria-labelledby="staticBackdropLabel" aria-hidden="true">
+        <div class="modal-dialog modal-dialog-scrollable">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title" id="staticBackdropLabel">장바구니</h5>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                </div>
+                <div class="modal-body">
+                    <div class="row ms-1">
+                        <div class="col fw-bolder">
+                            BBQ XX점
+                        </div>
+                    </div>
+                    <!-- 주문 내역 -->
+                    <div class="card mt-3">
+                        <div class="card-body">
+                            <div class="row mb-3">
+                                <div class="col fw-bolder">
+                                    핫 황금올리브 핫크리스피
+                                </div>
+                                <div class="col d-grid gap-2 d-md-flex justify-content-md-end">
+                                    <button type="button" class="btn-close"></button>
+                                </div>
+                            </div>
+                            <div class="row">
+                                <div class="col">
+                                    <div class="d-flex position-relative">
+                                        <img src="https://via.placeholder.com/100x100" class="flex-shrink-0" alt="img" style="height: 100px;">
+                                        <div>
+                                            <ul>
+                                                <li>가격 : <span>윙.봉 (22,000원)</span></li>
+                                                <li>사이드메뉴 추가선택 : <span>더블치즈볼 5개 (5,000원)</span></li>
+                                            </ul>
+                                            <div class="ms-3">27,000원</div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <!-- 주문 내역 -->
+                    <!-- 주문 내역 -->
+                    <div class="card mt-3">
+                        <div class="card-body">
+                            <div class="row mb-3">
+                                <div class="col fw-bolder">
+                                    핫 황금올리브 핫크리스피
+                                </div>
+                                <div class="col d-grid gap-2 d-md-flex justify-content-md-end">
+                                    <button type="button" class="btn-close"></button>
+                                </div>
+                            </div>
+                            <div class="row">
+                                <div class="col">
+                                    <div class="d-flex position-relative">
+                                        <img src="https://via.placeholder.com/100x100" class="flex-shrink-0" alt="img" style="height: 100px;">
+                                        <div>
+                                            <ul>
+                                                <li>가격 : <span>한마리 (21,000원)</span></li>
+                                                <li>사이드메뉴 추가선택 : <span>소떡소떡(매운) (3,000원) / 케이준감자 (3,000원)</span></li>
+                                            </ul>
+                                            <div class="ms-3">27,000원</div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <!-- 주문 내역 -->
+                    <!-- 주문 가격 -->
+                    <div class="card mt-3">
+                        <div class="card-body">
+                            <div class="row">
+                                <div class="col text-start">
+                                    총 주문금액
+                                </div>
+                                <div class="col text-end">
+                                    54,000원
+                                </div>
+                            </div>
+                            <div class="row">
+                                <div class="col text-start">
+                                    배달팁
+                                </div>
+                                <div class="col text-end">
+                                    3,000원
+                                </div>
+                            </div>
+                            <div class="row border-top fw-bolder">
+                                <div class="col text-start">
+                                    결제예정금액
+                                </div>
+                                <div class="col text-end">
+                                    57,000원
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <!-- 주문 가격 -->
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">나가기</button>
+                    <button type="button" class="btn btn-primary">주문하기</button>
+                </div>
+            </div>
+        </div>
+    </div>
+</section>
 
 <article>
     <div class="container px-4 py-5">
@@ -82,7 +201,12 @@
                         </div>
                         <div class="row h-25">
                             <div class="col fs-2 align-self-center">
-                                별 별 별 별 별 4.9
+                                <img src="../../static/icon/star-fill.svg" alt="star-fill" style="height: 30px;">
+                                <img src="../../static/icon/star-fill.svg" alt="star-fill" style="height: 30px;">
+                                <img src="../../static/icon/star-fill.svg" alt="star-fill" style="height: 30px;">
+                                <img src="../../static/icon/star-fill.svg" alt="star-fill" style="height: 30px;">
+                                <img src="../../static/icon/star-fill.svg" alt="star-fill" style="height: 30px;">
+                                <span>4.9</span>
                             </div>
                         </div>
                         <div class="row">
@@ -95,13 +219,22 @@
                         </div>
                         <div class="row h-25 mt-3 mb-3">
                             <div class="col align-self-center">
-                                <button type="button" class="btn btn-primary w-75">전화</button>
+                                <button type="button" class="btn btn-outline-dark w-75">
+                                    <img src="../../static/icon/telephone.svg" alt="telephone">
+                                    <span>전화</span>
+                                </button>
                             </div>
                             <div class="col align-self-center">
-                                <button type="button" class="btn btn-primary w-75">찜</button>
+                                <button type="button" class="btn btn-outline-dark w-75">
+                                    <img src="../../static/icon/heart.svg" alt="heart">
+                                    <span>찜</span>
+                                </button>
                             </div>
                             <div class="col align-self-center">
-                                <button type="button" class="btn btn-primary w-75">공유</button>
+                                <button type="button" class="btn btn-outline-dark w-75">
+                                    <img src="../../static/icon/share.svg" alt="share">
+                                    <span>공유</span>
+                                </button>
                             </div>
                         </div>
                     </div>
@@ -110,8 +243,8 @@
                 <!-- store detail information start -->
                 <nav>
                     <div class="nav nav-tabs" id="nav-tab" role="tablist">
-                        <button class="nav-link active" id="nav-home-tab" data-bs-toggle="tab" data-bs-target="#nav-home" type="button" role="tab" aria-controls="nav-home" aria-selected="true">배달주문</button>
-                        <button class="nav-link" id="nav-profile-tab" data-bs-toggle="tab" data-bs-target="#nav-profile" type="button" role="tab" aria-controls="nav-profile" aria-selected="false">포장/방문주문</button>
+                        <button class="nav-link w-50 active" id="nav-home-tab" data-bs-toggle="tab" data-bs-target="#nav-home" type="button" role="tab" aria-controls="nav-home" aria-selected="true">배달주문</button>
+                        <button class="nav-link w-50" id="nav-profile-tab" data-bs-toggle="tab" data-bs-target="#nav-profile" type="button" role="tab" aria-controls="nav-profile" aria-selected="false">포장/방문주문</button>
                     </div>
                 </nav>
                 <div class="tab-content m-2 ps-2" id="nav-tabContent">
@@ -202,9 +335,9 @@
         <!-- menu information start -->
         <nav>
             <div class="nav nav-tabs" id="nav-tab-menu" role="tablist">
-                <button class="nav-link active" id="nav-home-tab-menu" data-bs-toggle="tab" data-bs-target="#nav-home-menu" type="button" role="tab" aria-controls="nav-home" aria-selected="true">메뉴</button>
-                <button class="nav-link" id="nav-profile-tab-menu" data-bs-toggle="tab" data-bs-target="#nav-profile-menu" type="button" role="tab" aria-controls="nav-profile" aria-selected="false">정보</button>
-                <button class="nav-link" id="nav-contact-tab-menu" data-bs-toggle="tab" data-bs-target="#nav-contact-menu" type="button" role="tab" aria-controls="nav-contact" aria-selected="false">리뷰</button>
+                <button class="nav-link w-25 active" id="nav-home-tab-menu" data-bs-toggle="tab" data-bs-target="#nav-home-menu" type="button" role="tab" aria-controls="nav-home" aria-selected="true">메뉴</button>
+                <button class="nav-link w-25" id="nav-profile-tab-menu" data-bs-toggle="tab" data-bs-target="#nav-profile-menu" type="button" role="tab" aria-controls="nav-profile" aria-selected="false">정보</button>
+                <button class="nav-link w-25" id="nav-contact-tab-menu" data-bs-toggle="tab" data-bs-target="#nav-contact-menu" type="button" role="tab" aria-controls="nav-contact" aria-selected="false">리뷰</button>
             </div>
         </nav>
         <div class="tab-content mt-3" id="nav-tabContent-menu">
@@ -222,7 +355,7 @@
                                 <div class="row row-cols-1 row-cols-md-2 g-4">
                                     <!-- menu start -->
                                     <div class="col">
-                                        <div class="card" onclick="location.href='#'" style="cursor: pointer">
+                                        <div class="card" style="cursor: pointer" data-bs-toggle="modal" data-bs-target="#menuDetail">
                                             <div class="card-body">
                                                 <div class="row">
                                                     <div class="col">
@@ -237,6 +370,151 @@
                                                     <div class="col-sm-3 align-self-center">
                                                         <img src="https://via.placeholder.com/125x125" alt="menu img" style="width: 125px; height: 125px;">
                                                     </div>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <!-- Modal -->
+                                    <div class="modal fade" id="menuDetail" data-bs-backdrop="static" data-bs-keyboard="false" tabindex="-1" aria-labelledby="staticBackdropLabel" aria-hidden="true">
+                                        <div class="modal-dialog">
+                                            <div class="modal-content">
+                                                <div class="modal-header">
+                                                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                                                </div>
+                                                <div class="modal-body">
+                                                    <img src="https://via.placeholder.com/500x250" alt="menu img" class="w-100 h-50">
+                                                    <div class="card mt-3">
+                                                        <div class="card-body text-center">
+                                                            <h4>핫 황금올리브 핫크리스피</h4>
+                                                            <h6>핫 하고 빠삭한 핫빠 크리스피</h6>
+                                                        </div>
+                                                    </div>
+                                                    <!-- 메인 선택 -->
+                                                    <div class="card mt-3">
+                                                        <div class="card-body">
+                                                            <h4>가격</h4>
+                                                            <div class="form-check mt-3">
+                                                                <input class="form-check-input" type="radio" name="flexRadioDefault" id="selectMain1">
+                                                                <label class="form-check-label w-100" for="selectMain1">
+                                                                    <div class="row">
+                                                                        <div class="col">
+                                                                            한마리
+                                                                        </div>
+                                                                        <div class="col text-end">
+                                                                            21,000원
+                                                                        </div>
+                                                                    </div>
+                                                                </label>
+                                                            </div>
+                                                            <div class="form-check mt-3">
+                                                                <input class="form-check-input" type="radio" name="flexRadioDefault" id="selectMain2">
+                                                                <label class="form-check-label w-100" for="selectMain2">
+                                                                    <div class="row">
+                                                                        <div class="col">
+                                                                            순살(가슴살80%엉치살20%)
+                                                                        </div>
+                                                                        <div class="col text-end">
+                                                                            23,000원
+                                                                        </div>
+                                                                    </div>
+                                                                </label>
+                                                            </div>
+                                                            <div class="form-check mt-3">
+                                                                <input class="form-check-input" type="radio" name="flexRadioDefault" id="selectMain3">
+                                                                <label class="form-check-label w-100" for="selectMain3">
+                                                                    <div class="row">
+                                                                        <div class="col">
+                                                                            [BEST]닭다리
+                                                                        </div>
+                                                                        <div class="col text-end">
+                                                                            22,000원
+                                                                        </div>
+                                                                    </div>
+                                                                </label>
+                                                            </div>
+                                                            <div class="form-check mt-3">
+                                                                <input class="form-check-input" type="radio" name="flexRadioDefault" id="selectMain4">
+                                                                <label class="form-check-label w-100" for="selectMain4">
+                                                                    <div class="row">
+                                                                        <div class="col">
+                                                                            윙.봉
+                                                                        </div>
+                                                                        <div class="col text-end">
+                                                                            22,000원
+                                                                        </div>
+                                                                    </div>
+                                                                </label>
+                                                            </div>
+                                                        </div>
+                                                    </div>
+                                                    <!-- 사이드메뉴 선택 -->
+                                                    <div class="card mt-3">
+                                                        <div class="card-body">
+                                                            <h4>사이드메뉴 추가선택</h4>
+                                                            <div class="form-check mt-3">
+                                                                <input class="form-check-input" type="checkbox" name="flexRadioDefault" id="selectSide1">
+                                                                <label class="form-check-label w-100" for="selectSide1">
+                                                                    <div class="row">
+                                                                        <div class="col">
+                                                                            황금알치즈볼 5개
+                                                                        </div>
+                                                                        <div class="col text-end">
+                                                                            +5,000원
+                                                                        </div>
+                                                                    </div>
+                                                                </label>
+                                                            </div>
+                                                            <div class="form-check mt-3">
+                                                                <input class="form-check-input" type="checkbox" name="flexRadioDefault" id="selectSide2">
+                                                                <label class="form-check-label w-100" for="selectSide2">
+                                                                    <div class="row">
+                                                                        <div class="col">
+                                                                            크림치즈볼 5개
+                                                                        </div>
+                                                                        <div class="col text-end">
+                                                                            +5,000원
+                                                                        </div>
+                                                                    </div>
+                                                                </label>
+                                                            </div>
+                                                            <div class="form-check mt-3">
+                                                                <input class="form-check-input" type="checkbox" name="flexRadioDefault" id="selectSide3">
+                                                                <label class="form-check-label w-100" for="selectSide3">
+                                                                    <div class="row">
+                                                                        <div class="col">
+                                                                            모듬감자튀김
+                                                                        </div>
+                                                                        <div class="col text-end">
+                                                                            +8,000원
+                                                                        </div>
+                                                                    </div>
+                                                                </label>
+                                                            </div>
+                                                            <div class="form-check mt-3">
+                                                                <input class="form-check-input" type="checkbox" name="flexRadioDefault" id="selectSide4">
+                                                                <label class="form-check-label w-100" for="selectSide4">
+                                                                    <div class="row">
+                                                                        <div class="col">
+                                                                            소떡소떡(매운)
+                                                                        </div>
+                                                                        <div class="col text-end">
+                                                                            +3,000원
+                                                                        </div>
+                                                                    </div>
+                                                                </label>
+                                                            </div>
+                                                        </div>
+                                                    </div>
+                                                    <!-- 수량 -->
+                                                    <div class="card mt-3">
+                                                        <div class="card-body">
+                                                            <h4>수량</h4>
+
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                                <div class="modal-footer">
+                                                    <button type="button" class="btn btn-primary w-25">담기</button>
                                                 </div>
                                             </div>
                                         </div>
@@ -271,83 +549,96 @@
                     <!-- menu section end -->
                 </div>
             </div>
+            <!-- information tab -->
             <div class="tab-pane fade" id="nav-profile-menu" role="tabpanel" aria-labelledby="nav-profile-tab" tabindex="0">
-                <div class="card mt-3">
-                    <div class="card-body">
-                        <h5>영업정보</h5>
-                        <div class="row mt-3">
-                            <div class="col">상호명</div>
-                            <div class="col">비비큐치킨</div>
-                        </div>
-                        <div class="row">
-                            <div class="col">운영시간</div>
-                            <div class="col">매일-낮 12:00 ~ 오후 11:30</div>
-                        </div>
-                        <div class="row">
-                            <div class="col">휴무일</div>
-                            <div class="col">연중휴무</div>
-                        </div>
-                        <div class="row">
-                            <div class="col">전화번호</div>
-                            <div class="col">000-0000-0000</div>
-                        </div>
-                        <div class="row">
-                            <div class="col">배달지역</div>
-                            <div class="col">강남구</div>
-                        </div>
-                    </div>
-                </div>
-                <div class="card mt-3">
-                    <div class="card-body">
-                        <h5>안내 및 혜택</h5>
-                        <p>안내사항</p>
-                    </div>
-                </div>
-                <div class="card mt-3">
-                    <div class="card-body">
-                        <h5>가게 통계</h5>
-                        <div class="row mt-3">
-                            <div class="col">최근 주문수</div>
-                            <div class="col">2,000+</div>
-                        </div>
-                        <div class="row">
-                            <div class="col">전체 리뷰수</div>
-                            <div class="col">2,000+</div>
-                        </div>
-                        <div class="row">
-                            <div class="col">찜</div>
-                            <div class="col">2,000</div>
+                <div class="row row-cols-1 row-cols-md-2 g-4">
+                    <div class="col">
+                        <div class="card">
+                            <div class="card-body">
+                                <h5>영업정보</h5>
+                                <div class="row mt-3">
+                                    <div class="col">상호명</div>
+                                    <div class="col">비비큐치킨</div>
+                                </div>
+                                <div class="row">
+                                    <div class="col">운영시간</div>
+                                    <div class="col">매일-낮 12:00 ~ 오후 11:30</div>
+                                </div>
+                                <div class="row">
+                                    <div class="col">휴무일</div>
+                                    <div class="col">연중휴무</div>
+                                </div>
+                                <div class="row">
+                                    <div class="col">전화번호</div>
+                                    <div class="col">000-0000-0000</div>
+                                </div>
+                                <div class="row">
+                                    <div class="col">배달지역</div>
+                                    <div class="col">강남구</div>
+                                </div>
+                            </div>
                         </div>
                     </div>
-                </div>
-                <div class="card mt-3">
-                    <div class="card-body">
-                        <h5>배달팁 안내</h5>
-                        <ul>
-                            <li>배달팁은 가게에서 책정한 금액입니다.</li>
-                            <li>배민은 배달팁 결제만 대행할 뿐, 금액은 가게로 전달됩니다.</li>
-                        </ul>
-                        <h5>주문금액 별 배달팁</h5>
+                    <div class="col">
+                        <div class="card h-100">
+                            <div class="card-body">
+                                <h5>가게 통계</h5>
+                                <div class="row mt-3">
+                                    <div class="col">최근 주문수</div>
+                                    <div class="col">2,000+</div>
+                                </div>
+                                <div class="row">
+                                    <div class="col">전체 리뷰수</div>
+                                    <div class="col">2,000+</div>
+                                </div>
+                                <div class="row">
+                                    <div class="col">찜</div>
+                                    <div class="col">2,000</div>
+                                </div>
+                            </div>
+                        </div>
                     </div>
-                </div>
-                <div class="card mt-3">
-                    <div class="card-body">
-                        <h5>사업자정보</h5>
-                        <div class="row mt-3">
-                            <div class="col">대표자명</div>
-                            <div class="col">홍길동</div>
+                    <div class="col">
+                        <div class="card">
+                            <div class="card-body">
+                                <h5>배달팁 안내</h5>
+                                <ul>
+                                    <li>배달팁은 가게에서 책정한 금액입니다.</li>
+                                    <li>배민은 배달팁 결제만 대행할 뿐, 금액은 가게로 전달됩니다.</li>
+                                </ul>
+                                <h5>주문금액 별 배달팁</h5>
+                            </div>
                         </div>
-                        <div class="row">
-                            <div class="col">상호명</div>
-                            <div class="col">비비큐치킨</div>
+                    </div>
+                    <div class="col">
+                        <div class="card h-100">
+                            <div class="card-body">
+                                <h5>사업자정보</h5>
+                                <div class="row mt-3">
+                                    <div class="col">대표자명</div>
+                                    <div class="col">홍길동</div>
+                                </div>
+                                <div class="row">
+                                    <div class="col">상호명</div>
+                                    <div class="col">비비큐치킨</div>
+                                </div>
+                                <div class="row">
+                                    <div class="col">사업자주소</div>
+                                    <div class="col">서울특별시 강남구</div>
+                                </div>
+                                <div class="row">
+                                    <div class="col">사업자등록번호</div>
+                                    <div class="col">000-00-00000</div>
+                                </div>
+                            </div>
                         </div>
-                        <div class="row">
-                            <div class="col">사업자주소</div>
-                            <div class="col">서울특별시 강남구</div>
-                        </div>
-                        <div class="row">
-                            <div class="col">사업자등록번호</div>
-                            <div class="col">000-00-00000</div>
+                    </div>
+                    <div class="col">
+                        <div class="card">
+                            <div class="card-body">
+                                <h5>안내 및 혜택</h5>
+                                <p>안내사항</p>
+                            </div>
                         </div>
                     </div>
                 </div>
@@ -369,23 +660,26 @@
                         <div class="card">
                             <div class="card-body">
                                 <!-- 작성자 정보 -->
-                                <div class="row mb-3">
-                                    <div class="col-sm-1">
-                                        <img src="https://via.placeholder.com/50x50" alt="리뷰사진" style="width: 50px; height: 50px;">
-                                    </div>
+                                <div class="row">
                                     <div class="col">
-                                        <div class="row">
-                                            <div class="col">
-                                                닉네임
-                                            </div>
-                                        </div>
-                                        <div class="row">
-                                            <div class="col">
-                                                별별별별별 0000.00.00
+                                        <div class="d-flex position-relative">
+                                            <img src="https://via.placeholder.com/50x50" class="flex-shrink-0" alt="img" style="height: 50px;">
+                                            <div>
+                                                <ul style="list-style:none;">
+                                                    <li>닉네임</li>
+                                                    <li>
+                                                        <img src="../../static/icon/star-fill.svg" alt="star-fill">
+                                                        <img src="../../static/icon/star-fill.svg" alt="star-fill">
+                                                        <img src="../../static/icon/star-fill.svg" alt="star-fill">
+                                                        <img src="../../static/icon/star-fill.svg" alt="star-fill">
+                                                        <img src="../../static/icon/star-fill.svg" alt="star-fill">
+                                                        <span>0000.00.00</span>
+                                                    </li>
+                                                </ul>
                                             </div>
                                         </div>
                                     </div>
-                                    <div class="col-sm-2">
+                                    <div class="col d-grid gap-2 d-md-flex justify-content-md-end">
                                         <button type="button" class="btn btn-danger">신고하기</button>
                                     </div>
                                 </div>
