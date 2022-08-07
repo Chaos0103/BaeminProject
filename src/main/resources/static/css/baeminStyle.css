@@ -1,0 +1,9 @@
+
+.baemin-btn, .baemin-btn:hover {
+    color: white;
+    background-color: rgb(95, 190, 187);
+}
+.baemin-btn:active {
+    color: white;
+    background-color: rgb(150, 219, 218);
+}
