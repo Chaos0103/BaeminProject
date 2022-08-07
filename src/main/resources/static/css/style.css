@@ -19,14 +19,3 @@ header {
     max-width: 400px;
     padding: 15px;
 }
-
-.custom-btn {
-    --bs-btn-font-weight: 600;
-    --bs-btn-color: black;
-    --bs-btn-bg: #5FBEBB;
-    --bs-btn-border-color: #5FBEBB;
-    --bs-btn-border-radius: .5rem;
-    --bs-btn-hover-color: black;
-    --bs-btn-hover-bg: #58B3B0;
-    --bs-btn-hover-border-color: #58B3B0;
-}
