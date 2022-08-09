@@ -19,3 +19,8 @@ header {
     max-width: 400px;
     padding: 15px;
 }
+
+.white, .white a {
+    color: #fff;
+    cursor: pointer;
+}
