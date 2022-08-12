@@ -9,33 +9,83 @@
     <title>배달의 민족</title>
 </head>
 <body>
-<!-- header -->
+<!-- login header -->
 <header class="p-3">
     <div class="container">
-        <div class="d-flex flex-wrap align-items-center justify-content-center justify-content-lg-start">
-            <a href="#" class="d-flex align-items-center mb-2 mb-lg-0 ms-3 text-white text-decoration-none">
-                <img src="../../static/img/logo.png" alt="main_icon" height="20"/>
-            </a>
-
-            <ul class="nav col-12 col-lg-auto me-lg-auto mb-2 ms-2 justify-content-center mb-md-0">
-                <li><a href="#" class="nav-link px-2 text-white">Home</a></li>
-                <li><a href="#" class="nav-link px-2 text-white">찜</a></li>
-                <li><a href="#" class="nav-link px-2 text-white">주문내역</a></li>
-                <li><a href="#" class="nav-link px-2 text-white">마이페이지</a></li>
-                <li><a href="#" class="nav-link px-2 text-white">About</a></li>
-            </ul>
-
-            <form class="col-12 col-lg-auto mb-3 mb-lg-0 me-lg-3" role="search">
-                <input type="search" class="form-control form-control-dark text-bg-light" placeholder="Search..." aria-label="Search">
-            </form>
-
-            <ul class="nav pe-2">
-                <li class="nav-item"><a href="#" class="nav-link link-light px-2">Login</a></li>
-                <li class="nav-item"><a href="#" class="nav-link link-light px-2">Sign up</a></li>
-            </ul>
+        <div class="row ms-3 me-3">
+            <div class="col w-25 align-self-center">
+                <a href="#">
+                    <img src="../../static/img/logo.png" alt="main_icon" height="20"/>
+                </a>
+            </div>
+            <div class="col w-50">
+                <form role="search">
+                    <input type="search" class="form-control form-control-dark text-bg-light" placeholder="Search..." aria-label="Search">
+                </form>
+            </div>
+            <div class="col w-25 align-self-center">
+                <ul class="nav pe-2 justify-content-end">
+                    <li class="nav-item ps-4">
+                        <svg onclick="location.href='#'"
+                             xmlns="http://www.w3.org/2000/svg" width="25" height="25" fill="currentColor" class="bi bi-cart white" viewBox="0 0 16 16">
+                            <path d="M0 1.5A.5.5 0 0 1 .5 1H2a.5.5 0 0 1 .485.379L2.89 3H14.5a.5.5 0 0 1 .491.592l-1.5 8A.5.5 0 0 1 13 12H4a.5.5 0 0 1-.491-.408L2.01 3.607 1.61 2H.5a.5.5 0 0 1-.5-.5zM3.102 4l1.313 7h8.17l1.313-7H3.102zM5 12a2 2 0 1 0 0 4 2 2 0 0 0 0-4zm7 0a2 2 0 1 0 0 4 2 2 0 0 0 0-4zm-7 1a1 1 0 1 1 0 2 1 1 0 0 1 0-2zm7 0a1 1 0 1 1 0 2 1 1 0 0 1 0-2z"/>
+                        </svg>
+                    </li>
+                    <!-- 알림 -->
+                    <li class="nav-item ps-4">
+                        <svg data-bs-toggle="modal" data-bs-target="#notification"
+                             xmlns="http://www.w3.org/2000/svg" width="25" height="25" fill="currentColor" class="bi bi-bell white" viewBox="0 0 16 16">
+                            <path d="M8 16a2 2 0 0 0 2-2H6a2 2 0 0 0 2 2zM8 1.918l-.797.161A4.002 4.002 0 0 0 4 6c0 .628-.134 2.197-.459 3.742-.16.767-.376 1.566-.663 2.258h10.244c-.287-.692-.502-1.49-.663-2.258C12.134 8.197 12 6.628 12 6a4.002 4.002 0 0 0-3.203-3.92L8 1.917zM14.22 12c.223.447.481.801.78 1H1c.299-.199.557-.553.78-1C2.68 10.2 3 6.88 3 6c0-2.42 1.72-4.44 4.005-4.901a1 1 0 1 1 1.99 0A5.002 5.002 0 0 1 13 6c0 .88.32 4.2 1.22 6z"/>
+                        </svg>
+                    </li>
+                    <li class="nav-item ps-4">
+                        <svg onclick="location.href='#'"
+                             xmlns="http://www.w3.org/2000/svg" width="25" height="25" fill="currentColor" class="bi bi-person white" viewBox="0 0 16 16">
+                            <path d="M8 8a3 3 0 1 0 0-6 3 3 0 0 0 0 6zm2-3a2 2 0 1 1-4 0 2 2 0 0 1 4 0zm4 8c0 1-1 1-1 1H3s-1 0-1-1 1-4 6-4 6 3 6 4zm-1-.004c-.001-.246-.154-.986-.832-1.664C11.516 10.68 10.289 10 8 10c-2.29 0-3.516.68-4.168 1.332-.678.678-.83 1.418-.832 1.664h10z"/>
+                        </svg>
+                    </li>
+                </ul>
+            </div>
         </div>
     </div>
 </header>
+<!-- 알림 모달 -->
+<section>
+    <div class="modal fade" id="notification" tabindex="-1" aria-labelledby="notificationLabel" aria-hidden="true">
+        <div class="modal-dialog">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title" id="notificationLabel">알림센터</h5>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                </div>
+                <div class="modal-body">
+                    <div class="card mt-3">
+                        <div class="card-body">
+                            <h5 class="card-title">리뷰를 남겨보세요.</h5>
+                            <p class="card-text">
+                                <strong>BBQ XX점</strong>의 음식이 맛있으셨다면 다른 분들을 위해 리뷰를 남겨주세요. (리뷰 쓰기는 주문 이후 3일 동안만 가능합니다.)
+                            </p>
+                            <p class="card-text text-muted">
+                                08월 09일 20:00
+                            </p>
+                        </div>
+                    </div>
+                    <div class="card mt-3">
+                        <div class="card-body">
+                            <h5 class="card-title">조리가 완료되었습니다.</h5>
+                            <p class="card-text">
+                                <strong>BBQ XX점</strong>을(를) 이용해주셔서 감사합니다. 맛있게 드세요.
+                            </p>
+                            <p class="card-text text-muted">
+                                08월 09일 19:30
+                            </p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</section>
 
 <article>
     <div class="container px-4 py-5">
@@ -43,41 +93,61 @@
             <!-- top info -->
             <section>
                 <div class="container text-center">
-                    <div class="row bg-main text-white" style="height: 100px;">
-                        <div class="align-self-center fs-1 bg-main" style="width: 200px;">
+                    <div class="row bg-main text-white" style="">
+                        <div class="col-sm-2 align-self-center fs-1 bg-main">
                             MY배민
                         </div>
                         <div class="col border-start">
                             <div class="row align-self-center text-start p-2">
-                                할인쿠폰
+                                <div class="col fs-5">
+                                    회원등급
+                                </div>
                             </div>
-                            <div class="row align-self-center text-start fs-1 ps-3">
-                                0장
+                            <div class="row align-self-center fs-1 ps-3">
+                                <div class="col text-end">
+                                    VIP
+                                </div>
                             </div>
                         </div>
                         <div class="col border-start">
                             <div class="row align-self-center text-start p-2">
-                                리뷰작성
+                                <div class="col fs-5">
+                                    할인쿠폰
+                                </div>
                             </div>
-                            <div class="row align-self-center text-start fs-1 ps-3">
-                                0개
+                            <div class="row align-self-center fs-1 ps-3">
+                                <div class="col text-end">
+                                    0장
+                                </div>
+                            </div>
+                        </div>
+                        <div class="col border-start">
+                            <div class="row align-self-center text-start p-2">
+                                <div class="col fs-5">
+                                    리뷰작성
+                                </div>
+                            </div>
+                            <div class="row align-self-center fs-1 ps-3">
+                                <div class="col text-end">
+                                    0개
+                                </div>
                             </div>
                         </div>
                         <div class="col border-start">
                             <div class="row border-bottom h-50">
-                                <div class="col align-self-center text-start">
+                                <div class="col-sm-4 align-self-center text-start fs-5">
                                     포인트
                                 </div>
                                 <div class="col align-self-center text-end">
-                                    0 원
+                                    500,000 원
                                 </div>
                             </div>
                             <div class="row h-50">
-                                <div class="col align-self-center text-start">
+                                <div class="col-sm-4 align-self-center text-start fs-5">
                                     페이
                                 </div>
                                 <div class="col align-self-center text-end">
-                                    0 원
+                                    500,000 원
                                 </div>
                             </div>
                         </div>
@@ -89,7 +159,7 @@
                 <div class="container text-center">
                     <!-- sidebar -->
                     <div class="row">
-                        <div class="border text-start bg-secondary bg-opacity-10" style="width: 200px; height: 500px;">
+                        <div class="col-sm-2 border text-start bg-secondary bg-opacity-10" style="height: 500px;">
                             <nav class="nav flex-column mt-4">
                                 <div class="border-bottom">
                                     <label class="nav-link text-dark">MY 배달</label>
@@ -135,134 +205,22 @@
                                     </div>
                                     <div class="row rounded-3 ms-3 me-3 mb-3 border">
                                         <div class="col">
-                                            <div class="row m-2 fs-4">
-                                                배송완료
-                                            </div>
-                                            <div class="row" style="height: 100px;">
-                                                <div style="width: 125px;">
-                                                    <img src="../../static/img/dummy.png" class="align-middle" style="width: 100px; height: 100px;" alt="매장이미지"/>
+                                            <div class="row mt-2 mb-2 fs-4">
+                                                <div class="col">
+                                                    배송완료
                                                 </div>
                                                 <div class="col">
-                                                    <div class="row h-50">
-                                                        <div class="col align-self-center">
-                                                            주문한 음식명
-                                                        </div>
-                                                    </div>
-                                                    <div class="row h-50">
-                                                        <div class="col align-self-center">
-                                                            가격/수량
-                                                        </div>
-                                                        <div class="col align-self-center text-end">
-                                                            <button type="button" class="btn btn-outline-secondary" style="width: 125px;">장바구니 담기</button>
-                                                        </div>
+                                                    <div class="d-grid gap-2 d-md-flex justify-content-md-end">
+                                                        <button type="button" class="btn btn-outline-secondary">장바구니 담기</button>
                                                     </div>
                                                 </div>
                                             </div>
-                                        </div>
-                                        <div class="border-start" style="width: 250px;">
-                                            <div class="text-center">
-                                                <button type="button" class="btn btn-outline-secondary mt-3 ms-3 me-3" style="width: 200px;">가게보기</button>
-                                            </div>
-                                            <div class="text-center">
-                                                <button type="button" class="btn btn-outline-secondary m-3" style="width: 200px;">리뷰 작성하기</button>
-                                            </div>
-                                            <div class="text-center">
-                                                <button type="button" class="btn btn-outline-danger mb-3 ms-3 me-3" style="width: 200px;">주문내역 삭제</button>
-                                            </div>
-                                        </div>
-                                    </div>
-                                </div>
-                            </div>
-                            <!-- 주문내역끝 -->
-                            <!-- 주문내역시작 -->
-                            <div class="m-4">
-                                <div class="border rounded-3">
-                                    <div class="row m-3">
-                                        <div class="col">
-                                            2022. 07. 25 주문
-                                        </div>
-                                        <div class="col text-end">
-                                            <a href="#" class="nav-link link-primary">주문 상세보기 ></a>
-                                        </div>
-                                    </div>
-                                    <div class="row rounded-3 ms-3 me-3 mb-3 border">
-                                        <div class="col">
-                                            <div class="row m-2 fs-4">
-                                                배송완료
-                                            </div>
-                                            <div class="row" style="height: 100px;">
-                                                <div style="width: 125px;">
+                                            <div class="row">
+                                                <div class="d-flex position-relative">
+                                                    <img src="https://via.placeholder.com/100x100" class="d-block flex-shrink-0 me-3" alt="store img 1" style="height: 100px;">
                                                     <div>
-                                                        <img src="../../static/img/dummy.png" class="align-middle" style="width: 100px; height: 100px;" alt="매장이미지"/>
-                                                    </div>
-                                                </div>
-                                                <div class="col">
-                                                    <div class="row h-50">
-                                                        <div class="col align-self-center">
-                                                            주문한 음식명
-                                                        </div>
-                                                    </div>
-                                                    <div class="row h-50">
-                                                        <div class="col align-self-center">
-                                                            가격/수량
-                                                        </div>
-                                                        <div class="col align-self-center text-end">
-                                                            <button type="button" class="btn btn-outline-secondary" style="width: 125px;">장바구니 담기</button>
-                                                        </div>
-                                                    </div>
-                                                </div>
-                                            </div>
-                                        </div>
-                                        <div class="border-start" style="width: 250px;">
-                                            <div class="text-center">
-                                                <button type="button" class="btn btn-outline-secondary mt-3 ms-3 me-3" style="width: 200px;">가게보기</button>
-                                            </div>
-                                            <div class="text-center">
-                                                <button type="button" class="btn btn-outline-secondary m-3" style="width: 200px;">리뷰 작성하기</button>
-                                            </div>
-                                            <div class="text-center">
-                                                <button type="button" class="btn btn-outline-danger mb-3 ms-3 me-3" style="width: 200px;">주문내역 삭제</button>
-                                            </div>
-                                        </div>
-                                    </div>
-                                </div>
-                            </div>
-                            <!-- 주문내역끝 -->
-                            <!-- 주문내역시작 -->
-                            <div class="m-4">
-                                <div class="border rounded-3">
-                                    <div class="row m-3">
-                                        <div class="col">
-                                            2022. 07. 25 주문
-                                        </div>
-                                        <div class="col text-end">
-                                            <a href="#" class="nav-link link-primary">주문 상세보기 ></a>
-                                        </div>
-                                    </div>
-                                    <div class="row rounded-3 ms-3 me-3 mb-3 border">
-                                        <div class="col">
-                                            <div class="row m-2 fs-4">
-                                                배송완료
-                                            </div>
-                                            <div class="row" style="height: 100px;">
-                                                <div style="width: 125px;">
-                                                    <div>
-                                                        <img src="../../static/img/dummy.png" class="align-middle" style="width: 100px; height: 100px;" alt="매장이미지"/>
-                                                    </div>
-                                                </div>
-                                                <div class="col">
-                                                    <div class="row h-50">
-                                                        <div class="col align-self-center">
-                                                            주문한 음식명
-                                                        </div>
-                                                    </div>
-                                                    <div class="row h-50">
-                                                        <div class="col align-self-center">
-                                                            가격/수량
-                                                        </div>
-                                                        <div class="col align-self-center text-end">
-                                                            <button type="button" class="btn btn-outline-secondary" style="width: 125px;">장바구니 담기</button>
-                                                        </div>
+                                                        <h5 class="mt-0">주문한 음식명</h5>
+                                                        <p>가격/수량</p>
                                                     </div>
                                                 </div>
                                             </div>
@@ -303,6 +261,7 @@
         <p class="text-center text-muted">&copy; 2022 Company, Inc</p>
     </footer>
 </div>
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.2.0/dist/js/bootstrap.bundle.min.js" integrity="sha384-A3rJD856KowSb7dwlZdYEkO39Gagi7vIsF0jrRAoQmDKKtQBHUuLZ9AsSv4jD4Xa" crossorigin="anonymous"></script>
 </body>
 
 </html>
