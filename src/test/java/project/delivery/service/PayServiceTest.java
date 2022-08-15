@@ -11,6 +11,7 @@ import project.delivery.domain.Member;
 import project.delivery.domain.Pay;
 import project.delivery.domain.PayHistory;
 import project.delivery.exception.MaxException;
+import project.delivery.exception.NotEnoughBalanceException;
 import project.delivery.repository.MemberRepository;
 import project.delivery.repository.PayRepository;
 
@@ -52,6 +53,35 @@ class PayServiceTest {
             payService.chargePayMoney(member.getId(), 10000);
         });
         assertThat(pay.getMoney()).isEqualTo(2000000);
+    }
+
+    @Test
+    @DisplayName("배민페이머니사용")
+    void consumePayMoney() {
+        Member member = createMember();
+        Pay pay = new Pay(member, "012345");
+        payRepository.save(pay);
+        payService.chargePayMoney(member.getId(), 1000000);
+
+        Long payHistoryId = payService.consumePayMoney(member.getId(), 100000, "test content");
+
+        PayHistory payHistory = pay.getPayHistories().get(1);
+        assertThat(payHistory.getId()).isEqualTo(payHistoryId);
+        assertThat(pay.getMoney()).isEqualTo(900000);
+    }
+
+    @Test
+    @DisplayName("배민페이머니사용-잔액부족")
+    void consumePayMoney_NotEnough() {
+        Member member = createMember();
+        Pay pay = new Pay(member, "012345");
+        payRepository.save(pay);
+        payService.chargePayMoney(member.getId(), 100000);
+
+        assertThrows(NotEnoughBalanceException.class, () -> {
+            payService.consumePayMoney(member.getId(), 200000, "test content");
+        });
+        assertThat(pay.getMoney()).isEqualTo(100000);
     }
 
     private Member createMember() {
