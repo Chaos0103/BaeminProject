@@ -1,0 +1,46 @@
+package project.delivery.domain;
+
+import lombok.AccessLevel;
+import lombok.Getter;
+import lombok.NoArgsConstructor;
+
+import javax.persistence.*;
+
+@Entity
+@Getter
+@NoArgsConstructor(access = AccessLevel.PROTECTED)
+public class Member extends TimeBaseEntity {
+
+    @Id @GeneratedValue
+    @Column(name = "member_id")
+    private Long id;
+
+    @Column(updatable = false, nullable = false, length = 50)
+    private String email;
+    @Column(nullable = false, length = 16)
+    private String password;
+    @Column(updatable = false, nullable = false, length = 20)
+    private String username;
+    @Column(updatable = false, nullable = false, length = 8)
+    private String birth;
+    @Column(nullable = false, length = 11)
+    private String phone;
+    @Column(nullable = false, length = 20)
+    private String nickname;
+    @Enumerated(EnumType.STRING)
+    private MemberGrade grade;
+    @Embedded
+    private Address address;
+
+    public Member(String email, String password, String username, String birth, String phone, String nickname, Address address) {
+        this.email = email;
+        this.password = password;
+        this.username = username;
+        this.birth = birth;
+        this.phone = phone;
+        this.nickname = nickname;
+        this.address = address;
+
+        this.grade = MemberGrade.BASIC;
+    }
+}
