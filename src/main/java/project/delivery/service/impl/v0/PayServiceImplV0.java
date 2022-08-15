@@ -16,19 +16,10 @@ public class PayServiceImplV0 implements PayService {
     private final PayRepository payRepository;
 
     @Override
-    public Long chargePayMoney(Long memberId, int price) {
+    public Long createPayHistory(Long memberId, int price, String content, TransactionType type) {
         Pay findPay = getPay(memberId);
 
-        PayHistory payHistory = PayHistory.createPayHistory(findPay, price, "", TransactionType.CHARGE);
-
-        return payHistory.getId();
-    }
-
-    @Override
-    public Long consumePayMoney(Long memberId, int price, String content) {
-        Pay findPay = getPay(memberId);
-
-        PayHistory payHistory = PayHistory.createPayHistory(findPay, price, content, TransactionType.USE);
+        PayHistory payHistory = PayHistory.createPayHistory(findPay, price, content, type);
 
         return payHistory.getId();
     }
