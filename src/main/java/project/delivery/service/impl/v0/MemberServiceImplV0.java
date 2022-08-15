@@ -7,6 +7,7 @@ import project.delivery.domain.Member;
 import project.delivery.dto.AddressDto;
 import project.delivery.dto.MemberDto;
 import project.delivery.exception.DuplicateException;
+import project.delivery.exception.NoSuchException;
 import project.delivery.repository.MemberRepository;
 import project.delivery.service.MemberService;
 
@@ -28,6 +29,35 @@ public class MemberServiceImplV0 implements MemberService {
         Member savedMember = memberRepository.save(member);
 
         return savedMember.getId();
+    }
+
+    @Override
+    public void changeNickname(Long memberId, String nickname) {
+        Member findMember = getMember(memberId);
+
+        findMember.changeNickname(nickname);
+    }
+
+    @Override
+    public void changePassword(Long memberId, String password) {
+        Member findMember = getMember(memberId);
+        
+        findMember.changePassword(password);
+    }
+
+    @Override
+    public void changePhone(Long memberId, String phone) {
+        Member findMember = getMember(memberId);
+
+        findMember.changePhone(phone);
+    }
+
+    @Override
+    public void changeAddress(Long memberId, AddressDto addressDto) {
+        Member findMember = getMember(memberId);
+
+        Address address = createAddress(addressDto);
+        findMember.changeAddress(address);
     }
 
     /**
@@ -75,5 +105,16 @@ public class MemberServiceImplV0 implements MemberService {
      */
     private static Address createAddress(AddressDto addressDto) {
         return new Address(addressDto.getZipcode(), addressDto.getMainAddress(), addressDto.getDetailAddress());
+    }
+
+    /**
+     * 회원 정보 검색
+     * @return 회원 엔티티
+     * @exception NoSuchException 등록되지 않은 회원의 PK로 조회하는 경우 예외 발생
+     */
+    private Member getMember(Long memberId) {
+        return memberRepository.findById(memberId).orElseThrow(() -> {
+            throw new NoSuchException("등록되지 않은 회원입니다.");
+        });
     }
 }

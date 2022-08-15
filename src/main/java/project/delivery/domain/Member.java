@@ -43,4 +43,21 @@ public class Member extends TimeBaseEntity {
 
         this.grade = MemberGrade.BASIC;
     }
+
+    //==비즈니스 로직==//
+    public void changeNickname(String nickname) {
+        this.nickname = nickname;
+    }
+
+    public void changePassword(String password) {
+        this.password = password;
+    }
+
+    public void changePhone(String phone) {
+        this.phone = phone;
+    }
+
+    public void changeAddress(Address address) {
+        this.address = address;
+    }
 }
