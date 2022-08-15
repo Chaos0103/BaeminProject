@@ -17,12 +17,16 @@ public class PayServiceImplV0 implements PayService {
 
     @Override
     public Long chargePayMoney(Long memberId, int price) {
-        Pay findPay = payRepository.findByMemberId(memberId).orElseThrow(() -> {
-            throw new NoSuchException("");
-        });
+        Pay findPay = getPay(memberId);
 
-        PayHistory payHistory = new PayHistory(findPay, price, TransactionType.CHARGE);
+        PayHistory payHistory = PayHistory.createPayHistory(findPay, price, TransactionType.CHARGE);
 
         return payHistory.getId();
+    }
+
+    private Pay getPay(Long memberId) {
+        return payRepository.findByMemberId(memberId).orElseThrow(() -> {
+            throw new NoSuchException("배민페이 미가입자입니다.");
+        });
     }
 }
