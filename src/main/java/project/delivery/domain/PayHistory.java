@@ -30,11 +30,18 @@ public class PayHistory extends TimeBaseEntity {
         this.pay = pay;
         this.price = price;
         this.type = type;
-        addPayHistory();
     }
 
-    //==연관관계 메서드==//
-    public void addPayHistory() {
-        this.pay.getPayHistories().add(this);
+    //==생성 메서드==//
+    public static PayHistory createPayHistory(Pay pay, int price, TransactionType type) {
+        PayHistory payHistory = new PayHistory(pay, price, type);
+        if (type.equals(TransactionType.CHARGE)) {
+            pay.addMoney(price);
+        } else {
+            pay.removeMoney(price);
+        }
+        pay.getPayHistories().add(payHistory);
+
+        return payHistory;
     }
 }
