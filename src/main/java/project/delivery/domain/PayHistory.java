@@ -23,18 +23,21 @@ public class PayHistory extends TimeBaseEntity {
 
     @Column(updatable = false, nullable = false)
     private int price;
+    @Column(updatable = false, nullable = false)
+    private String content;
     @Enumerated(EnumType.STRING)
     private TransactionType type;
 
-    public PayHistory(Pay pay, int price, TransactionType type) {
+    public PayHistory(Pay pay, int price, String content, TransactionType type) {
         this.pay = pay;
         this.price = price;
+        this.content = content;
         this.type = type;
     }
 
     //==생성 메서드==//
-    public static PayHistory createPayHistory(Pay pay, int price, TransactionType type) {
-        PayHistory payHistory = new PayHistory(pay, price, type);
+    public static PayHistory createPayHistory(Pay pay, int price, String content, TransactionType type) {
+        PayHistory payHistory = new PayHistory(pay, price, content, type);
         if (type.equals(TransactionType.CHARGE)) {
             pay.addMoney(price);
         } else {

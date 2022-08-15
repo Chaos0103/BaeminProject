@@ -11,4 +11,7 @@ public interface PayService {
      */
     @Transactional
     Long chargePayMoney(Long memberId, int price);
+
+    @Transactional
+    Long consumePayMoney(Long memberId, int price, String content);
 }
