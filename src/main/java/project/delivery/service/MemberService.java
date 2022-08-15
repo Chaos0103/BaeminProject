@@ -38,8 +38,11 @@ public interface MemberService {
     @Transactional
     void changeAddress(Long memberId, AddressDto addressDto);
 
+    /**
+     * 회원탈퇴
+     */
+    @Transactional
+    void deleteMember(Long memberId);
 
     //회원조회
-    //회원삭제
-
 }

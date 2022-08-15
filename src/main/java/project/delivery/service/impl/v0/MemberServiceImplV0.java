@@ -41,7 +41,7 @@ public class MemberServiceImplV0 implements MemberService {
     @Override
     public void changePassword(Long memberId, String password) {
         Member findMember = getMember(memberId);
-        
+
         findMember.changePassword(password);
     }
 
@@ -58,6 +58,13 @@ public class MemberServiceImplV0 implements MemberService {
 
         Address address = createAddress(addressDto);
         findMember.changeAddress(address);
+    }
+
+    @Override
+    public void deleteMember(Long memberId) {
+        Member findMember = getMember(memberId);
+
+        memberRepository.delete(findMember);
     }
 
     /**
