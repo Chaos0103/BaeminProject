@@ -97,6 +97,51 @@ class MemberServiceTest {
         assertThrows(DuplicateException.class, () -> memberService.joinMember(memberDto));
     }
 
+    @Test
+    @DisplayName("회원정보수정-닉네임")
+    void changeNickname() {
+        Member member = createMember();
+
+        memberService.changeNickname(member.getId(), "newNickname");
+
+        Member findMember = memberRepository.findById(member.getId()).get();
+        assertThat(findMember.getNickname()).isEqualTo("newNickname");
+    }
+
+    @Test
+    @DisplayName("회원정보수정-비밀번호")
+    void changePassword() {
+        Member member = createMember();
+
+        memberService.changePassword(member.getId(), "newPassword");
+
+        Member findMember = memberRepository.findById(member.getId()).get();
+        assertThat(findMember.getPassword()).isEqualTo("newPassword");
+    }
+
+    @Test
+    @DisplayName("회원정보수정-연락처")
+        void changePhone() {
+        Member member = createMember();
+
+        memberService.changePhone(member.getId(), "01087654321");
+
+        Member findMember = memberRepository.findById(member.getId()).get();
+        assertThat(findMember.getPhone()).isEqualTo("01087654321");
+    }
+
+    @Test
+    @DisplayName("회원정보수정-주소")
+    void changeAddress() {
+        Member member = createMember();
+        AddressDto addressDto = new AddressDto("54321", "newMainAddress", "newDetailAddress");
+
+        memberService.changeAddress(member.getId(), addressDto);
+
+        Member findMember = memberRepository.findById(member.getId()).get();
+        assertThat(findMember.getAddress().getMainAddress()).isEqualTo("newMainAddress");
+    }
+
     private Member createMember() {
         Address address = new Address("12345", "mainAddress", "detailAddress");
         Member member = new Member("test@test.com", "test1!", "user", "20010101", "01011111111", "tester", address);
