@@ -142,6 +142,17 @@ class MemberServiceTest {
         assertThat(findMember.getAddress().getMainAddress()).isEqualTo("newMainAddress");
     }
 
+    @Test
+    @DisplayName("회원탈퇴")
+    void deleteMember() {
+        Member member = createMember();
+
+        memberService.deleteMember(member.getId());
+
+        Optional<Member> findMember = memberRepository.findById(member.getId());
+        assertThat(findMember).isEmpty();
+    }
+
     private Member createMember() {
         Address address = new Address("12345", "mainAddress", "detailAddress");
         Member member = new Member("test@test.com", "test1!", "user", "20010101", "01011111111", "tester", address);
