@@ -57,4 +57,8 @@ public class Pay extends TimeBaseEntity {
         }
         this.money = restMoney;
     }
+
+    public void changePassword(String password) {
+        this.password = password;
+    }
 }
