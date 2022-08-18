@@ -2,6 +2,7 @@ package project.delivery.service;
 
 import org.springframework.transaction.annotation.Transactional;
 import project.delivery.domain.Member;
+import project.delivery.dto.MemberDto;
 
 @Transactional(readOnly = true)
 public interface LoginService {
@@ -14,13 +15,13 @@ public interface LoginService {
 
     /**
      * 아이디찾기
-     * @return 이메일
+     * @return 회원DTO
      */
-    String findLoginEmail(String username, String phone);
+    MemberDto findLoginEmail(String phone);
 
     /**
      * 비밀번호찾기
-     * @return 비밀번호
+     * @return 찾은 회원의 고유번호
      */
-    String findLoginPassword(String username, String email);
+    Long findLoginPassword(String email, String phone);
 }

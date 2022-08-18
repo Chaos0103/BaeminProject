@@ -1,0 +1,77 @@
+<!DOCTYPE html>
+<html lang="ko" xmlns:th="http://www.thymeleaf.org">
+<head th:replace="fragments/head::head"></head>
+<body>
+<!-- article -->
+<article class="form-join w-100 m-auto mt-4 text-center">
+    <div class="mb-3">
+        <img class="mb-4" src="/img/icon_logo.png" alt="logo_img" width="300">
+        <h6 class="text-start">회원정보를 입력해주세요</h6>
+    </div>
+    <form method="post" th:object="${joinMemberForm}">
+        <div class="input-group mb-3">
+            <span class="input-group-text" id="basic-addon1">
+                <img src="/icon/email.svg" alt="이메일 아이콘">
+            </span>
+            <input th:field="*{email}" type="email" class="form-control" placeholder="아이디(이메일)" aria-label="Email" aria-describedby="basic-addon1">
+        </div>
+        <div class="input-group mb-3">
+            <span class="input-group-text" id="basic-addon2">
+                <img src="/icon/lock.svg" alt="자물쇠 아이콘">
+            </span>
+            <input th:field="*{password}" type="password" class="form-control" placeholder="비밀번호" aria-label="Password" aria-describedby="basic-addon2">
+        </div>
+        <div class="input-group mb-3">
+            <span class="input-group-text" id="basic-addon3">
+                <img src="/icon/shield.svg" alt="보안 아이콘">
+            </span>
+            <input th:field="*{checkPassword}" type="password" class="form-control" placeholder="비밀번호 확인" aria-label="Password" aria-describedby="basic-addon3">
+        </div>
+        <div class="input-group mb-3">
+            <span class="input-group-text" id="basic-addon4">
+                <img src="/icon/person.svg" alt="사람 아이콘">
+            </span>
+            <input th:field="*{username}" type="text" class="form-control" placeholder="이름" aria-label="Username" aria-describedby="basic-addon4">
+        </div>
+        <div class="input-group mb-3">
+            <span class="input-group-text" id="basic-addon5">
+                <img src="/icon/phone.svg" alt="휴대폰 아이콘">
+            </span>
+            <input th:field="*{phone}" type="text" class="form-control" placeholder="휴대폰 번호" aria-label="Phone" aria-describedby="basic-addon5">
+        </div>
+        <div class="input-group mb-3">
+            <span class="input-group-text" id="basic-addon6">
+                <img src="/icon/calendar.svg" alt="달력 아이콘">
+            </span>
+            <input th:field="*{birth}" type="text" class="form-control" placeholder="생년월일" aria-label="Birth" aria-describedby="basic-addon6">
+        </div>
+        <div class="input-group mb-3">
+            <span class="input-group-text" id="basic-addon7">
+                <img src="/icon/nickname.svg" alt="닉네임 아이콘">
+            </span>
+            <input th:field="*{nickname}" type="text" class="form-control" placeholder="닉네임" aria-label="Nickname" aria-describedby="basic-addon7">
+        </div>
+        <div class="input-group mb-3">
+            <span class="input-group-text" id="basic-addon8">
+                <img src="/icon/house.svg" alt="집 아이콘">
+            </span>
+            <input th:field="*{zipcode}" type="text" class="form-control" placeholder="우편번호" aria-label="Zipcode" aria-describedby="basic-addon8">
+        </div>
+        <div class="input-group mb-3">
+            <span class="input-group-text" id="basic-addon9">
+                <img src="/icon/house.svg" alt="집 아이콘">
+            </span>
+            <input th:field="*{mainAddress}" type="text" class="form-control" placeholder="메인주소" aria-label="Address" aria-describedby="basic-addon9">
+        </div>
+        <div class="input-group mb-3">
+            <span class="input-group-text" id="basic-addon10">
+                <img src="/icon/house.svg" alt="집 아이콘">
+            </span>
+            <input th:field="*{detailAddress}" type="text" class="form-control" placeholder="상세주소" aria-label="Address" aria-describedby="basic-addon10">
+        </div>
+        <button class="w-100 btn btn-lg baemin-btn" id="btn_login" type="submit">동의하고 가입하기</button>
+    </form>
+</article>
+
+</body>
+</html>

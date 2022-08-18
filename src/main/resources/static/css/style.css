@@ -24,3 +24,13 @@ header {
     color: #fff;
     cursor: pointer;
 }
+/*에러발생*/
+.field-error {
+    border-color: #dc3545;
+    color: #dc3545;
+}
+
+.form-signin {
+    max-width: 400px;
+    padding: 15px;
+}

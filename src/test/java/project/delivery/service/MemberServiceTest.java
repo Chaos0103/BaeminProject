@@ -8,8 +8,8 @@ import org.springframework.transaction.annotation.Transactional;
 import project.delivery.domain.Address;
 import project.delivery.domain.Member;
 import project.delivery.domain.MemberGrade;
-import project.delivery.dto.AddressDto;
-import project.delivery.dto.MemberDto;
+import project.delivery.dto.create.CreateAddressDto;
+import project.delivery.dto.create.CreateMemberDto;
 import project.delivery.exception.DuplicateException;
 import project.delivery.repository.MemberRepository;
 
@@ -30,8 +30,8 @@ class MemberServiceTest {
     @Test
     @DisplayName("회원가입")
     void joinMember() {
-        AddressDto addressDto = new AddressDto("12345", "서울특별시", "101-101");
-        MemberDto memberDto = new MemberDto("baemin@baemin.com", "baemin1!", "baemin", "20010101", "01012345678", "baemin", addressDto);
+        CreateAddressDto addressDto = new CreateAddressDto("12345", "서울특별시", "101-101");
+        CreateMemberDto memberDto = new CreateMemberDto("baemin@baemin.com", "baemin1!", "baemin", "20010101", "01012345678", "baemin", addressDto);
 
         Long memberId = memberService.joinMember(memberDto);
 
@@ -42,8 +42,8 @@ class MemberServiceTest {
     @Test
     @DisplayName("회원가입-등급")
     void joinMember_grade() {
-        AddressDto addressDto = new AddressDto("12345", "서울특별시", "101-101");
-        MemberDto memberDto = new MemberDto("baemin@baemin.com", "baemin1!", "baemin", "20010101", "01012345678", "baemin", addressDto);
+        CreateAddressDto addressDto = new CreateAddressDto("12345", "서울특별시", "101-101");
+        CreateMemberDto memberDto = new CreateMemberDto("baemin@baemin.com", "baemin1!", "baemin", "20010101", "01012345678", "baemin", addressDto);
 
         Long memberId = memberService.joinMember(memberDto);
 
@@ -54,8 +54,8 @@ class MemberServiceTest {
     @Test
     @DisplayName("회원가입-시간")
     void joinMember_time() {
-        AddressDto addressDto = new AddressDto("12345", "서울특별시", "101-101");
-        MemberDto memberDto = new MemberDto("baemin@baemin.com", "baemin1!", "baemin", "20010101", "01012345678", "baemin", addressDto);
+        CreateAddressDto addressDto = new CreateAddressDto("12345", "서울특별시", "101-101");
+        CreateMemberDto memberDto = new CreateMemberDto("baemin@baemin.com", "baemin1!", "baemin", "20010101", "01012345678", "baemin", addressDto);
 
         Long memberId = memberService.joinMember(memberDto);
 
@@ -69,8 +69,8 @@ class MemberServiceTest {
     void joinMember_duplicatedEmail() {
         Member savedMember = createMember();
 
-        AddressDto addressDto = new AddressDto("12345", "서울특별시", "101-101");
-        MemberDto memberDto = new MemberDto("test@test.com", "baemin1!", "baemin", "20010101", "01012345678", "baemin", addressDto);
+        CreateAddressDto addressDto = new CreateAddressDto("12345", "서울특별시", "101-101");
+        CreateMemberDto memberDto = new CreateMemberDto("test@test.com", "baemin1!", "baemin", "20010101", "01012345678", "baemin", addressDto);
 
         assertThrows(DuplicateException.class, () -> memberService.joinMember(memberDto));
     }
@@ -80,8 +80,8 @@ class MemberServiceTest {
         void joinMember_duplicatedPhone() {
         Member savedMember = createMember();
 
-        AddressDto addressDto = new AddressDto("12345", "서울특별시", "101-101");
-        MemberDto memberDto = new MemberDto("baemin@baemin.com", "baemin1!", "baemin", "20010101", "01011111111", "baemin", addressDto);
+        CreateAddressDto addressDto = new CreateAddressDto("12345", "서울특별시", "101-101");
+        CreateMemberDto memberDto = new CreateMemberDto("baemin@baemin.com", "baemin1!", "baemin", "20010101", "01011111111", "baemin", addressDto);
 
         assertThrows(DuplicateException.class, () -> memberService.joinMember(memberDto));
     }
@@ -91,8 +91,8 @@ class MemberServiceTest {
     void joinMember_duplicatedNickname() {
         Member savedMember = createMember();
 
-        AddressDto addressDto = new AddressDto("12345", "서울특별시", "101-101");
-        MemberDto memberDto = new MemberDto("baemin@baemin.com", "baemin1!", "baemin", "20010101", "01012345678", "tester", addressDto);
+        CreateAddressDto addressDto = new CreateAddressDto("12345", "서울특별시", "101-101");
+        CreateMemberDto memberDto = new CreateMemberDto("baemin@baemin.com", "baemin1!", "baemin", "20010101", "01012345678", "tester", addressDto);
 
         assertThrows(DuplicateException.class, () -> memberService.joinMember(memberDto));
     }
@@ -134,7 +134,7 @@ class MemberServiceTest {
     @DisplayName("회원정보수정-주소")
     void changeAddress() {
         Member member = createMember();
-        AddressDto addressDto = new AddressDto("54321", "newMainAddress", "newDetailAddress");
+        CreateAddressDto addressDto = new CreateAddressDto("54321", "newMainAddress", "newDetailAddress");
 
         memberService.changeAddress(member.getId(), addressDto);
 

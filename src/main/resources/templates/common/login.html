@@ -1,0 +1,48 @@
+<!DOCTYPE html>
+<html lang="ko" xmlns:th="http://www.thymeleaf.org">
+<head th:replace="fragments/head::head"></head>
+<head>
+    <title>배달의 민족 | 로그인</title>
+</head>
+<body>
+<header th:replace="fragments/basicHeader::basicHeader"></header>
+
+<article class="form-signin w-100 m-auto mt-4 text-center">
+    <form action="/login" method="post" th:object="${loginForm}">
+        <img class="mb-4 w-100" src="/img/icon_logo.png" alt="main_logo">
+        <!-- 글로벌 오류 메세지 -->
+        <div th:if="${#fields.hasGlobalErrors()}" class="text-center">
+            <p class="field-error" th:each="err : ${#fields.globalErrors()}" th:text="${err}">전체 오류 메시지</p>
+        </div>
+
+        <div>
+            <label for="email" class="form-label"></label>
+            <input th:field="*{email}" type="email" class="form-control border border-top-0 border-start-0 border-end-0" id="email" placeholder="아이디 또는 이메일">
+            <div class="field-error text-start" th:errors="*{email}"></div>
+        </div>
+
+        <div class="mb-3">
+            <label for="password" class="form-label"></label>
+            <input th:field="*{password}" type="password" class="form-control border border-top-0 border-start-0 border-end-0" id="password" placeholder="비밀번호">
+            <div class="field-error text-start" th:errors="*{password}"></div>
+        </div>
+
+        <button class="w-100 btn btn-lg baemin-btn" id="btn_login" type="submit">로그인</button>
+    </form>
+    <div class="mt-3 mb-5">
+        <a href="/login/loginId" class="text-muted text-decoration-none me-3">아이디 찾기</a> | <a href="/login/password" class="text-muted text-decoration-none ms-3">비밀번호 찾기</a>
+    </div>
+    <div class="mt-5">
+        <button class="w-100 btn btn-sm btn-light border border-dark" id="facebook" type="button" onclick="beforeService()">페이스북으로 로그인</button>
+    </div>
+    <div class="mt-3">
+        <button class="w-100 btn btn-sm btn-light border border-dark" id="naver" type="button" onclick="beforeService()">네이버로 로그인</button>
+    </div>
+    <div class="mt-3">
+        <p>혹시, 배달의민족이 처음이신가요? <a href="/sign-up" class="text-decoration-none text-baemin">회원가입</a></p>
+    </div>
+</article>
+
+<footer th:replace="fragments/footer::footer"></footer>
+</body>
+</html>

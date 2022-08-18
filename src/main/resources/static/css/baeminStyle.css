@@ -1,4 +1,9 @@
+/*배달의민족 텍스트 컬러*/
+.text-baemin {
+    color: rgb(95, 190, 187);
+}
 
+/*배달의민족 버튼*/
 .baemin-btn, .baemin-btn:hover {
     color: white;
     background-color: rgb(95, 190, 187);
