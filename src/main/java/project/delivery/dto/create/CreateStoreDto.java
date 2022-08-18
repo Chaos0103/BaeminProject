@@ -19,4 +19,20 @@ public class CreateStoreDto {
     private String businessAddress;
     private String businessNumber;
     private String announcement;
+
+    public CreateStoreDto(String storeName, Category category, String tel, String introduction, String tradeName, String openTime, String holiday, String deliveryArea, String deliveryTip, String representativeName, String businessAddress, String businessNumber, String announcement) {
+        this.storeName = storeName;
+        this.category = category;
+        this.tel = tel;
+        this.introduction = introduction;
+        this.tradeName = tradeName;
+        this.openTime = openTime;
+        this.holiday = holiday;
+        this.deliveryArea = deliveryArea;
+        this.deliveryTip = deliveryTip;
+        this.representativeName = representativeName;
+        this.businessAddress = businessAddress;
+        this.businessNumber = businessNumber;
+        this.announcement = announcement;
+    }
 }
