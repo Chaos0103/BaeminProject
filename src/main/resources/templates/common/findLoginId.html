@@ -1,0 +1,21 @@
+<!DOCTYPE html>
+<html lang="ko" xmlns:th="http://www.thymeleaf.org">
+<head th:replace="fragments/head::head">
+    <title></title>
+</head>
+<body>
+<header th:replace="fragments/basicHeader::basicHeader"></header>
+
+<article class="form-signin w-100 m-auto mt-4 text-center">
+    <h4 class="mb-5">인증이 완료되었습니다</h4>
+    <div class="mb-5 pb-5">
+        <h5 class="mb-5">고객님의 배달의민족 아이디 목록입니다</h5>
+        <p th:text="|${email} (가입일: ${#temporals.format(createdDate, 'yyyy-MM-dd')})|"></p>
+    </div>
+    <button class="w-100 btn btn-lg baemin-btn mb-3" id="btn_login" type="submit">로그인하기</button>
+    <a href="/login/password" class="text-decoration-none text-baemin">비밀번호 찾기</a>
+</article>
+
+<footer th:replace="fragments/footer::footer"></footer>
+</body>
+</html>

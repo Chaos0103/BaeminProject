@@ -1,8 +1,8 @@
 package project.delivery.service;
 
 import org.springframework.transaction.annotation.Transactional;
-import project.delivery.dto.AddressDto;
-import project.delivery.dto.MemberDto;
+import project.delivery.dto.create.CreateAddressDto;
+import project.delivery.dto.create.CreateMemberDto;
 
 @Transactional(readOnly = true)
 public interface MemberService {
@@ -12,7 +12,7 @@ public interface MemberService {
      * @return 회원고유번호
      */
     @Transactional
-    Long joinMember(MemberDto memberDto);
+    Long joinMember(CreateMemberDto memberDto);
 
     /**
      * 회원정보수정: 닉네임 변경
@@ -36,7 +36,7 @@ public interface MemberService {
      * 회원정보수정: 주소 변경
      */
     @Transactional
-    void changeAddress(Long memberId, AddressDto addressDto);
+    void changeAddress(Long memberId, CreateAddressDto addressDto);
 
     /**
      * 회원탈퇴

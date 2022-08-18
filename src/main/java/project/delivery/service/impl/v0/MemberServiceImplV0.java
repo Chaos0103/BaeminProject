@@ -4,8 +4,8 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import project.delivery.domain.Address;
 import project.delivery.domain.Member;
-import project.delivery.dto.AddressDto;
-import project.delivery.dto.MemberDto;
+import project.delivery.dto.create.CreateAddressDto;
+import project.delivery.dto.create.CreateMemberDto;
 import project.delivery.exception.DuplicateException;
 import project.delivery.exception.NoSuchException;
 import project.delivery.repository.MemberRepository;
@@ -20,7 +20,7 @@ public class MemberServiceImplV0 implements MemberService {
     private final MemberRepository memberRepository;
 
     @Override
-    public Long joinMember(MemberDto memberDto) {
+    public Long joinMember(CreateMemberDto memberDto) {
         duplicatedEmail(memberDto.getEmail());
         duplicatedPhone(memberDto.getPhone());
         duplicatedNickname(memberDto.getNickname());
@@ -53,7 +53,7 @@ public class MemberServiceImplV0 implements MemberService {
     }
 
     @Override
-    public void changeAddress(Long memberId, AddressDto addressDto) {
+    public void changeAddress(Long memberId, CreateAddressDto addressDto) {
         Member findMember = getMember(memberId);
 
         Address address = createAddress(addressDto);
@@ -101,7 +101,7 @@ public class MemberServiceImplV0 implements MemberService {
      * 회원 엔티티 생성
      * @return 회원 엔티티
      */
-    private static Member createMember(MemberDto memberDto) {
+    private static Member createMember(CreateMemberDto memberDto) {
         Address address = createAddress(memberDto.getAddressDto());
         return new Member(memberDto.getEmail(), memberDto.getPassword(), memberDto.getUsername(), memberDto.getBirth(), memberDto.getPhone(), memberDto.getNickname(), address);
     }
@@ -110,7 +110,7 @@ public class MemberServiceImplV0 implements MemberService {
      * 주소 값타입 생성
      * @return 주소 값타입
      */
-    private static Address createAddress(AddressDto addressDto) {
+    private static Address createAddress(CreateAddressDto addressDto) {
         return new Address(addressDto.getZipcode(), addressDto.getMainAddress(), addressDto.getDetailAddress());
     }
 
