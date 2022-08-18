@@ -1,6 +1,7 @@
 package project.delivery.dto;
 
 import lombok.Data;
+import project.delivery.domain.Address;
 
 @Data
 public class AddressDto {
@@ -9,9 +10,9 @@ public class AddressDto {
     private String mainAddress;
     private String detailAddress;
 
-    public AddressDto(String zipcode, String mainAddress, String detailAddress) {
-        this.zipcode = zipcode;
-        this.mainAddress = mainAddress;
-        this.detailAddress = detailAddress;
+    public AddressDto(Address address) {
+        this.zipcode = address.getZipcode();
+        this.mainAddress = address.getMainAddress();
+        this.detailAddress = address.getDetailAddress();
     }
 }

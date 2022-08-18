@@ -4,10 +4,6 @@ spring:
     username: sa
     password:
     driver-class-name: org.h2.Driver
-#  security:
-#    user:
-#      name: user
-#      password: 1234
 
   jpa:
     hibernate:
@@ -18,3 +14,9 @@ spring:
 
 logging.level:
   org.hibernate.SQL: debug
+  project.delivery: debug
+
+server:
+  servlet:
+    session:
+      tracking-modes: cookie

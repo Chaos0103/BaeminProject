@@ -32,3 +32,7 @@ function test() {
         $('#toRiderForm').hide();
     }
 }
+
+function beforeService() {
+    alert('서비스 준비중입니다');
+}
