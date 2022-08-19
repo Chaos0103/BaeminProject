@@ -6,6 +6,8 @@ import lombok.NoArgsConstructor;
 
 import javax.persistence.*;
 
+import static javax.persistence.FetchType.*;
+
 @Entity
 @Getter
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
@@ -20,6 +22,8 @@ public class Store extends TimeBaseEntity {
     @Enumerated(EnumType.STRING)
     @Column(updatable = false, nullable = false)
     private Category category;
+    @Embedded
+    private UploadFile uploadFile;
     @Column(nullable = false, length = 11)
     private String tel;
     @Lob
@@ -57,9 +61,13 @@ public class Store extends TimeBaseEntity {
     @Column(nullable = false)
     private int recentOrderCount;
 
-    public Store(String storeName, Category category, String tel, String introduction, String tradeName, String openTime, String holiday, String deliveryArea, String deliveryTip, String representativeName, String businessAddress, String businessNumber, String announcement) {
+    @OneToOne(mappedBy = "store", optional = false, cascade = CascadeType.ALL, fetch = LAZY)
+    private DeliveryInfo deliveryInfo;
+
+    public Store(String storeName, Category category, UploadFile uploadFile, String tel, String introduction, String tradeName, String openTime, String holiday, String deliveryArea, String deliveryTip, String representativeName, String businessAddress, String businessNumber, String announcement) {
         this.storeName = storeName;
         this.category = category;
+        this.uploadFile = uploadFile;
         this.tel = tel;
         this.introduction = introduction;
         this.tradeName = tradeName;
@@ -77,5 +85,10 @@ public class Store extends TimeBaseEntity {
         this.commentCount = 0;
         this.bookmarkCount = 0;
         this.recentOrderCount = 0;
+    }
+
+    //==연관관계 메서드==//
+    public void addDeliveryInfo(DeliveryInfo deliveryInfo) {
+        this.deliveryInfo = deliveryInfo;
     }
 }

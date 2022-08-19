@@ -4,6 +4,7 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import project.delivery.domain.Category;
 import project.delivery.domain.Store;
+import project.delivery.domain.UploadFile;
 import project.delivery.dto.StoreDto;
 import project.delivery.dto.create.CreateStoreDto;
 import project.delivery.exception.DuplicateException;
@@ -37,6 +38,12 @@ public class StoreServiceImplV0 implements StoreService {
                 .toList();
     }
 
+    @Override
+    public StoreDto detailStore(Long storeId) {
+        Optional<Store> store = storeRepository.findStore(storeId);
+        return new StoreDto(store.get());
+    }
+
     private void duplicatedBusinessNumber(String businessNumber) {
         Optional<Store> findStore = storeRepository.findByBusinessNumber(businessNumber);
         if (findStore.isPresent()) {
@@ -45,8 +52,9 @@ public class StoreServiceImplV0 implements StoreService {
     }
 
     private Store createStore(CreateStoreDto createStoreDto) {
-        return new Store(createStoreDto.getStoreName(), createStoreDto.getCategory(), createStoreDto.getTel(), createStoreDto.getIntroduction(), createStoreDto.getIntroduction(),
+        return new Store(createStoreDto.getStoreName(), createStoreDto.getCategory(), new UploadFile(null, null), createStoreDto.getTel(), createStoreDto.getIntroduction(), createStoreDto.getIntroduction(),
                 createStoreDto.getOpenTime(), createStoreDto.getHoliday(), createStoreDto.getDeliveryArea(), createStoreDto.getDeliveryTip(), createStoreDto.getRepresentativeName(),
                 createStoreDto.getBusinessAddress(), createStoreDto.getBusinessNumber(), createStoreDto.getAnnouncement());
     }
+
 }

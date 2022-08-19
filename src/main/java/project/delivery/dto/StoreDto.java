@@ -3,12 +3,14 @@ package project.delivery.dto;
 import lombok.Data;
 import project.delivery.domain.Category;
 import project.delivery.domain.Store;
+import project.delivery.domain.UploadFile;
 
 @Data
 public class StoreDto {
     private Long id;
     private String storeName;
     private Category category;
+    private UploadFile uploadFile;
     private String tel;
     private String introduction;
     private String tradeName;
@@ -26,10 +28,13 @@ public class StoreDto {
     private int bookmarkCount;
     private int recentOrderCount;
 
+    private DeliveryInfoDto deliveryInfoDto;
+
     public StoreDto(Store store) {
         this.id = store.getId();
         this.storeName = store.getStoreName();
         this.category = store.getCategory();
+        this.uploadFile = store.getUploadFile();
         this.tel = store.getTel();
         this.introduction = store.getIntroduction();
         this.tradeName = store.getTradeName();
@@ -46,5 +51,6 @@ public class StoreDto {
         this.commentCount = store.getCommentCount();
         this.bookmarkCount = store.getBookmarkCount();
         this.recentOrderCount = store.getRecentOrderCount();
+        this.deliveryInfoDto = new DeliveryInfoDto(store.getDeliveryInfo());
     }
 }
