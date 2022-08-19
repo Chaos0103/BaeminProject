@@ -14,4 +14,6 @@ public interface StoreService {
     Long createNewStore(CreateStoreDto createStoreDto);
 
     List<StoreDto> searchStores(Category category);
+
+    StoreDto detailStore(Long storeId);
 }
