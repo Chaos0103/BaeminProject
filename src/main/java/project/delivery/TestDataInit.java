@@ -20,7 +20,10 @@ public class TestDataInit {
     @PostConstruct
     private void init() {
         Address address = new Address("06544", "서울시 서초구 신반포로 270", "101-101");
-        Member member = new Member("lyt1228@naver.com", "pw1!", "임우택", "19980103", "01088888888", "chaos", address);
+        Member member = new Member("lyt1228@naver.com", "pw12345678@", "임우택", "19980103", "01088888888", "chaos", address);
+
+        Pay pay = new Pay(member, "123456");
+        pay.addMoney(1000000);
         memberRepository.save(member);
 
         Store store1 = new Store("BBQ 간석중앙점", Category.CHICKEN, new UploadFile("/file/bbq.png", "/file/bbq.png"), "0324297326", "안녕하세요!BBQ 간석중앙점을 찾아주셔서 감사합니다!",
@@ -35,8 +38,5 @@ public class TestDataInit {
         new DeliveryInfo(store2, 12000, PaymentType.DIRECT, "32~47분 소요 예상", "1,000원 ~ 3,000원");
         storeRepository.save(store2);
 
-        Pay pay = new Pay(member, "123456");
-        pay.addMoney(1000000);
-        payRepository.save(pay);
     }
 }

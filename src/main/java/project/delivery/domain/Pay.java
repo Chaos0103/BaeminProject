@@ -39,6 +39,7 @@ public class Pay extends TimeBaseEntity {
         this.member = member;
         this.password = password;
         this.money = 0;
+        member.addPay(this);
     }
 
     //==비즈니스 로직==//

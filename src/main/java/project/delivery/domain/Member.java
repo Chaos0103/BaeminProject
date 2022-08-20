@@ -25,12 +25,15 @@ public class Member extends TimeBaseEntity {
     private String birth;
     @Column(nullable = false, length = 11)
     private String phone;
-    @Column(nullable = false, length = 20)
+    @Column(nullable = false, length = 10)
     private String nickname;
     @Enumerated(EnumType.STRING)
     private MemberGrade grade;
     @Embedded
     private Address address;
+
+    @OneToOne(mappedBy = "member", orphanRemoval = true, cascade = CascadeType.ALL, fetch = FetchType.LAZY)
+    private Pay pay;
 
     public Member(String email, String password, String username, String birth, String phone, String nickname, Address address) {
         this.email = email;
@@ -44,6 +47,10 @@ public class Member extends TimeBaseEntity {
         this.grade = MemberGrade.BASIC;
     }
 
+    //==연관관계 메서드==//
+    public void addPay(Pay pay) {
+        this.pay = pay;
+    }
     //==비즈니스 로직==//
     public void changeNickname(String nickname) {
         this.nickname = nickname;
