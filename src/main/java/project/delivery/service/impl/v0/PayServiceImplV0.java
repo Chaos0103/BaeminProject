@@ -5,6 +5,7 @@ import org.springframework.stereotype.Service;
 import project.delivery.domain.*;
 import project.delivery.dto.PayAccountDto;
 import project.delivery.dto.PayCardDto;
+import project.delivery.dto.PayDto;
 import project.delivery.dto.PayHistoryDto;
 import project.delivery.dto.create.CreatePayAccountDto;
 import project.delivery.dto.create.CreatePayCardDto;
@@ -32,6 +33,18 @@ public class PayServiceImplV0 implements PayService {
         Pay savedPay = payRepository.save(pay);
 
         return savedPay.getId();
+    }
+
+    @Override
+    public void chargePayMoney(Long memberId, int money) {
+        Pay findPay = getPay(memberId);
+        findPay.addMoney(money);
+    }
+
+    @Override
+    public void refundPayMoney(Long memberId) {
+        Pay findPay = getPay(memberId);
+        createPayHistory(memberId, findPay.getMoney(), "배민페이", TransactionType.REFUND);
     }
 
     @Override
@@ -89,6 +102,14 @@ public class PayServiceImplV0 implements PayService {
     }
 
     @Override
+    public PayDto findPay(Long memberId) {
+        Pay findPay = payRepository.findDataByMemberId(memberId).orElseThrow(() -> {
+            throw new NoSuchException("배민페이 미가입자입니다");
+        });
+        return new PayDto(findPay);
+    }
+
+    @Override
     public List<PayHistoryDto> findPayHistory(Long memberId, TransactionType type) {
         Pay findPay = getPay(memberId);
 
@@ -141,7 +162,7 @@ public class PayServiceImplV0 implements PayService {
 
     private Pay getPay(Long memberId) {
         return payRepository.findByMemberId(memberId).orElseThrow(() -> {
-            throw new NoSuchException("배민페이 미가입자입니다.");
+            throw new NoSuchException("배민페이 미가입자입니다");
         });
     }
 

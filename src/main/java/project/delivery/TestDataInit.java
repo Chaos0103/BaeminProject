@@ -4,6 +4,7 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Component;
 import project.delivery.domain.*;
 import project.delivery.repository.MemberRepository;
+import project.delivery.repository.PayRepository;
 import project.delivery.repository.StoreRepository;
 
 import javax.annotation.PostConstruct;
@@ -14,6 +15,7 @@ public class TestDataInit {
 
     private final MemberRepository memberRepository;
     private final StoreRepository storeRepository;
+    private final PayRepository payRepository;
 
     @PostConstruct
     private void init() {
@@ -32,5 +34,9 @@ public class TestDataInit {
                 "인천광역시 남동구 구월동 1136 1층 105, 106호(구월동, 가온누리)", "186-17-01688", "BBQ 인청시청점 리.뷰.이.벤.트!");
         new DeliveryInfo(store2, 12000, PaymentType.DIRECT, "32~47분 소요 예상", "1,000원 ~ 3,000원");
         storeRepository.save(store2);
+
+        Pay pay = new Pay(member, "123456");
+        pay.addMoney(1000000);
+        payRepository.save(pay);
     }
 }
