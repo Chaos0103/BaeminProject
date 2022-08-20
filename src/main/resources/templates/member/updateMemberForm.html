@@ -1,41 +1,10 @@
 <!DOCTYPE html>
-<html lang="ko">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1">
-    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.2.0/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-gH2yIJqKdNHPEq0n4Mqa/HGKIhSkIHeL5AyhkYV8i59U5AR6csBvApHHNl/vI1Bx" crossorigin="anonymous">
-    <link rel="stylesheet" href="../../static/css/style.css">
-    <link href="../../static/icon/favicon.ico" rel="shortcut icon" type="image/x-icon">
-    <title>배달의 민족</title>
+<html lang="ko" xmlns:th="http://www.thymeleaf.org">
+<head th:replace="fragments/head::head(~{::title})">
+    <title>배달의 민족 | 회원정보 수정</title>
 </head>
-<body class="text-center">
-<!-- header -->
-<header class="p-3">
-    <div class="container">
-        <div class="d-flex flex-wrap align-items-center justify-content-center justify-content-lg-start">
-            <a href="/home" class="d-flex align-items-center mb-2 mb-lg-0 ms-3 text-white text-decoration-none">
-                <img src="../../static/img/logo.png" alt="main_icon" height="20"/>
-            </a>
-
-            <ul class="nav col-12 col-lg-auto me-lg-auto mb-2 ms-2 justify-content-center mb-md-0">
-                <li><a href="#" class="nav-link px-2 text-white">Home</a></li>
-                <li><a href="#" class="nav-link px-2 text-white">찜</a></li>
-                <li><a href="#" class="nav-link px-2 text-white">주문내역</a></li>
-                <li><a href="#" class="nav-link px-2 text-white">마이페이지</a></li>
-                <li><a href="#" class="nav-link px-2 text-white">About</a></li>
-            </ul>
-
-            <form class="col-12 col-lg-auto mb-3 mb-lg-0 me-lg-3" role="search">
-                <input type="search" class="form-control form-control-dark text-bg-light" placeholder="Search..." aria-label="Search">
-            </form>
-
-            <ul class="nav pe-2">
-                <li class="nav-item"><a href="#" class="nav-link link-light px-2">Login</a></li>
-                <li class="nav-item"><a href="#" class="nav-link link-light px-2">Sign up</a></li>
-            </ul>
-        </div>
-    </div>
-</header>
+<body>
+<header th:replace="fragments/loginHeader::loginHeader"></header>
 
 <arricle>
     <div class="container px-4 py-5">
@@ -43,27 +12,29 @@
             <section class="p-5">
                 <h1 class="ms-4">회원정보 수정</h1>
                 <div class="m-4">
-                    <table class="table align-middle">
+                    <table class="table align-middle" th:object="${loginMember}">
                         <tbody class="table-group-divider">
                         <tr>
                             <th scope="row" class="ps-4 col-md-2 bg-secondary" style="--bs-bg-opacity: .3;">닉네임</th>
                             <td>
-                                <form method="post">
+                                <form method="post" action="/members/nickname">
                                     <div class="row ms-1">
                                         <label class="col-sm-4">
-                                            <input type="text" class="form-control" value="독고배달"/>
+                                            <input type="text" class="form-control" value="독고배달" th:field="${changeNicknameForm.newNickname}" maxlength="10">
+                                            <div class="field-error text-start" th:errors="${changeNicknameForm.newNickname}"></div>
                                         </label>
                                         <div class="col">
                                             <button class="btn btn-light border-dark" type="submit">닉네임 변경</button>
                                         </div>
                                     </div>
+                                    <div class="field-error ms-4" th:text="${equalNickname}?:_"></div>
                                 </form>
                             </td>
                         </tr>
                         <tr>
                             <th scope="row" class="ps-4 col-md-2 bg-secondary" style="--bs-bg-opacity: .3;">아이디(이메일)</th>
                             <td>
-                                <div class="col-lg-4 ms-3 align-self-center p-1">
+                                <div class="col-lg-4 ms-3 align-self-center p-1" th:text="*{email}">
                                     baemin@baemin.com
                                 </div>
                             </td>
@@ -71,7 +42,7 @@
                         <tr>
                             <th scope="row" class="ps-4 col-md-2 bg-secondary" style="--bs-bg-opacity: .3;">이름</th>
                             <td>
-                                <div class="col-lg-4 ms-3 align-self-center p-1">
+                                <div class="col-lg-4 ms-3 align-self-center p-1" th:text="*{username}">
                                     배달이
                                 </div>
                             </td>
@@ -79,7 +50,7 @@
                         <tr>
                             <th scope="row" class="ps-4 col-md-2 bg-secondary" style="--bs-bg-opacity: .3;">휴대폰 번호</th>
                             <td>
-                                <div class="col-lg-4 ms-3 align-self-center p-1">
+                                <div class="col-lg-4 ms-3 align-self-center p-1" th:text="*{phone}">
                                     01012345678
                                 </div>
                             </td>
@@ -87,17 +58,21 @@
                         <tr>
                             <th scope="row" class="ps-4 col-md-2 bg-secondary" style="--bs-bg-opacity: .3;">비밀번호 변경</th>
                             <td>
-                                <form method="post">
+                                <form method="post" th:action="@{/members/password}" th:object="${changePasswordForm}">
                                     <div class="mb-3 mt-3 row ms-2">
                                         <label for="nowPassword" class="col-sm-2 col-form-label">현재 비밀번호</label>
                                         <div class="col-sm-4">
-                                            <input type="password" class="form-control" id="nowPassword">
+                                            <input type="password" class="form-control" id="nowPassword" th:field="*{nowPassword}" maxlength="20">
+                                            <div class="field-error" th:errors="*{nowPassword}"></div>
+                                            <div class="field-error" th:text="${notEqualPassword}?:_"></div>
                                         </div>
                                     </div>
                                     <div class="mb-3 row ms-2">
                                         <label for="newPassword" class="col-sm-2 col-form-label">신규 비밀번호</label>
                                         <div class="col-sm-4">
-                                            <input type="password" class="form-control" id="newPassword" placeholder="10-20자 이내">
+                                            <input type="password" class="form-control" id="newPassword" placeholder="10-20자 이내" th:field="*{newPassword}" maxlength="20">
+                                            <div class="field-error" th:errors="*{newPassword}"></div>
+                                            <div class="field-error" th:text="${equalNowPassword}?:_"></div>
                                         </div>
                                         <div class="col">
                                             <button class="btn btn-light border-dark" type="submit">비밀번호 변경</button>
@@ -111,29 +86,41 @@
                 </div>
                 <div class="row justify-content-end">
                     <div class="col-md-1 me-3">
-                        <button type="button" class="btn btn-secondary btn-sm">회원탈퇴</button>
+                        <button type="button" class="btn btn-secondary btn-sm" data-bs-toggle="modal" data-bs-target="#deleteMember">회원탈퇴</button>
                     </div>
                 </div>
                 <div class="text-center mt-4">
-                    <button class="btn btn-light border-dark" type="submit">나가기</button>
+                    <button class="btn btn-light border-dark" type="button" th:onclick="|location.href='@{/orders}'|">나가기</button>
                 </div>
             </section>
         </div>
     </div>
 </arricle>
-
-<!-- footer -->
-<div class="container">
-    <footer class="py-3 my-4">
-        <ul class="nav justify-content-center border-bottom pb-3 mb-3">
-            <li class="nav-item"><a href="#" class="nav-link px-2 text-muted">Home</a></li>
-            <li class="nav-item"><a href="#" class="nav-link px-2 text-muted">찜</a></li>
-            <li class="nav-item"><a href="#" class="nav-link px-2 text-muted">주문내역</a></li>
-            <li class="nav-item"><a href="#" class="nav-link px-2 text-muted">마이페이지</a></li>
-            <li class="nav-item"><a href="#" class="nav-link px-2 text-muted">About</a></li>
-        </ul>
-        <p class="text-center text-muted">&copy; 2022 Company, Inc</p>
-    </footer>
+<!-- delete member -->
+<div class="modal fade" id="deleteMember" tabindex="-1" aria-labelledby="deleteMemberLabel" aria-hidden="true">
+    <div class="modal-dialog modal-dialog-scrollable">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title" id="deleteMemberLabel">회원탈퇴</h5>
+                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+            </div>
+            <div class="modal-body">
+                <ul>
+                    <li>배달의민족 회원탈퇴 시 배달의민족 서비스에 탈퇴되며, 회사가 운영하는 다른 제휴 서비스(ex. 배민사장님광장 등)의 이용은 가능합니다.</li>
+                    <li>배달의민족 회원탈퇴 시 회원이 보유하고 있던 포인트, 쿠폰 및 배민페이머니는 모두 소멸되며, 복구가 불가능합니다.</li>
+                    <li>배달의민족 회원탈퇴 후 재가입하더라도 탈퇴 전의 회원정보, 거래정보 및 포인트, 쿠폰, 배민페이머니 등은 복구되지 않습니다.</li>
+                    <li>유상성 쿠폰, 배민페이머니는 각각 'My배민>쿠폰함', 'My배민>배민페이관리>배민페이머니'에서 확인 가능합니다.</li>
+                    <li>배달의민족 회원은 유상성 쿠폰 및 배민페이머니를 회원탈퇴 신청 전에 환불 신청하거나 소진하여야 합니다. 회원이 환불 신청 없이 자진 탈퇴하고자 하는 경우, 회사는 유상성 쿠폰 및 배민페이머니에 대한 소멸 동의를 받습니다.</li>
+                    <li>배달의민족 회원이 탈퇴하려는 경우 결제 편의를 목적으로 회원이 지정(선택)한 부가 서비스(ex. 배민페이)가 해지되며, 해당 서비스 회원의 자격도 자동으로 상실(탈퇴)됩니다.</li>
+                    <li>배달의민족 회원탈퇴 시 회원정보 및 서비스 이용기록은 모두 삭제되며, 삭제된 데이터는 복구가 불가능합니다. 다만 법령에 의하여 보관해야 하는 경우 또는 회원가입 남용, 서비스 부정사용 등을 위한 회사 내부정책에 의하여 보관해야하는 정보는 회원탈퇴 후에도 일정기간 보관됩니다. 자세한 사항은 배달의민족 개인정보 처리방침에서 확인하실 수 있습니다.</li>
+                </ul>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn baemin-btn w-100" th:onclick="|location.href='@{/members/delete}'|">계정 삭제하기</button>
+            </div>
+        </div>
+    </div>
 </div>
+<footer th:replace="fragments/footer::footer"></footer>
 </body>
 </html>
