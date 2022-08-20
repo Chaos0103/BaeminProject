@@ -2,6 +2,7 @@ package project.delivery.dto;
 
 import lombok.Data;
 import project.delivery.domain.Member;
+import project.delivery.domain.MemberGrade;
 
 import java.time.LocalDateTime;
 
@@ -15,6 +16,7 @@ public class MemberDto {
     private String birth;
     private String phone;
     private String nickname;
+    private MemberGrade grade;
     private LocalDateTime createdDate;
     private LocalDateTime lastModifiedDate;
     private AddressDto addressDto;
@@ -27,6 +29,7 @@ public class MemberDto {
         this.birth = member.getBirth();
         this.phone = member.getPhone();
         this.nickname = member.getNickname();
+        this.grade = member.getGrade();
         this.createdDate = member.getCreatedDate();
         this.lastModifiedDate = member.getLastModifiedDate();
         this.addressDto = new AddressDto(member.getAddress());

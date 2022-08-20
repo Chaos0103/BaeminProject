@@ -51,7 +51,7 @@ class StoreServiceTest {
     }
 
     private Store createStore() {
-        Store store = new Store("test Store", Category.CHICKEN, "0212345678", "introduction", "test",
+        Store store = new Store("test Store", Category.CHICKEN, null, "0212345678", "introduction", "test",
                 "10:00", "연중무휴", "전지역", "1,000원", "test", "address",
                 "123-45-67890", "announcement");
         return storeRepository.save(store);
