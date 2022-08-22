@@ -1,0 +1,34 @@
+<!DOCTYPE html>
+<html lang="ko" xmlns:th="http://www.thymeleaf.org">
+<!-- 알림 모달 -->
+<div th:fragment="notifications (notifications)" class="modal fade" id="notification" tabindex="-1" aria-labelledby="notificationLabel" aria-hidden="true">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title" id="notificationLabel">알림센터</h5>
+                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+            </div>
+            <div class="modal-body">
+                <div class="card mt-3" th:each="notification:${notifications}">
+                    <div class="card-body">
+                        <h5 class="card-title" th:if="${notification.type.toString()} == 'REVIEW'">리뷰를 남겨보세요.</h5>
+                        <h5 class="card-title" th:if="${notification.type.toString()} == 'COMPLETE'">조리가 완료되었습니다.</h5>
+                        <h5 class="card-title" th:if="${notification.type.toString()} == 'DELIVERY'">음식이 배달중입니다.</h5>
+                        <p class="card-text" th:if="${notification.type.toString()} == 'REVIEW'">
+                            <strong th:text="${notification.storeName}">BBQ XX점</strong>의 음식이 맛있으셨다면 다른 분들을 위해 리뷰를 남겨주세요. (리뷰 쓰기는 주문 이후 3일 동안만 가능합니다.)
+                        </p>
+                        <p class="card-text" th:if="${notification.type.toString()} == 'COMPLETE'">
+                            <strong th:text="${notification.storeName}">BBQ XX점</strong>을(를) 이용해주셔서 감사합니다. 맛있게 드세요.
+                        </p>
+                        <p class="card-text" th:if="${notification.type.toString()} == 'DELIVERY'">
+                            <strong th:text="${notification.storeName}">BBQ XX점</strong>ㄴㄴ
+                        </p>
+                        <p class="card-text text-muted" th:text="${#temporals.format(notification.createdDate, 'MM월 dd일 hh:mm')}">
+                            08월 09일 20:00
+                        </p>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>

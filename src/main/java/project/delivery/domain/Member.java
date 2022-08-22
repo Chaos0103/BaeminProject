@@ -6,6 +6,8 @@ import lombok.NoArgsConstructor;
 
 import javax.persistence.*;
 
+import static javax.persistence.FetchType.*;
+
 @Entity
 @Getter
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
@@ -32,8 +34,11 @@ public class Member extends TimeBaseEntity {
     @Embedded
     private Address address;
 
-    @OneToOne(mappedBy = "member", orphanRemoval = true, cascade = CascadeType.ALL, fetch = FetchType.LAZY)
+    @OneToOne(mappedBy = "member", orphanRemoval = true, cascade = CascadeType.ALL, fetch = LAZY)
     private Pay pay;
+
+    @OneToOne(mappedBy = "member",orphanRemoval = true, cascade = CascadeType.ALL, fetch = LAZY)
+    private Point point;
 
     public Member(String email, String password, String username, String birth, String phone, String nickname, Address address) {
         this.email = email;
@@ -50,6 +55,10 @@ public class Member extends TimeBaseEntity {
     //==연관관계 메서드==//
     public void addPay(Pay pay) {
         this.pay = pay;
+    }
+
+    public void addPoint(Point point) {
+        this.point = point;
     }
     //==비즈니스 로직==//
     public void changeNickname(String nickname) {
