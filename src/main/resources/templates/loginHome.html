@@ -1,11 +1,11 @@
 <!DOCTYPE html>
 <html lang="ko" xmlns:th="http://www.thymeleaf.org">
-<head th:replace="fragments/head::head">
+<head th:replace="fragments/head::head(~{::title})">
     <title>배달의 민족</title>
 </head>
 <body>
 <header th:replace="fragments/loginHeader::loginHeader"></header>
-
+<div th:replace="fragments/notifications::notifications(${notifications})"></div>
 <article class="container px-4 py-5">
     <div class="row row-cols-1 row-cols-lg-5 align-items-stretch g-4 py-5 text-decoration-none">
         <!-- row 1 -->
@@ -62,7 +62,7 @@
         <!-- row 2 -->
         <div class="col">
             <div class="card">
-                <a href="#">
+                <a href="/stores?category=CHICKEN">
                     <img src="/img/category_06.png" class="card-img" alt="치킨">
                     <div class="card-img-overlay">
                         <h5 class="card-title text-dark">치킨</h5>

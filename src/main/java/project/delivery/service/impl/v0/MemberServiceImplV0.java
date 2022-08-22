@@ -4,6 +4,8 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import project.delivery.domain.Address;
 import project.delivery.domain.Member;
+import project.delivery.domain.Pay;
+import project.delivery.domain.Point;
 import project.delivery.dto.create.CreateAddressDto;
 import project.delivery.dto.create.CreateMemberDto;
 import project.delivery.exception.DuplicateException;

@@ -4,6 +4,7 @@ import org.springframework.transaction.annotation.Transactional;
 import project.delivery.domain.TransactionType;
 import project.delivery.dto.PayAccountDto;
 import project.delivery.dto.PayCardDto;
+import project.delivery.dto.PayDto;
 import project.delivery.dto.create.CreatePayAccountDto;
 import project.delivery.dto.create.CreatePayCardDto;
 import project.delivery.dto.PayHistoryDto;
@@ -19,6 +20,12 @@ public interface PayService {
      */
     @Transactional
     Long joinPay(Long memberId, String password);
+
+    @Transactional
+    void chargePayMoney(Long memberId, int money);
+
+    @Transactional
+    void refundPayMoney(Long memberId);
 
     /**
      * 페이내역등록
@@ -65,7 +72,7 @@ public interface PayService {
     @Transactional
     void deletePayAccount(Long payAccountId);
 
-    //페이조회
+    PayDto findPay(Long memberId);
 
     /**
      * 페이내역조회
