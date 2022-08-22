@@ -11,6 +11,7 @@ import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
 import project.delivery.domain.Member;
 import project.delivery.exception.NoSuchException;
+import project.delivery.login.Login;
 import project.delivery.service.MemberService;
 
 import javax.servlet.http.HttpServletRequest;
@@ -25,17 +26,28 @@ public class MemberController {
 
     private final MemberService memberService;
 
+    @ModelAttribute("loginMember")
+    public Member loginMember(@Login Member loginMember){
+        return loginMember;
+    }
+
+    @ModelAttribute("changeNicknameForm")
+    public ChangeNicknameForm changeNicknameForm() {
+        return new ChangeNicknameForm();
+    }
+
+    @ModelAttribute("changePasswordForm")
+    public ChangePasswordForm changePasswordForm() {
+        return new ChangePasswordForm();
+    }
+
     @GetMapping
     public String memberInfo(
             @ModelAttribute("changeNicknameForm") ChangeNicknameForm changeNicknameForm,
             @ModelAttribute("changePasswordForm") ChangePasswordForm changePasswordForm,
-            HttpSession session, Model model) {
-
-        Member loginMember = getLoginMember(session);
+            @Login Member loginMember) {
 
         changeNicknameForm.setNewNickname(loginMember.getNickname());
-        model.addAttribute("loginMember", loginMember);
-
         return "member/updateMemberForm";
     }
 
@@ -43,22 +55,17 @@ public class MemberController {
     public String changeNickname(
             @Validated @ModelAttribute("changeNicknameForm") ChangeNicknameForm changeNicknameForm,
             BindingResult bindingResult,
-            HttpSession session, Model model) {
+            @Login Member loginMember, Model model) {
 
-        Member loginMember = getLoginMember(session);
         String nickname = changeNicknameForm.getNewNickname();
 
         if (bindingResult.hasErrors()) {
             log.debug("폼 데이터 검증시 예외 발생: {}개", bindingResult.getErrorCount());
-            model.addAttribute("loginMember", loginMember);
-            model.addAttribute("changePasswordForm", new ChangePasswordForm());
             return "member/updateMemberForm";
         }
 
         if (loginMember.getNickname().equals(nickname)) {
             log.debug("기존 닉네임과 동일합니다");
-            model.addAttribute("loginMember", loginMember);
-            model.addAttribute("changePasswordForm", new ChangePasswordForm());
             model.addAttribute("equalNickname", "기존 닉네임과 동일합니다");
             return "member/updateMemberForm";
         }
@@ -80,32 +87,25 @@ public class MemberController {
     public String changePassword(
             @Validated @ModelAttribute("changePasswordForm") ChangePasswordForm changePasswordForm,
             BindingResult bindingResult,
-            HttpSession session, Model model) {
+            @Login Member loginMember, Model model) {
 
-        Member loginMember = getLoginMember(session);
         String nowPassword = changePasswordForm.getNowPassword();
         String newPassword = changePasswordForm.getNewPassword();
 
         if (bindingResult.hasErrors()) {
             log.debug("폼 데이터 검증시 예외 발생: {}개", bindingResult.getErrorCount());
-            model.addAttribute("loginMember", loginMember);
-            model.addAttribute("changeNicknameForm", new ChangeNicknameForm());
             return "member/updateMemberForm";
         }
 
         if (!loginMember.getPassword().equals(nowPassword)) {
             log.debug("비밀번호가 일치하지 않습니다");
             model.addAttribute("notEqualPassword", "비밀번호가 일치하지 않습니다");
-            model.addAttribute("loginMember", loginMember);
-            model.addAttribute("changeNicknameForm", new ChangeNicknameForm());
             return "member/updateMemberForm";
         }
 
         if (loginMember.getPassword().equals(newPassword)) {
             log.debug("기존 비밀번호와 같은 비밀번호를 설정할 수 없습니다");
             model.addAttribute("equalNowPassword", "기존 비밀번호와 같은 비밀번호를 설정할 수 없습니다");
-            model.addAttribute("loginMember", loginMember);
-            model.addAttribute("changeNicknameForm", new ChangeNicknameForm());
             return "member/updateMemberForm";
         }
 
@@ -122,9 +122,7 @@ public class MemberController {
     }
 
     @GetMapping("/delete")
-    public String deleteMember(HttpSession session, HttpServletRequest request) {
-        Member loginMember = getLoginMember(session);
-
+    public String deleteMember(@Login Member loginMember, HttpServletRequest request) {
         try {
             memberService.deleteMember(loginMember.getId());
             log.info("회원번호 {} 탈퇴", loginMember.getId());
@@ -138,10 +136,6 @@ public class MemberController {
             log.error("잘못된 접근이 발생하였습니다: {}", e.getMessage());
         }
         return "redirect:/";
-    }
-
-    private Member getLoginMember(HttpSession session) {
-        return (Member) session.getAttribute("loginMember");
     }
 
     @Data
