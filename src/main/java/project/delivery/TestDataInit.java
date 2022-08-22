@@ -4,7 +4,7 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Component;
 import project.delivery.domain.*;
 import project.delivery.repository.MemberRepository;
-import project.delivery.repository.PayRepository;
+import project.delivery.repository.NotificationRepository;
 import project.delivery.repository.StoreRepository;
 
 import javax.annotation.PostConstruct;
@@ -15,7 +15,7 @@ public class TestDataInit {
 
     private final MemberRepository memberRepository;
     private final StoreRepository storeRepository;
-    private final PayRepository payRepository;
+    private final NotificationRepository notificationRepository;
 
     @PostConstruct
     private void init() {
@@ -24,6 +24,9 @@ public class TestDataInit {
 
         Pay pay = new Pay(member, "123456");
         pay.addMoney(1000000);
+
+        Point point = new Point(member);
+        new PointHistory(point, 1000, "BBQ 간석중앙점", PointType.USE);
         memberRepository.save(member);
 
         Store store1 = new Store("BBQ 간석중앙점", Category.CHICKEN, new UploadFile("/file/bbq.png", "/file/bbq.png"), "0324297326", "안녕하세요!BBQ 간석중앙점을 찾아주셔서 감사합니다!",
@@ -38,5 +41,11 @@ public class TestDataInit {
         new DeliveryInfo(store2, 12000, PaymentType.DIRECT, "32~47분 소요 예상", "1,000원 ~ 3,000원");
         storeRepository.save(store2);
 
+        Notification notification1 = new Notification(member,"BBQ 간석중앙점", "test", NotificationType.REVIEW);
+        Notification notification2 = new Notification(member,"BBQ 간석중앙점", "test", NotificationType.COMPLETE);
+        Notification notification3 = new Notification(member,"BBQ 간석중앙점", "test", NotificationType.DELIVERY);
+        notificationRepository.save(notification1);
+        notificationRepository.save(notification2);
+        notificationRepository.save(notification3);
     }
 }
