@@ -9,9 +9,9 @@ import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
-import project.delivery.controller.form.JoinMemberForm;
-import project.delivery.dto.create.CreateAddressDto;
-import project.delivery.dto.create.CreateMemberDto;
+import project.delivery.controller.form.MemberSaveForm;
+import project.delivery.domain.Address;
+import project.delivery.domain.Member;
 import project.delivery.exception.DuplicateException;
 import project.delivery.service.MemberService;
 
@@ -24,12 +24,12 @@ public class SignUpController {
     private final MemberService memberService;
 
     @GetMapping
-    public String signUpForm(@ModelAttribute("joinMemberForm") JoinMemberForm joinMemberForm) {
+    public String signUpForm(@ModelAttribute("memberSaveForm") MemberSaveForm form) {
         return "common/joinMemberForm";
     }
 
     @PostMapping
-    public String signUp(@Validated @ModelAttribute JoinMemberForm joinMemberForm, BindingResult bindingResult) {
+    public String signUp(@Validated @ModelAttribute MemberSaveForm form, BindingResult bindingResult) {
 
         if (bindingResult.hasErrors()) {
             log.debug("폼 데이터 검증시 예외 발생: {}개", bindingResult.getErrorCount());
@@ -37,9 +37,9 @@ public class SignUpController {
         }
 
         try {
-            CreateMemberDto createMemberDto = getCreateMemberDto(joinMemberForm);
+            Member member = createMember(form);
 
-            Long memberId = memberService.joinMember(createMemberDto);
+            Long memberId = memberService.joinMember(member);
             log.info("신규 회원가입 발생: 회원 번호 {}", memberId);
 
             return "redirect:/";
@@ -51,12 +51,9 @@ public class SignUpController {
         }
     }
 
-    private CreateMemberDto getCreateMemberDto(JoinMemberForm joinMemberForm) {
-        CreateAddressDto createAddressDto = new CreateAddressDto(joinMemberForm.getZipcode(),
-                joinMemberForm.getMainAddress(), joinMemberForm.getDetailAddress());
-
-        return new CreateMemberDto(joinMemberForm.getEmail(), joinMemberForm.getPassword(),
-                joinMemberForm.getUsername(), joinMemberForm.getBirth(), joinMemberForm.getPhone(),
-                joinMemberForm.getNickname(), createAddressDto);
+    private static Member createMember(MemberSaveForm form) {
+        Address address = new Address(form.getZipcode(), form.getMainAddress(), form.getDetailAddress());
+        return new Member(form.getEmail(), form.getPassword(), form.getUsername(), form.getBirth(), form.getPhone(), form.getNickname(), address);
     }
+
 }

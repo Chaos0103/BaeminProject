@@ -2,8 +2,7 @@ package project.delivery.service;
 
 import org.springframework.transaction.annotation.Transactional;
 import project.delivery.domain.Category;
-import project.delivery.dto.StoreDto;
-import project.delivery.dto.create.CreateStoreDto;
+import project.delivery.domain.Store;
 
 import java.util.List;
 
@@ -11,9 +10,9 @@ import java.util.List;
 public interface StoreService {
 
     @Transactional
-    Long createNewStore(CreateStoreDto createStoreDto);
+    Long createNewStore(Store store);
 
-    List<StoreDto> searchStores(Category category);
+    List<Store> searchStores(Category category);
 
-    StoreDto detailStore(Long storeId);
+    Store detailStore(Long storeId);
 }

@@ -5,8 +5,8 @@
     <div class="container">
         <div class="row ms-3 me-3">
             <div class="col w-25 align-self-center">
-                <a href="/">
-                    <img src="/img/logo.png" alt="main_icon" height="20"/>
+                <a href="/" th:href="@{/}">
+                    <img src="/img/logo.png" th:src="@{/img/logo.png}" alt="main_icon" height="20"/>
                 </a>
             </div>
             <div class="col w-50">
@@ -16,8 +16,8 @@
             </div>
             <div class="col w-25 align-self-center">
                 <ul class="nav pe-2 justify-content-end">
-                    <li class="nav-item"><a href="/login" class="nav-link link-light px-2">Login</a></li>
-                    <li class="nav-item"><a href="/sign-up" class="nav-link link-light px-2">Sign up</a></li>
+                    <li class="nav-item"><a href="/login" th:href="@{/login}" class="nav-link link-light px-2">Login</a></li>
+                    <li class="nav-item"><a href="/sign-up" th:href="@{/sign-up}" class="nav-link link-light px-2">Sign up</a></li>
                 </ul>
             </div>
         </div>

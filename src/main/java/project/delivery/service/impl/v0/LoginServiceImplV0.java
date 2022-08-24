@@ -3,7 +3,6 @@ package project.delivery.service.impl.v0;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import project.delivery.domain.Member;
-import project.delivery.dto.MemberDto;
 import project.delivery.exception.NoSuchException;
 import project.delivery.repository.MemberRepository;
 import project.delivery.service.LoginService;
@@ -23,12 +22,11 @@ public class LoginServiceImplV0 implements LoginService {
     }
 
     @Override
-    public MemberDto findLoginEmail(String phone) {
-        Member findMember = memberRepository.findByPhone(phone)
+    public Member findLoginEmail(String phone) {
+        return memberRepository.findByPhone(phone)
                 .orElseThrow(() -> {
                     throw new NoSuchException("등록되지 않은 회원입니다");
                 });
-        return new MemberDto(findMember);
     }
 
     @Override

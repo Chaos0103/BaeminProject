@@ -8,8 +8,6 @@ import org.springframework.transaction.annotation.Transactional;
 import project.delivery.domain.Address;
 import project.delivery.domain.Member;
 import project.delivery.domain.MemberGrade;
-import project.delivery.dto.create.CreateAddressDto;
-import project.delivery.dto.create.CreateMemberDto;
 import project.delivery.exception.DuplicateException;
 import project.delivery.repository.MemberRepository;
 
@@ -30,10 +28,10 @@ class MemberServiceTest {
     @Test
     @DisplayName("회원가입")
     void joinMember() {
-        CreateAddressDto addressDto = new CreateAddressDto("12345", "서울특별시", "101-101");
-        CreateMemberDto memberDto = new CreateMemberDto("baemin@baemin.com", "baemin1!", "baemin", "20010101", "01012345678", "baemin", addressDto);
+        Address address = new Address("12345", "서울특별시", "101-101");
+        Member member = new Member("baemin@baemin.com", "baemin1!", "baemin", "20010101", "01012345678", "baemin", address);
 
-        Long memberId = memberService.joinMember(memberDto);
+        Long memberId = memberService.joinMember(member);
 
         Optional<Member> findMember = memberRepository.findById(memberId);
         assertThat(findMember).isPresent();
@@ -42,10 +40,10 @@ class MemberServiceTest {
     @Test
     @DisplayName("회원가입-등급")
     void joinMember_grade() {
-        CreateAddressDto addressDto = new CreateAddressDto("12345", "서울특별시", "101-101");
-        CreateMemberDto memberDto = new CreateMemberDto("baemin@baemin.com", "baemin1!", "baemin", "20010101", "01012345678", "baemin", addressDto);
+        Address address = new Address("12345", "서울특별시", "101-101");
+        Member member = new Member("baemin@baemin.com", "baemin1!", "baemin", "20010101", "01012345678", "baemin", address);
 
-        Long memberId = memberService.joinMember(memberDto);
+        Long memberId = memberService.joinMember(member);
 
         Member findMember = memberRepository.findById(memberId).get();
         assertThat(findMember.getGrade()).isEqualTo(MemberGrade.BASIC);
@@ -54,10 +52,10 @@ class MemberServiceTest {
     @Test
     @DisplayName("회원가입-시간")
     void joinMember_time() {
-        CreateAddressDto addressDto = new CreateAddressDto("12345", "서울특별시", "101-101");
-        CreateMemberDto memberDto = new CreateMemberDto("baemin@baemin.com", "baemin1!", "baemin", "20010101", "01012345678", "baemin", addressDto);
+        Address address = new Address("12345", "서울특별시", "101-101");
+        Member member = new Member("baemin@baemin.com", "baemin1!", "baemin", "20010101", "01012345678", "baemin", address);
 
-        Long memberId = memberService.joinMember(memberDto);
+        Long memberId = memberService.joinMember(member);
 
         Member findMember = memberRepository.findById(memberId).get();
         assertThat(findMember.getCreatedDate()).isNotNull();
@@ -69,10 +67,10 @@ class MemberServiceTest {
     void joinMember_duplicatedEmail() {
         Member savedMember = createMember();
 
-        CreateAddressDto addressDto = new CreateAddressDto("12345", "서울특별시", "101-101");
-        CreateMemberDto memberDto = new CreateMemberDto("test@test.com", "baemin1!", "baemin", "20010101", "01012345678", "baemin", addressDto);
+        Address address = new Address("12345", "서울특별시", "101-101");
+        Member member = new Member("test@test.com", "baemin1!", "baemin", "20010101", "01012345678", "baemin", address);
 
-        assertThrows(DuplicateException.class, () -> memberService.joinMember(memberDto));
+        assertThrows(DuplicateException.class, () -> memberService.joinMember(member));
     }
 
     @Test
@@ -80,10 +78,10 @@ class MemberServiceTest {
         void joinMember_duplicatedPhone() {
         Member savedMember = createMember();
 
-        CreateAddressDto addressDto = new CreateAddressDto("12345", "서울특별시", "101-101");
-        CreateMemberDto memberDto = new CreateMemberDto("baemin@baemin.com", "baemin1!", "baemin", "20010101", "01011111111", "baemin", addressDto);
+        Address address = new Address("12345", "서울특별시", "101-101");
+        Member member = new Member("baemin@baemin.com", "baemin1!", "baemin", "20010101", "01011111111", "baemin", address);
 
-        assertThrows(DuplicateException.class, () -> memberService.joinMember(memberDto));
+        assertThrows(DuplicateException.class, () -> memberService.joinMember(member));
     }
 
     @Test
@@ -91,10 +89,10 @@ class MemberServiceTest {
     void joinMember_duplicatedNickname() {
         Member savedMember = createMember();
 
-        CreateAddressDto addressDto = new CreateAddressDto("12345", "서울특별시", "101-101");
-        CreateMemberDto memberDto = new CreateMemberDto("baemin@baemin.com", "baemin1!", "baemin", "20010101", "01012345678", "tester", addressDto);
+        Address address = new Address("12345", "서울특별시", "101-101");
+        Member member = new Member("baemin@baemin.com", "baemin1!", "baemin", "20010101", "01012345678", "tester", address);
 
-        assertThrows(DuplicateException.class, () -> memberService.joinMember(memberDto));
+        assertThrows(DuplicateException.class, () -> memberService.joinMember(member));
     }
 
     @Test
@@ -134,9 +132,9 @@ class MemberServiceTest {
     @DisplayName("회원정보수정-주소")
     void changeAddress() {
         Member member = createMember();
-        CreateAddressDto addressDto = new CreateAddressDto("54321", "newMainAddress", "newDetailAddress");
+        Address address = new Address("54321", "newMainAddress", "newDetailAddress");
 
-        memberService.changeAddress(member.getId(), addressDto);
+        memberService.changeAddress(member.getId(), address);
 
         Member findMember = memberRepository.findById(member.getId()).get();
         assertThat(findMember.getAddress().getMainAddress()).isEqualTo("newMainAddress");

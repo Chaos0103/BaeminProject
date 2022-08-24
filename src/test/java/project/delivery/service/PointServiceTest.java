@@ -1,13 +1,11 @@
 package project.delivery.service;
 
-import org.assertj.core.api.Assertions;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.test.annotation.Rollback;
 import org.springframework.transaction.annotation.Transactional;
 import project.delivery.domain.*;
-import project.delivery.dto.create.CreatePointHistoryDto;
 import project.delivery.repository.MemberRepository;
 import project.delivery.repository.PointRepository;
 
@@ -29,13 +27,13 @@ class PointServiceTest {
     void createPointHistory() {
         Member member = createMember();
         Point point = createPoint(member);
-        CreatePointHistoryDto createPointHistoryDto = new CreatePointHistoryDto(10000, "test", PointType.SAVE);
+        PointHistory pointHistory = new PointHistory(10000, "test", PointType.SAVE);
 
-        pointService.createPointHistory(member.getId(), createPointHistoryDto);
+        pointService.createPointHistory(member.getId(), pointHistory);
         em.flush();
 
-        PointHistory pointHistory = em.find(PointHistory.class, point.getPointHistories().get(0).getId());
-        assertThat(pointHistory).isEqualTo(point.getPointHistories().get(0));
+        PointHistory findPointHistory = em.find(PointHistory.class, point.getPointHistories().get(0).getId());
+        assertThat(findPointHistory).isEqualTo(point.getPointHistories().get(0));
     }
 
     private Member createMember() {

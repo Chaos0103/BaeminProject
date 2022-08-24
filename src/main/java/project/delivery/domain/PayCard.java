@@ -30,11 +30,15 @@ public class PayCard extends TimeBaseEntity {
     @Column(updatable = false, nullable = false, length = 2)
     private String password;
 
-    public PayCard(Pay pay, String cardNumber, String expirationDate, String cvc, String password) {
-        this.pay = pay;
+    public PayCard(String cardNumber, String expirationDate, String cvc, String password) {
         this.cardNumber = cardNumber;
         this.expirationDate = expirationDate;
         this.cvc = cvc;
         this.password = password;
+    }
+
+    //==연관관계 메서드==//
+    public void addPay(Pay pay) {
+        this.pay = pay;
     }
 }

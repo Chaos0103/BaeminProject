@@ -7,7 +7,7 @@ import javax.validation.constraints.Email;
 import javax.validation.constraints.NotBlank;
 
 @Data
-public class JoinMemberForm {
+public class MemberSaveForm {
 
     @Email
     @Length(max = 50)

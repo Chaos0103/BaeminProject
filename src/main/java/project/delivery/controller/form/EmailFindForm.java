@@ -5,8 +5,8 @@ import lombok.Data;
 import javax.validation.constraints.NotBlank;
 
 @Data
-public class FindEmailForm {
+public class EmailFindForm {
 
-    @NotBlank(message = "연락처를 입력해주세요")
+    @NotBlank
     private String phone;
 }

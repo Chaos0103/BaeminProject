@@ -23,10 +23,14 @@ public class Notification extends TimeBaseEntity {
     private String content;
     private NotificationType type;
 
-    public Notification(Member member, String storeName, String content, NotificationType type) {
-        this.member = member;
+    public Notification(String storeName, String content, NotificationType type) {
         this.storeName = storeName;
         this.content = content;
         this.type = type;
+    }
+
+    //==연관관계 메서드==//
+    public void addMember(Member member) {
+        this.member = member;
     }
 }

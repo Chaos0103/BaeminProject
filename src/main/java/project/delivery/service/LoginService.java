@@ -2,7 +2,6 @@ package project.delivery.service;
 
 import org.springframework.transaction.annotation.Transactional;
 import project.delivery.domain.Member;
-import project.delivery.dto.MemberDto;
 
 @Transactional(readOnly = true)
 public interface LoginService {
@@ -17,7 +16,7 @@ public interface LoginService {
      * 아이디찾기
      * @return 회원DTO
      */
-    MemberDto findLoginEmail(String phone);
+    Member findLoginEmail(String phone);
 
     /**
      * 비밀번호찾기

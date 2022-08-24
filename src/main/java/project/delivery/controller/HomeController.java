@@ -6,7 +6,7 @@ import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
 import project.delivery.domain.Member;
-import project.delivery.dto.NotificationDto;
+import project.delivery.domain.Notification;
 import project.delivery.login.Login;
 import project.delivery.service.NotificationService;
 
@@ -26,8 +26,8 @@ public class HomeController {
             return "home";
         }
 
-        List<NotificationDto> notificationDtos = notificationService.findByMemberId(loginMember.getId());
-        model.addAttribute("notifications", notificationDtos);
+        List<Notification> notifications = notificationService.findByMemberId(loginMember.getId());
+        model.addAttribute("notifications", notifications);
 
         return "loginHome";
     }

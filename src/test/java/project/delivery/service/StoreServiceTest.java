@@ -8,7 +8,7 @@ import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.transaction.annotation.Transactional;
 import project.delivery.domain.Category;
 import project.delivery.domain.Store;
-import project.delivery.dto.create.CreateStoreDto;
+import project.delivery.domain.UploadFile;
 import project.delivery.exception.DuplicateException;
 import project.delivery.repository.StoreRepository;
 
@@ -27,11 +27,11 @@ class StoreServiceTest {
     @Test
     @DisplayName("가게등록")
     void createNewStore() {
-        CreateStoreDto createStoreDto = new CreateStoreDto("test Store", Category.CHICKEN, "0212345678", "introduction", "test",
+        Store store = new Store("test Store", Category.CHICKEN, new UploadFile(null, null), "0212345678", "introduction", "test",
                 "10:00", "연중무휴", "전지역", "1,000원", "test", "address",
                 "123-45-67890", "announcement");
 
-        Long storeId = storeService.createNewStore(createStoreDto);
+        Long storeId = storeService.createNewStore(store);
 
         Optional<Store> findStore = storeRepository.findById(storeId);
         assertThat(findStore).isPresent();
@@ -41,12 +41,12 @@ class StoreServiceTest {
     @DisplayName("가게등록-사업자번호 중복")
     void createNewStore_businessNumber() {
         Store store = createStore();
-        CreateStoreDto createStoreDto = new CreateStoreDto("test Store", Category.CHICKEN, "0212345678", "introduction", "test",
+        Store newStore = new Store("test Store", Category.CHICKEN, new UploadFile(null, null), "0212345678", "introduction", "test",
                 "10:00", "연중무휴", "전지역", "1,000원", "test", "address",
                 "123-45-67890", "announcement");
 
         assertThrows(DuplicateException.class, () -> {
-            storeService.createNewStore(createStoreDto);
+            storeService.createNewStore(newStore);
         });
     }
 

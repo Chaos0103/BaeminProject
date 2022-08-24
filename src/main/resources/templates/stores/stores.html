@@ -5,6 +5,8 @@
 </head>
 <body>
 <header th:replace="fragments/loginHeader::loginHeader"></header>
+<div th:replace="fragments/notifications::notifications(${notifications})"></div>
+
 <!-- 알림 모달 -->
 <div class="modal fade" id="notification" tabindex="-1" aria-labelledby="notificationLabel" aria-hidden="true">
     <div class="modal-dialog">
@@ -61,7 +63,7 @@
             <div class="col">
                 <div class="row row-cols-1 row-cols-md-2 g-4">
                     <!-- store start -->
-                    <div class="col" th:each="store : ${storeDtos}">
+                    <div class="col" th:each="store : ${stores}">
                         <div class="card" th:onclick="|location.href='@{/stores/{storeId}/detail (storeId=${store.id})}'|" style="cursor: pointer">
                             <div class="card-body">
                                 <div class="d-flex">
@@ -80,10 +82,10 @@
                                             </div>
                                         </div>
                                         <div class="row">
-                                            <div class="col" th:text="|최소주문 ${store.deliveryInfoDto.minOrderPrice}원|">
+                                            <div class="col" th:text="|최소주문 ${store.deliveryInfo.minOrderPrice}원|">
                                                 최소주문 0원
                                             </div>
-                                            <div class="col" th:text="|배달팁 ${store.deliveryInfoDto.deliveryTip}|">
+                                            <div class="col" th:text="|배달팁 ${store.deliveryInfo.deliveryTip}|">
                                                 배달팁 0원
                                             </div>
                                         </div>

@@ -1,13 +1,7 @@
 package project.delivery.service;
 
 import org.springframework.transaction.annotation.Transactional;
-import project.delivery.domain.TransactionType;
-import project.delivery.dto.PayAccountDto;
-import project.delivery.dto.PayCardDto;
-import project.delivery.dto.PayDto;
-import project.delivery.dto.create.CreatePayAccountDto;
-import project.delivery.dto.create.CreatePayCardDto;
-import project.delivery.dto.PayHistoryDto;
+import project.delivery.domain.*;
 
 import java.util.List;
 
@@ -51,7 +45,7 @@ public interface PayService {
      * @return 페이카드고유번호
      */
     @Transactional
-    Long createPayCard(Long memberId, CreatePayCardDto createPayCardDto);
+    Long createPayCard(Long memberId, PayCard payCard);
 
     /**
      * 페이카드삭제
@@ -64,7 +58,7 @@ public interface PayService {
      * @return 페이계좌고유번호
      */
     @Transactional
-    Long createPayAccount(Long memberId, CreatePayAccountDto createPayAccountDto);
+    Long createPayAccount(Long memberId, PayAccount payAccount);
 
     /**
      * 페이계좌삭제
@@ -72,7 +66,7 @@ public interface PayService {
     @Transactional
     void deletePayAccount(Long payAccountId);
 
-    PayDto findPay(Long memberId);
+    Pay findPay(Long memberId);
 
     /**
      * 페이내역조회
@@ -80,18 +74,18 @@ public interface PayService {
      * @param type TransactionType
      * @return PayHistoryDto
      */
-    List<PayHistoryDto> findPayHistory(Long memberId, TransactionType type);
+    List<PayHistory> findPayHistory(Long memberId, TransactionType type);
 
     /**
      * 페이카드조회
      * @return PayCardDto
      */
-    List<PayCardDto> findPayCard(Long memberId);
+    List<PayCard> findPayCard(Long memberId);
 
     /**
      * 페이계좌조회
      *
      * @return PayAccountDto
      */
-    List<PayAccountDto> findPayAccount(Long memberId);
+    List<PayAccount> findPayAccount(Long memberId);
 }

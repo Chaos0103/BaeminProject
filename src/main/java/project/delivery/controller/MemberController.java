@@ -10,13 +10,16 @@ import org.springframework.validation.BindingResult;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
 import project.delivery.domain.Member;
+import project.delivery.domain.Notification;
 import project.delivery.exception.NoSuchException;
 import project.delivery.login.Login;
 import project.delivery.service.MemberService;
+import project.delivery.service.NotificationService;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpSession;
 import javax.validation.constraints.NotBlank;
+import java.util.List;
 
 @Slf4j
 @Controller
@@ -25,6 +28,7 @@ import javax.validation.constraints.NotBlank;
 public class MemberController {
 
     private final MemberService memberService;
+    private final NotificationService notificationService;
 
     @ModelAttribute("loginMember")
     public Member loginMember(@Login Member loginMember){
@@ -39,6 +43,11 @@ public class MemberController {
     @ModelAttribute("changePasswordForm")
     public ChangePasswordForm changePasswordForm() {
         return new ChangePasswordForm();
+    }
+
+    @ModelAttribute("notifications")
+    public List<Notification> notifications(@Login Member loginMember) {
+        return notificationService.findByMemberId(loginMember.getId());
     }
 
     @GetMapping

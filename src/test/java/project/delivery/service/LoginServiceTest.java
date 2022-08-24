@@ -1,6 +1,5 @@
 package project.delivery.service;
 
-import org.assertj.core.api.Assertions;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -8,7 +7,6 @@ import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.transaction.annotation.Transactional;
 import project.delivery.domain.Address;
 import project.delivery.domain.Member;
-import project.delivery.dto.MemberDto;
 import project.delivery.exception.NoSuchException;
 import project.delivery.repository.MemberRepository;
 
@@ -57,9 +55,9 @@ class LoginServiceTest {
     void findLoginEmail() {
         Member member = createMember();
 
-        MemberDto memberDto = loginService.findLoginEmail(member.getPhone());
+        Member loginMember = loginService.findLoginEmail(member.getPhone());
 
-        assertThat(memberDto.getEmail()).isEqualTo(member.getEmail());
+        assertThat(loginMember.getEmail()).isEqualTo(member.getEmail());
     }
 
     @Test
@@ -104,7 +102,7 @@ class LoginServiceTest {
 
     private Member createMember() {
         Address address = new Address("12345", "mainAddress", "detailAddress");
-        Member member = new Member("test@test.com", "test1!", "user", "20010101", "01011111111", "tester", address);
+        Member member = new Member("test123@test.com", "test1!", "user", "20010101", "01087654321", "tester", address);
         return memberRepository.save(member);
     }
 }

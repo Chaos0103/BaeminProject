@@ -7,11 +7,12 @@
 <header th:replace="fragments/basicHeader::basicHeader"></header>
 
 <article class="form-signin w-100 m-auto mt-4">
-    <form action="/login/loginId" method="post">
+    <form action="/login/loginId" th:action="@{/login/loginId}" method="post">
         <h3 class="text-center mb-5">아이디 찾기</h3>
         <div class="mb-5 pb-5">
             <label for="phone" class="form-label fs-5 mb-3"><strong>아이디를 찾기 위해선<br>휴대폰번호 인증이 필요합니다</strong></label>
-            <input th:field="${findEmailForm.phone}" type="text" class="form-control" id="phone" placeholder="휴대폰번호를 입력해주세요" maxlength="11">
+            <input th:field="${emailFindForm.phone}" type="text" class="form-control" id="phone" placeholder="휴대폰번호를 입력해주세요" maxlength="11" th:errorclass="field-error">
+            <div class="field-error text-start" th:errors="${emailFindForm.phone}"></div>
         </div>
         <button class="w-100 btn btn-lg baemin-btn" id="btn_login" type="submit">완료</button>
     </form>

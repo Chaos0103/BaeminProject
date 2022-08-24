@@ -1,6 +1,6 @@
 <!DOCTYPE html>
 <html lang="ko" xmlns:th="http://www.thymeleaf.org">
-<head th:replace="fragments/head::head">
+<head th:replace="fragments/head::head(~{::title})">
     <title>배달의 민족</title>
 </head>
 <body>
@@ -156,7 +156,7 @@
                 <div class="card text-center mb-3">
                     <div class="card-body">
                         <div class="row h-25">
-                            <div class="col fs-1 align-self-center" th:text="${storeDto.storeName}">
+                            <div class="col fs-1 align-self-center" th:text="${store.storeName}">
                                 BBQ XX점
                             </div>
                         </div>
@@ -167,14 +167,14 @@
                                 <img src="/icon/star-fill.svg" alt="star-fill" style="height: 30px;">
                                 <img src="/icon/star-fill.svg" alt="star-fill" style="height: 30px;">
                                 <img src="/icon/star-fill.svg" alt="star-fill" style="height: 30px;">
-                                <span th:text="${storeDto.rating}">4.9</span>
+                                <span th:text="${store.rating}">4.9</span>
                             </div>
                         </div>
                         <div class="row">
-                            <div class="col fs-5" th:text="|최근리뷰 ${storeDto.reviewCount}|">
+                            <div class="col fs-5" th:text="|최근리뷰 ${store.reviewCount}|">
                                 최근리뷰 123
                             </div>
-                            <div class="col fs-5" th:text="|최근사장님댓글 ${storeDto.commentCount}|">
+                            <div class="col fs-5" th:text="|최근사장님댓글 ${store.commentCount}|">
                                 최근사장님댓글 123
                             </div>
                         </div>
@@ -215,7 +215,7 @@
                             <div class="col-sm-3">
                                 최소주문금액
                             </div>
-                            <div class="col" th:text="${storeDto.deliveryInfoDto.minOrderPrice}">
+                            <div class="col" th:text="${store.deliveryInfo.minOrderPrice}">
                                 15,000원
                             </div>
                         </div>
@@ -231,7 +231,7 @@
                             <div class="col-sm-3">
                                 배달시간
                             </div>
-                            <div class="col" th:text="${storeDto.deliveryInfoDto.deliveryTime}">
+                            <div class="col" th:text="${store.deliveryInfo.deliveryTime}">
                                 44분~59분 소요 예상
                             </div>
                         </div>
@@ -239,7 +239,7 @@
                             <div class="col-sm-3">
                                 배달팁
                             </div>
-                            <div class="col" th:text="${storeDto.deliveryInfoDto.deliveryTip}">
+                            <div class="col" th:text="${store.deliveryInfo.deliveryTip}">
                                 0원 ~ 3,000원
                             </div>
                         </div>
@@ -519,23 +519,23 @@
                                 <h5>영업정보</h5>
                                 <div class="row mt-3">
                                     <div class="col">상호명</div>
-                                    <div class="col" th:text="${storeDto.tradeName}">비비큐치킨</div>
+                                    <div class="col" th:text="${store.tradeName}">비비큐치킨</div>
                                 </div>
                                 <div class="row">
                                     <div class="col">운영시간</div>
-                                    <div class="col" th:text="${storeDto.openTime}">매일-낮 12:00 ~ 오후 11:30</div>
+                                    <div class="col" th:text="${store.openTime}">매일-낮 12:00 ~ 오후 11:30</div>
                                 </div>
                                 <div class="row">
                                     <div class="col">휴무일</div>
-                                    <div class="col" th:text="${storeDto.holiday}">연중휴무</div>
+                                    <div class="col" th:text="${store.holiday}">연중휴무</div>
                                 </div>
                                 <div class="row">
                                     <div class="col">전화번호</div>
-                                    <div class="col" th:text="${storeDto.tel}">000-0000-0000</div>
+                                    <div class="col" th:text="${store.tel}">000-0000-0000</div>
                                 </div>
                                 <div class="row">
                                     <div class="col">배달지역</div>
-                                    <div class="col" th:text="${storeDto.deliveryArea}">강남구</div>
+                                    <div class="col" th:text="${store.deliveryArea}">강남구</div>
                                 </div>
                             </div>
                         </div>
@@ -546,15 +546,15 @@
                                 <h5>가게 통계</h5>
                                 <div class="row mt-3">
                                     <div class="col">최근 주문수</div>
-                                    <div class="col" th:text="${storeDto.recentOrderCount}">2,000+</div>
+                                    <div class="col" th:text="${store.recentOrderCount}">2,000+</div>
                                 </div>
                                 <div class="row">
                                     <div class="col">전체 리뷰수</div>
-                                    <div class="col" th:text="${storeDto.reviewCount}">2,000+</div>
+                                    <div class="col" th:text="${store.reviewCount}">2,000+</div>
                                 </div>
                                 <div class="row">
                                     <div class="col">찜</div>
-                                    <div class="col" th:text="${storeDto.bookmarkCount}">2,000</div>
+                                    <div class="col" th:text="${store.bookmarkCount}">2,000</div>
                                 </div>
                             </div>
                         </div>
@@ -577,19 +577,19 @@
                                 <h5>사업자정보</h5>
                                 <div class="row mt-3">
                                     <div class="col">대표자명</div>
-                                    <div class="col" th:text="${storeDto.representativeName}">홍길동</div>
+                                    <div class="col" th:text="${store.representativeName}">홍길동</div>
                                 </div>
                                 <div class="row">
                                     <div class="col">상호명</div>
-                                    <div class="col" th:text="${storeDto.tradeName}">비비큐치킨</div>
+                                    <div class="col" th:text="${store.tradeName}">비비큐치킨</div>
                                 </div>
                                 <div class="row">
                                     <div class="col">사업자주소</div>
-                                    <div class="col" th:text="${storeDto.businessAddress}">서울특별시 강남구</div>
+                                    <div class="col" th:text="${store.businessAddress}">서울특별시 강남구</div>
                                 </div>
                                 <div class="row">
                                     <div class="col">사업자등록번호</div>
-                                    <div class="col" th:text="${storeDto.businessNumber}">000-00-00000</div>
+                                    <div class="col" th:text="${store.businessNumber}">000-00-00000</div>
                                 </div>
                             </div>
                         </div>
@@ -598,7 +598,7 @@
                         <div class="card">
                             <div class="card-body">
                                 <h5>안내 및 혜택</h5>
-                                <p th:text="${storeDto.introduction}">안내사항</p>
+                                <p th:text="${store.introduction}">안내사항</p>
                             </div>
                         </div>
                     </div>
@@ -608,7 +608,7 @@
                 <div class="card mt-3">
                     <div class="card-body">
                         <h5>사장님 공지</h5>
-                        <p th:text="${storeDto.announcement}">사장님 공지 내용</p>
+                        <p th:text="${store.announcement}">사장님 공지 내용</p>
                     </div>
                 </div>
                 <div class="card mt-3">

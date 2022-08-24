@@ -4,10 +4,6 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import project.delivery.domain.Address;
 import project.delivery.domain.Member;
-import project.delivery.domain.Pay;
-import project.delivery.domain.Point;
-import project.delivery.dto.create.CreateAddressDto;
-import project.delivery.dto.create.CreateMemberDto;
 import project.delivery.exception.DuplicateException;
 import project.delivery.exception.NoSuchException;
 import project.delivery.repository.MemberRepository;
@@ -22,12 +18,11 @@ public class MemberServiceImplV0 implements MemberService {
     private final MemberRepository memberRepository;
 
     @Override
-    public Long joinMember(CreateMemberDto memberDto) {
-        duplicatedEmail(memberDto.getEmail());
-        duplicatedPhone(memberDto.getPhone());
-        duplicatedNickname(memberDto.getNickname());
+    public Long joinMember(Member member) {
+        duplicatedEmail(member.getEmail());
+        duplicatedPhone(member.getPhone());
+        duplicatedNickname(member.getNickname());
 
-        Member member = createMember(memberDto);
         Member savedMember = memberRepository.save(member);
 
         return savedMember.getId();
@@ -55,10 +50,9 @@ public class MemberServiceImplV0 implements MemberService {
     }
 
     @Override
-    public void changeAddress(Long memberId, CreateAddressDto addressDto) {
+    public void changeAddress(Long memberId, Address address) {
         Member findMember = getMember(memberId);
 
-        Address address = createAddress(addressDto);
         findMember.changeAddress(address);
     }
 
@@ -97,23 +91,6 @@ public class MemberServiceImplV0 implements MemberService {
         if (findMember.isPresent()) {
             throw new DuplicateException("이미 사용중인 닉네임입니다.");
         }
-    }
-
-    /**
-     * 회원 엔티티 생성
-     * @return 회원 엔티티
-     */
-    private static Member createMember(CreateMemberDto memberDto) {
-        Address address = createAddress(memberDto.getAddressDto());
-        return new Member(memberDto.getEmail(), memberDto.getPassword(), memberDto.getUsername(), memberDto.getBirth(), memberDto.getPhone(), memberDto.getNickname(), address);
-    }
-
-    /**
-     * 주소 값타입 생성
-     * @return 주소 값타입
-     */
-    private static Address createAddress(CreateAddressDto addressDto) {
-        return new Address(addressDto.getZipcode(), addressDto.getMainAddress(), addressDto.getDetailAddress());
     }
 
     /**

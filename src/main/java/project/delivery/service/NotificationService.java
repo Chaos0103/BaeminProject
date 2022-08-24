@@ -1,8 +1,7 @@
 package project.delivery.service;
 
 import org.springframework.transaction.annotation.Transactional;
-import project.delivery.dto.NotificationDto;
-import project.delivery.dto.create.CreateNotificationDto;
+import project.delivery.domain.Notification;
 
 import java.util.List;
 
@@ -10,7 +9,7 @@ import java.util.List;
 public interface NotificationService {
 
     @Transactional
-    Long createNotification(Long memberId, CreateNotificationDto createNotificationDto);
+    Long createNotification(Long memberId, Notification notification);
 
-    List<NotificationDto> findByMemberId(Long memberId);
+    List<Notification> findByMemberId(Long memberId);
 }

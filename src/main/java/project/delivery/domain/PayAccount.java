@@ -31,4 +31,9 @@ public class PayAccount extends TimeBaseEntity {
         this.bank = bank;
         this.accountNumber = accountNumber;
     }
+
+    //==연관관계 메서드==//
+    public void addPay(Pay pay) {
+        this.pay = pay;
+    }
 }

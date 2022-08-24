@@ -4,9 +4,6 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import project.delivery.domain.Category;
 import project.delivery.domain.Store;
-import project.delivery.domain.UploadFile;
-import project.delivery.dto.StoreDto;
-import project.delivery.dto.create.CreateStoreDto;
 import project.delivery.exception.DuplicateException;
 import project.delivery.repository.StoreRepository;
 import project.delivery.service.StoreService;
@@ -21,27 +18,21 @@ public class StoreServiceImplV0 implements StoreService {
     private final StoreRepository storeRepository;
 
     @Override
-    public Long createNewStore(CreateStoreDto createStoreDto) {
-        duplicatedBusinessNumber(createStoreDto.getBusinessNumber());
+    public Long createNewStore(Store store) {
+        duplicatedBusinessNumber(store.getBusinessNumber());
 
-        Store store = createStore(createStoreDto);
         Store savedStore = storeRepository.save(store);
-
         return savedStore.getId();
     }
 
     @Override
-    public List<StoreDto> searchStores(Category category) {
-        List<Store> findStores = storeRepository.findAllByCondition(category);
-        return findStores.stream()
-                .map(StoreDto::new)
-                .toList();
+    public List<Store> searchStores(Category category) {
+        return storeRepository.findAllByCondition(category);
     }
 
     @Override
-    public StoreDto detailStore(Long storeId) {
-        Optional<Store> store = storeRepository.findStore(storeId);
-        return new StoreDto(store.get());
+    public Store detailStore(Long storeId) {
+        return storeRepository.findStore(storeId).orElse(null);
     }
 
     private void duplicatedBusinessNumber(String businessNumber) {
@@ -50,11 +41,4 @@ public class StoreServiceImplV0 implements StoreService {
             throw new DuplicateException("이미 등록된 사업자 번호입니다");
         }
     }
-
-    private Store createStore(CreateStoreDto createStoreDto) {
-        return new Store(createStoreDto.getStoreName(), createStoreDto.getCategory(), new UploadFile(null, null), createStoreDto.getTel(), createStoreDto.getIntroduction(), createStoreDto.getIntroduction(),
-                createStoreDto.getOpenTime(), createStoreDto.getHoliday(), createStoreDto.getDeliveryArea(), createStoreDto.getDeliveryTip(), createStoreDto.getRepresentativeName(),
-                createStoreDto.getBusinessAddress(), createStoreDto.getBusinessNumber(), createStoreDto.getAnnouncement());
-    }
-
 }

@@ -3,12 +3,6 @@ package project.delivery.service.impl.v0;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import project.delivery.domain.*;
-import project.delivery.dto.PayAccountDto;
-import project.delivery.dto.PayCardDto;
-import project.delivery.dto.PayDto;
-import project.delivery.dto.PayHistoryDto;
-import project.delivery.dto.create.CreatePayAccountDto;
-import project.delivery.dto.create.CreatePayCardDto;
 import project.delivery.exception.NoSuchException;
 import project.delivery.repository.*;
 import project.delivery.service.PayService;
@@ -70,10 +64,11 @@ public class PayServiceImplV0 implements PayService {
     }
 
     @Override
-    public Long createPayCard(Long memberId, CreatePayCardDto createPayCardDto) {
+    public Long createPayCard(Long memberId, PayCard payCard) {
         Pay findPay = getPay(memberId);
 
-        PayCard payCard = createPayCard(createPayCardDto, findPay);
+        //연관관계 주입
+        payCard.addPay(findPay);
         PayCard savePayCard = payCardRepository.save(payCard);
 
         return savePayCard.getId();
@@ -86,10 +81,11 @@ public class PayServiceImplV0 implements PayService {
     }
 
     @Override
-    public Long createPayAccount(Long memberId, CreatePayAccountDto createPayAccountDto) {
+    public Long createPayAccount(Long memberId, PayAccount payAccount) {
         Pay findPay = getPay(memberId);
 
-        PayAccount payAccount = createPayAccount(createPayAccountDto, findPay);
+        //연관관계 주입
+        payAccount.addPay(findPay);
         PayAccount savedPayAccount = payAccountRepository.save(payAccount);
 
         return savedPayAccount.getId();
@@ -102,56 +98,36 @@ public class PayServiceImplV0 implements PayService {
     }
 
     @Override
-    public PayDto findPay(Long memberId) {
-        Pay findPay = payRepository.findDataByMemberId(memberId).orElseThrow(() -> {
+    public Pay findPay(Long memberId) {
+        return payRepository.findDataByMemberId(memberId).orElseThrow(() -> {
             throw new NoSuchException("배민페이 미가입자입니다");
         });
-        return new PayDto(findPay);
+
     }
 
     @Override
-    public List<PayHistoryDto> findPayHistory(Long memberId, TransactionType type) {
+    public List<PayHistory> findPayHistory(Long memberId, TransactionType type) {
         Pay findPay = getPay(memberId);
 
-        List<PayHistory> findPayHistories = payHistoryRepository.findAllByTransactionType(findPay.getId(), type);
-
-        return findPayHistories.stream()
-                .map(PayHistoryDto::new)
-                .toList();
+        return payHistoryRepository.findAllByTransactionType(findPay.getId(), type);
     }
 
     @Override
-    public List<PayCardDto> findPayCard(Long memberId) {
+    public List<PayCard> findPayCard(Long memberId) {
         Pay findPay = getPay(memberId);
 
-        List<PayCard> findPayCards = payCardRepository.findByPayId(findPay.getId());
-
-        return findPayCards.stream()
-                .map(PayCardDto::new)
-                .toList();
+        return payCardRepository.findByPayId(findPay.getId());
     }
 
     @Override
-    public List<PayAccountDto> findPayAccount(Long memberId) {
+    public List<PayAccount> findPayAccount(Long memberId) {
         Pay findPay = getPay(memberId);
 
-        List<PayAccount> findPayAccounts = payAccountRepository.findByPayId(findPay.getId());
-
-        return findPayAccounts.stream()
-                .map(PayAccountDto::new)
-                .toList();
+        return payAccountRepository.findByPayId(findPay.getId());
     }
 
     private Pay createPay(String password, Member findMember) {
         return new Pay(findMember, password);
-    }
-
-    private PayCard createPayCard(CreatePayCardDto createPayCardDto, Pay findPay) {
-        return new PayCard(findPay, createPayCardDto.getCardNumber(), createPayCardDto.getExpirationDate(), createPayCardDto.getCvc(), createPayCardDto.getPassword());
-    }
-
-    private PayAccount createPayAccount(CreatePayAccountDto createPayAccountDto, Pay findPay) {
-        return new PayAccount(findPay, createPayAccountDto.getBank(), createPayAccountDto.getAccountNumber());
     }
 
     private Member getMember(Long memberId) {
