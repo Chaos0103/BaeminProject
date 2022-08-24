@@ -1,4 +1,4 @@
-package project.delivery.interceptor;
+package project.delivery.login;
 
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.web.servlet.HandlerInterceptor;

@@ -1,4 +1,4 @@
-package project.delivery.file;
+package project.delivery.domain;
 
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Component;

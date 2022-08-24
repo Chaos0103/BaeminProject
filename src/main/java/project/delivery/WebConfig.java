@@ -4,7 +4,7 @@ import org.springframework.context.annotation.Configuration;
 import org.springframework.web.method.support.HandlerMethodArgumentResolver;
 import org.springframework.web.servlet.config.annotation.InterceptorRegistry;
 import org.springframework.web.servlet.config.annotation.WebMvcConfigurer;
-import project.delivery.interceptor.LoginCheckInterceptor;
+import project.delivery.login.LoginCheckInterceptor;
 import project.delivery.login.LoginArgumentResolver;
 
 import java.util.List;

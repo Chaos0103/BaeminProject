@@ -8,7 +8,7 @@ import org.springframework.validation.BindingResult;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
-import project.delivery.controller.form.ChangePasswordForm;
+import project.delivery.controller.form.PasswordChangeForm;
 import project.delivery.controller.form.EmailFindForm;
 import project.delivery.controller.form.FindPasswordForm;
 import project.delivery.controller.form.LoginForm;
@@ -56,18 +56,18 @@ public class LoginController {
             return "common/login";
         }
 
-        try {
-            Member loginMember = loginService.login(form.getEmail(), form.getPassword());
+        Member loginMember = loginService.login(form.getEmail(), form.getPassword());
 
-            HttpSession session = request.getSession();
-            session.setAttribute("loginMember", loginMember);
-            log.info("회원 번호 {} 로그인", loginMember.getId());
-            return "redirect:" + redirectURL;
-        } catch (NoSuchException e) {
-            bindingResult.reject("loginFail", e.getMessage());
-            log.debug("로그인 예외 발생: {}", e.getMessage());
+        if (loginMember == null) {
+            bindingResult.reject("loginFail", "계정 정보가 일치하지 않습니다.");
+            log.debug("로그인 예외 발생: {}", bindingResult.getTarget());
             return "common/login";
         }
+
+        HttpSession session = request.getSession();
+        session.setAttribute("loginMember", loginMember);
+        log.info("회원 번호 {} 로그인", loginMember.getId());
+        return "redirect:" + redirectURL;
     }
 
     /**
@@ -77,10 +77,7 @@ public class LoginController {
      */
     @GetMapping("/logout")
     public String logout(HttpServletRequest request) {
-        HttpSession session = request.getSession(false);
-        if (session != null) {
-            session.invalidate();
-        }
+        expiredSession(request);
         return "redirect:/";
     }
 
@@ -110,18 +107,18 @@ public class LoginController {
             return "common/findLoginIdForm";
         }
 
-        try {
-            Member member = loginService.findLoginEmail(form.getPhone());
+        Member member = loginService.findLoginEmail(form.getPhone());
 
-            redirectAttributes.addFlashAttribute("email", member.getEmail());
-            redirectAttributes.addFlashAttribute("createdDate", member.getCreatedDate());
-            log.info("회원번호 {} 아이디 찾기", member.getId());
-            return "redirect:/login/loginId/success";
-        } catch (NoSuchException e) {
-            log.debug("이메일 찾기 예외 발생: {}", e.getMessage());
+        if (member == null) {
+            bindingResult.reject("nonMember", "등록되지 않은 회원입니다.");
+            log.debug("이메일 찾기 예외 발생: {}", bindingResult.getTarget());
             return "common/findLoginIdForm";
         }
 
+        redirectAttributes.addFlashAttribute("email", member.getEmail());
+        redirectAttributes.addFlashAttribute("createdDate", member.getCreatedDate());
+        log.info("회원번호 {} 아이디 찾기", member.getId());
+        return "redirect:/login/loginId/success";
     }
 
     /**
@@ -161,17 +158,17 @@ public class LoginController {
             return "common/findPasswordForm";
         }
 
-        try {
-            Long memberId = loginService.findLoginPassword(form.getEmail(), form.getPhone());
+        Long memberId = loginService.findLoginPassword(form.getEmail(), form.getPhone());
 
-            redirectAttributes.addFlashAttribute("memberId", memberId);
-            log.info("회원번호 {} 비밀번호 찾기", memberId);
-            return "redirect:/login/password/" + memberId + "/change";
-        } catch (NoSuchException e) {
-            log.debug("비밀번호 찾기 예외 발생");
+        if (memberId == null) {
+            bindingResult.reject("nonMember", "등록되지 않은 회원입니다.");
+            log.debug("비밀번호 찾기 예외 발생: {}", bindingResult.getTarget());
             return "common/findPasswordForm";
         }
 
+        redirectAttributes.addFlashAttribute("memberId", memberId);
+        log.info("회원번호 {} 비밀번호 찾기", memberId);
+        return "redirect:/login/password/" + memberId + "/change";
     }
 
     /**
@@ -180,23 +177,25 @@ public class LoginController {
      * @Method GET
      */
     @GetMapping("/password/{memberId}/change")
-    public String changePassword(@ModelAttribute("changePasswordForm") ChangePasswordForm form, @PathVariable Long memberId) {
+    public String changePassword(@ModelAttribute("passwordChangeForm") PasswordChangeForm form, @PathVariable Long memberId) {
         log.debug("memberId {}", memberId);
         return "common/changePasswordForm";
     }
 
     @PostMapping("/password/{memberId}/change")
     public String changePasswordPost(
-            @Validated @ModelAttribute ChangePasswordForm form,
+            @Validated @ModelAttribute PasswordChangeForm form,
             BindingResult bindingResult,
             @PathVariable Long memberId) {
+
         if (bindingResult.hasErrors()) {
             log.debug("폼 데이터 검증시 예외 발생: {}개", bindingResult.getErrorCount());
             return "common/changePasswordForm";
         }
+
         if (!form.getPassword().equals(form.getCheckPassword())) {
+            bindingResult.reject("notEqualPassword", "비밀번호가 일치하지 않습니다.");
             log.debug("비밀번호 확인이 일치하지 않음");
-            bindingResult.reject("notEqualPassword", "비밀번호가 일치하지 않습니다");
             return "common/changePasswordForm";
         }
 
@@ -204,7 +203,6 @@ public class LoginController {
             log.debug("memberId {}", memberId);
             log.info("회원번호 {} 비밀번호 변경", memberId);
             memberService.changePassword(memberId, form.getPassword());
-
             return "redirect:/login";
         } catch (NoSuchException e) {
             log.warn("비정상적 접근 발생");
@@ -234,5 +232,12 @@ public class LoginController {
         }
 
         return secret;
+    }
+
+    private static void expiredSession(HttpServletRequest request) {
+        HttpSession session = request.getSession(false);
+        if (session != null) {
+            session.invalidate();
+        }
     }
 }
