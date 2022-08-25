@@ -10,7 +10,7 @@ import org.springframework.web.bind.annotation.*;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 import project.delivery.controller.form.PasswordChangeForm;
 import project.delivery.controller.form.EmailFindForm;
-import project.delivery.controller.form.FindPasswordForm;
+import project.delivery.controller.form.PasswordFindForm;
 import project.delivery.controller.form.LoginForm;
 import project.delivery.domain.Member;
 import project.delivery.exception.NoSuchException;
@@ -139,7 +139,7 @@ public class LoginController {
      * @Method GET
      */
     @GetMapping("/password")
-    public String findPassword(@ModelAttribute("findPasswordForm") FindPasswordForm form) {
+    public String findPassword(@ModelAttribute("passwordFindForm") PasswordFindForm form) {
         return "common/findPasswordForm";
     }
 
@@ -149,7 +149,7 @@ public class LoginController {
      */
     @PostMapping("/password")
     public String findPasswordPost(
-            @Validated @ModelAttribute FindPasswordForm form,
+            @Validated @ModelAttribute PasswordFindForm form,
             BindingResult bindingResult,
             RedirectAttributes redirectAttributes) {
 

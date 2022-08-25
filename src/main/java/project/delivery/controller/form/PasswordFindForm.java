@@ -7,7 +7,7 @@ import javax.validation.constraints.Email;
 import javax.validation.constraints.NotBlank;
 
 @Data
-public class FindPasswordForm {
+public class PasswordFindForm {
 
     @Email
     @Length(max = 50)
