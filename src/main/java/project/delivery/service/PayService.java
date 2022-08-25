@@ -19,7 +19,7 @@ public interface PayService {
     void chargePayMoney(Long memberId, int money);
 
     @Transactional
-    void refundPayMoney(Long memberId);
+    void refundPayMoney(Long memberId, String content);
 
     /**
      * 페이내역등록
@@ -47,6 +47,9 @@ public interface PayService {
     @Transactional
     Long createPayCard(Long memberId, PayCard payCard);
 
+    @Transactional
+    void updatePayCardNickname(Long payCardId, String nickname);
+
     /**
      * 페이카드삭제
      */
@@ -59,6 +62,9 @@ public interface PayService {
      */
     @Transactional
     Long createPayAccount(Long memberId, PayAccount payAccount);
+
+    @Transactional
+    void updatePayAccountNickname(Long payAccountId, String nickname);
 
     /**
      * 페이계좌삭제
@@ -80,12 +86,12 @@ public interface PayService {
      * 페이카드조회
      * @return PayCardDto
      */
-    List<PayCard> findPayCard(Long memberId);
+    List<PayCard> findPayCard(Long payId);
 
     /**
      * 페이계좌조회
      *
      * @return PayAccountDto
      */
-    List<PayAccount> findPayAccount(Long memberId);
+    List<PayAccount> findPayAccount(Long payId);
 }

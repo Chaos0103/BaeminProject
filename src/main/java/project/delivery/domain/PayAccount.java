@@ -25,15 +25,23 @@ public class PayAccount extends TimeBaseEntity {
     private Bank bank;
     @Column(updatable = false, nullable = false, length = 20)
     private String accountNumber;
+    @Column(nullable = false, length = 20)
+    private String nickname;
 
     public PayAccount(Pay pay, Bank bank, String accountNumber) {
         this.pay = pay;
         this.bank = bank;
         this.accountNumber = accountNumber;
+        this.nickname = bank.getDescription();
     }
 
     //==연관관계 메서드==//
     public void addPay(Pay pay) {
         this.pay = pay;
+    }
+
+    //==비즈니스 메서드==//
+    public void changeNickname(String nickname) {
+        this.nickname = nickname;
     }
 }

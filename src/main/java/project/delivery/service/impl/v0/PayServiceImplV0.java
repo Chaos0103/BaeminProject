@@ -36,9 +36,9 @@ public class PayServiceImplV0 implements PayService {
     }
 
     @Override
-    public void refundPayMoney(Long memberId) {
+    public void refundPayMoney(Long memberId, String content) {
         Pay findPay = getPay(memberId);
-        createPayHistory(memberId, findPay.getMoney(), "배민페이", TransactionType.REFUND);
+        createPayHistory(memberId, findPay.getMoney(), content, TransactionType.REFUND);
     }
 
     @Override
@@ -75,6 +75,15 @@ public class PayServiceImplV0 implements PayService {
     }
 
     @Override
+    public void updatePayCardNickname(Long payCardId, String nickname) {
+        PayCard payCard = payCardRepository.findById(payCardId).orElse(null);
+        if (payCard == null) {
+            throw new NoSuchException("비정상적인 접근입니다");
+        }
+        payCard.changeNickname(nickname);
+    }
+
+    @Override
     public void deletePayCard(Long payCardId) {
         PayCard findPayCard = getPayCard(payCardId);
         payCardRepository.delete(findPayCard);
@@ -92,6 +101,15 @@ public class PayServiceImplV0 implements PayService {
     }
 
     @Override
+    public void updatePayAccountNickname(Long payAccountId, String nickname) {
+        PayAccount payAccount = payAccountRepository.findById(payAccountId).orElse(null);
+        if (payAccount == null) {
+            throw new NoSuchException("비정상적인 접근입니다");
+        }
+        payAccount.changeNickname(nickname);
+    }
+
+    @Override
     public void deletePayAccount(Long payAccountId) {
         PayAccount findPayAccount = getPayAccount(payAccountId);
         payAccountRepository.delete(findPayAccount);
@@ -102,7 +120,6 @@ public class PayServiceImplV0 implements PayService {
         return payRepository.findDataByMemberId(memberId).orElseThrow(() -> {
             throw new NoSuchException("배민페이 미가입자입니다");
         });
-
     }
 
     @Override
@@ -113,17 +130,13 @@ public class PayServiceImplV0 implements PayService {
     }
 
     @Override
-    public List<PayCard> findPayCard(Long memberId) {
-        Pay findPay = getPay(memberId);
-
-        return payCardRepository.findByPayId(findPay.getId());
+    public List<PayCard> findPayCard(Long payId) {
+        return payCardRepository.findByPayId(payId);
     }
 
     @Override
-    public List<PayAccount> findPayAccount(Long memberId) {
-        Pay findPay = getPay(memberId);
-
-        return payAccountRepository.findByPayId(findPay.getId());
+    public List<PayAccount> findPayAccount(Long payId) {
+        return payAccountRepository.findByPayId(payId);
     }
 
     private Pay createPay(String password, Member findMember) {

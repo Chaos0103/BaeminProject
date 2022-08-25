@@ -3,9 +3,7 @@ package project.delivery;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Component;
 import project.delivery.domain.*;
-import project.delivery.repository.MemberRepository;
-import project.delivery.repository.NotificationRepository;
-import project.delivery.repository.StoreRepository;
+import project.delivery.repository.*;
 
 import javax.annotation.PostConstruct;
 
@@ -16,6 +14,8 @@ public class TestDataInit {
     private final MemberRepository memberRepository;
     private final StoreRepository storeRepository;
     private final NotificationRepository notificationRepository;
+    private final PayAccountRepository payAccountRepository;
+    private final PayCardRepository payCardRepository;
 
     @PostConstruct
     private void init() {
@@ -51,5 +51,12 @@ public class TestDataInit {
         notificationRepository.save(notification1);
         notificationRepository.save(notification2);
         notificationRepository.save(notification3);
+
+        PayAccount payAccount = new PayAccount(pay, Bank.KAKAOBANK, "3333-00-1234567");
+        payAccountRepository.save(payAccount);
+
+        PayCard payCard = new PayCard(Card.KAKAO, "1234123412341234", "1225", "000", "12");
+        payCard.addPay(pay);
+        payCardRepository.save(payCard);
     }
 }

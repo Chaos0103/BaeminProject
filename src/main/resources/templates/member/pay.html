@@ -24,7 +24,7 @@
                                 </div>
                             </div>
                             <div class="row align-self-center fs-1 ps-3">
-                                <div class="col text-end" th:text="${pay.member.grade}">
+                                <div class="col text-end" th:text="${loginMember.grade}">
                                     VIP
                                 </div>
                             </div>
@@ -58,7 +58,7 @@
                                 <div class="col-sm-4 align-self-center text-start fs-5">
                                     포인트
                                 </div>
-                                <div class="col align-self-center text-end">
+                                <div class="col align-self-center text-end" th:text="|${#numbers.formatInteger(loginMember.point.totalPoint, 0, 'COMMA')} 원|">
                                     500,000 원
                                 </div>
                             </div>
@@ -109,6 +109,9 @@
                                     <div class="col">
                                         <h2>배민페이</h2>
                                     </div>
+                                    <div class="col text-end align-self-center">
+                                        <button type="button" class="btn btn-outline-primary" id="button-changePayPassword" data-bs-toggle="modal" data-bs-target="#changePayPassword">비밀번호 변경</button>
+                                    </div>
                                 </div>
                             </div>
                             <div class="m-4 bg-main border">
@@ -127,26 +130,124 @@
                                         <button type="button" class="btn btn-light" data-bs-toggle="modal" data-bs-target="#payHistory">사용내역</button>
                                     </div>
                                     <div class="col d-grid gap-2 mx-auto">
-                                        <button type="button" class="btn btn-light" data-bs-toggle="modal" data-bs-target="#charge">충전</button>
+                                        <button id="button-charge" type="button" class="btn btn-light" data-bs-toggle="modal" data-bs-target="#charge">충전</button>
                                     </div>
                                     <div class="col d-grid gap-2 mx-auto">
                                         <button type="button" class="btn btn-light" data-bs-toggle="modal" data-bs-target="#refund">환불</button>
                                     </div>
                                 </div>
                             </div>
-                            <div class="m-4 border bg-secondary bg-opacity-10">
-                                <div class="row text-center ms-1 me-1" style="height: 125px;">
-                                    <div onclick="location.href='#'" class="col border-end">
-                                        <div class="row h-100">
-                                            <div class="col align-self-center fs-3">
-                                                결제수단 관리
+                            <div class="m-4">
+                                <nav>
+                                    <div class="nav nav-tabs" id="nav-tab" role="tablist">
+                                        <button class="nav-link active w-50" id="nav-payAccount-tab" data-bs-toggle="tab" data-bs-target="#payAccount" type="button" role="tab" aria-controls="nav-payAccount" aria-selected="true">계좌</button>
+                                        <button class="nav-link w-50" id="nav-payCard-tab" data-bs-toggle="tab" data-bs-target="#payCard" type="button" role="tab" aria-controls="nav-payCard" aria-selected="false">카드</button>
+                                    </div>
+                                </nav>
+                                <div class="tab-content mt-3" id="nav-tabContent">
+                                    <div class="tab-pane fade show active" id="payAccount" role="tabpanel" aria-labelledby="nav-payAccount-tab" tabindex="0">
+                                        <div class="row row-cols-1 row-cols-md-2 g-4">
+                                            <div class="col" th:each="payAccount : ${payAccounts}">
+                                                <div class="card" data-bs-toggle="modal" th:data-bs-target="'#detailPayAccount' + ${payAccount.id}" style="height: 135px; cursor: pointer;">
+                                                    <div class="card-body">
+                                                        <div class="d-flex position-relative">
+                                                            <img src="https://via.placeholder.com/150x100" class="flex-shrink-0 me-3" alt="...">
+                                                            <div>
+                                                                <h5 class="mt-0" th:text="${payAccount.nickname}"></h5>
+                                                                <p th:text="|${payAccount.bank.description} (${payAccount.accountNumber.substring(payAccount.accountNumber.length()-4, payAccount.accountNumber.length())})|"></p>
+                                                            </div>
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                                <!-- Modal -->
+                                                <div class="modal fade" th:id="'detailPayAccount' + ${payAccount.id}" tabindex="-1" aria-labelledby="detailPayAccountLabel" aria-hidden="true">
+                                                    <div class="modal-dialog">
+                                                        <div class="modal-content">
+                                                            <div class="modal-header">
+                                                                <h5 class="modal-title" id="detailPayAccountLabel">결제수단 관리</h5>
+                                                                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                                                            </div>
+                                                            <div class="modal-body">
+                                                                <h5 th:text="|${payAccount.bank.description} (${payAccount.accountNumber.substring(payAccount.accountNumber.length()-4, payAccount.accountNumber.length())})|"></h5>
+                                                                <form class="row g-3 mt-2" method="post" th:action="@{/pay/account/{accountId}/nickname(accountId=${payAccount.id})}">
+                                                                    <div class="col-auto w-75">
+                                                                        <label for="accountNickname" class="visually-hidden"></label>
+                                                                        <input type="text" th:field="${nicknameUpdateForm.newNickname}" class="form-control" id="accountNickname" placeholder="" maxlength="20">
+                                                                    </div>
+                                                                    <div class="col-auto w-25">
+                                                                        <button type="submit" class="btn btn-primary mb-3 w-100">별명저장</button>
+                                                                    </div>
+                                                                </form>
+                                                            </div>
+                                                            <div class="modal-footer">
+                                                                <button type="button" class="btn btn-outline-danger w-100" th:onclick="|location.href='@{/pay/account/{accountId}/delete(accountId=${payAccount.id})}'|">결제수단 삭제</button>
+                                                            </div>
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                            <!-- 계좌 추가 버튼 -->
+                                            <div class="col">
+                                                <div id="button-addPayAccount" class="card" style="height: 135px; cursor: pointer;" data-bs-toggle="modal" data-bs-target="#addPayAccount">
+                                                    <div class="card-body d-flex align-items-center justify-content-center">
+                                                        <div class="border border-secondary rounded-pill d-flex align-items-center justify-content-center w-50 h-50 fw-bold">
+                                                            + 결제수단 추가
+                                                        </div>
+                                                    </div>
+                                                </div>
                                             </div>
                                         </div>
                                     </div>
-                                    <div class="col" data-bs-toggle="modal" data-bs-target="#changePayPassword">
-                                        <div class="row h-100">
-                                            <div class="col align-self-center fs-3">
-                                                비밀번호 변경
+                                    <div class="tab-pane fade" id="payCard" role="tabpanel" aria-labelledby="nav-payCard-tab" tabindex="0">
+                                        <div class="row row-cols-1 row-cols-md-2 g-4">
+                                            <div class="col" th:each="payCard : ${payCards}">
+                                                <div class="card" data-bs-toggle="modal" th:data-bs-target="'#detailPayCard' + ${payCard.id}" style="height: 135px; cursor: pointer;">
+                                                    <div class="card-body">
+                                                        <div class="d-flex position-relative">
+                                                            <img src="https://via.placeholder.com/150x100" class="flex-shrink-0 me-3" alt="...">
+                                                            <div>
+                                                                <h5 class="mt-0" th:text="${payCard.nickname}"></h5>
+                                                                <p th:text="|${payCard.card.description} (${payCard.cardNumber.substring(payCard.cardNumber.length()-4, payCard.cardNumber.length())})|"></p>
+                                                            </div>
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                                <!-- Modal -->
+                                                <div class="modal fade" th:id="'detailPayCard' + ${payCard.id}" tabindex="-1" aria-labelledby="payCardLabel" aria-hidden="true">
+                                                    <div class="modal-dialog">
+                                                        <div class="modal-content">
+                                                            <div class="modal-header">
+                                                                <h5 class="modal-title" id="payCardLabel">결제수단 관리</h5>
+                                                                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                                                            </div>
+                                                            <div class="modal-body">
+                                                                <h5 th:text="|${payCard.card.description} (${payCard.cardNumber.substring(payCard.cardNumber.length()-4, payCard.cardNumber.length())})|"></h5>
+                                                                <form class="row g-3 mt-2" method="post" th:action="@{/pay/card/{cardId}/nickname(cardId=${payCard.id})}">
+                                                                    <div class="col-auto w-75">
+                                                                        <label for="inputPassword2" class="visually-hidden"></label>
+                                                                        <input type="text" th:field="${nicknameUpdateForm.newNickname}" class="form-control" id="inputPassword2" placeholder="" maxlength="20">
+                                                                    </div>
+                                                                    <div class="col-auto w-25">
+                                                                        <button type="submit" class="btn btn-primary mb-3 w-100">별명저장</button>
+                                                                    </div>
+                                                                </form>
+                                                            </div>
+                                                            <div class="modal-footer">
+                                                                <button type="button" class="btn btn-outline-danger w-100" th:onclick="|location.href='@{/pay/card/{cardId}/delete(cardId=${payCard.id})}'|">결제수단 삭제</button>
+                                                            </div>
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                            <!-- 계좌 추가 버튼 -->
+                                            <div class="col">
+                                                <div id="button-addPayCard" class="card" style="height: 135px; cursor: pointer;" data-bs-toggle="modal" data-bs-target="#addPayCard">
+                                                    <div class="card-body d-flex align-items-center justify-content-center">
+                                                        <div class="border border-secondary rounded-pill d-flex align-items-center justify-content-center w-50 h-50 fw-bold">
+                                                            + 결제수단 추가
+                                                        </div>
+                                                    </div>
+                                                </div>
                                             </div>
                                         </div>
                                     </div>
@@ -203,13 +304,24 @@
                 <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
             </div>
             <div class="modal-body">
-                <form method="post" th:action="@{/pay/charge}">
+                <form method="post" th:action="@{/pay/charge}" th:object="${payMoneyUpdateForm}">
                     <div class="mb-3">
-                        <label for="chargePayMoney" class="form-label"><strong>충전 금액</strong></label>
+                        <label for="chargePayMoney" class="form-label fw-bold">충전 금액</label>
                         <span class="float-end text-muted" th:text="|충전 가능 금액 ${#numbers.formatInteger(2000000 - pay.money, 0, 'COMMA')}원|"></span>
-                        <input type="text" class="form-control" th:field="${money.money}" id="chargePayMoney" placeholder="충전 금액을 입력하세요. (1만원부터 충전 가능)">
+                        <input type="text" class="form-control" th:field="*{money}" id="chargePayMoney" placeholder="충전 금액을 입력하세요. (1만원부터 충전 가능)" maxlength="7">
+                        <div class="field-error" th:errors="*{money}"></div>
                     </div>
-                    <div class="mt-3 text-muted" style="font-size: 90%;">
+                    <div class="mb-3">
+                        <label class="w-100">
+                            <div class="fw-bold">충전 수단</div>
+                            <p class="text-muted fs-custom">배민페이 계좌만 사용 가능합니다.</p>
+                            <select th:field="*{bank}" class="form-select">
+                                <option th:each="payAccount : ${payAccounts}" th:value="${payAccount.bank}"
+                                th:text="|${payAccount.bank.description} (${payAccount.accountNumber.substring(payAccount.accountNumber.length()-4, payAccount.accountNumber.length())})|">bank name</option>
+                            </select>
+                        </label>
+                    </div>
+                    <div class="mt-3 text-muted fs-custom">
                         <p>배민페이머니 이용 안내</p>
                         <ul>
                             <li>배민페이머니로 주문하면 0.5%가 배민포인트로 적립됩니다.</li>
@@ -226,13 +338,23 @@
     <div class="modal-dialog">
         <div class="modal-content">
             <div class="modal-header">
-                <h5 class="modal-title" id="refundLabel">배민페이머니 충전</h5>
+                <h5 class="modal-title" id="refundLabel">배민페이머니 환불</h5>
                 <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
             </div>
-            <div class="modal-body">
+            <form class="modal-body" th:action="@{/pay/refund}" method="post" th:object="${payMoneyRefundForm}">
                 <div class="mb-3">
                     <h5>환불 예정 금액</h5>
                     <h5 th:text="|${#numbers.formatInteger(pay.money, 0, 'COMMA')}원|">0원</h5>
+                </div>
+                <div class="mb-3">
+                    <label class="w-100">
+                        <div class="fw-bold">환불 받을 계좌</div>
+                        <p class="text-muted fs-custom">배민페이 계좌만 사용 가능합니다.</p>
+                        <select th:field="*{bank}" class="form-select">
+                            <option th:each="payAccount : ${payAccounts}" th:value="${payAccount.bank}"
+                                    th:text="|${payAccount.bank.description} (${payAccount.accountNumber.substring(payAccount.accountNumber.length()-4, payAccount.accountNumber.length())})|">bank name</option>
+                        </select>
+                    </label>
                 </div>
                 <div class="mt-3 text-muted" style="font-size: 90%;">
                     <p>배민페이머니 환불 안내</p>
@@ -242,10 +364,10 @@
                         <li>환불 결과는 배민페이머니 사용 내역에서 확인하실 수 있으며, 최대 3영업일이 소요될 수 있습니다.</li>
                     </ul>
                 </div>
-                <form th:action="@{/pay/refund}" method="post">
+                <div>
                     <button type="submit" class="btn baemin-btn w-100">환불하기</button>
-                </form>
-            </div>
+                </div>
+            </form>
         </div>
     </div>
 </div>
@@ -257,28 +379,133 @@
                 <h5 class="modal-title" id="changePayPasswordLabel">비밀번호 변경하기</h5>
                 <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
             </div>
-            <div class="modal-body">
-                <form method="post" th:action="@{/pay/changePassword}">
-                    <div class="mb-3">
-                        <label for="nowPassword" class="form-label">현재 비밀번호</label>
-                        <input type="password" class="form-control" id="nowPassword" placeholder="" maxlength="6">
+            <form class="modal-body" method="post" th:action="@{/pay/changePassword}" th:object="${changePayPasswordForm}">
+                <div class="mb-3">
+                    <label for="nowPassword" class="form-label">현재 비밀번호</label>
+                    <input th:field="*{nowPassword}" type="password" class="form-control" id="nowPassword" placeholder="" maxlength="6" th:errorclass="field-error">
+                    <div class="field-error" th:errors="*{nowPassword}"></div>
+                    <div th:if="${#fields.hasGlobalErrors()}">
+                        <p class="field-error" th:each="err : ${#fields.globalDetailedErrors()}"
+                           th:if="${err.code}=='notEqualPassword'" th:text="${err.message}">전체 오류 메시지</p>
                     </div>
-                    <div class="mb-3">
-                        <label for="newPassword" class="form-label">새로운 비밀번호</label>
-                        <input type="password" class="form-control" id="newPassword" placeholder="" maxlength="6">
+                </div>
+                <div class="mb-3">
+                    <label for="newPassword" class="form-label">새로운 비밀번호</label>
+                    <input th:field="*{newPassword}" type="password" class="form-control" id="newPassword" placeholder="" maxlength="6" th:errorclass="field-error">
+                    <div class="field-error" th:errors="*{newPassword}"></div>
+                </div>
+                <div class="mb-3">
+                    <label for="checkNewPassword" class="form-label">비밀번호 확인</label>
+                    <input th:field="*{checkNewPassword}" type="password" class="form-control" id="checkNewPassword" placeholder="" maxlength="6" th:errorclass="field-error">
+                    <div class="field-error" th:errors="*{checkNewPassword}"></div>
+                    <div th:if="${#fields.hasGlobalErrors()}">
+                        <p class="field-error" th:each="err : ${#fields.globalDetailedErrors()}"
+                           th:if="${err.code}=='notEqualCheckPassword'" th:text="${err.message}">전체 오류 메시지</p>
                     </div>
-                    <div class="mb-3">
-                        <label for="checkNewPassword" class="form-label">비밀번호 확인</label>
-                        <input type="password" class="form-control" id="checkNewPassword" placeholder="" maxlength="6">
-                    </div>
-                    <button type="submit" class="btn baemin-btn w-100">변경하기</button>
-                </form>
+                </div>
+                <button type="submit" class="btn baemin-btn w-100">변경하기</button>
+            </form>
+        </div>
+    </div>
+</div>
+<!-- addPayAccount -->
+<div class="modal fade" id="addPayAccount" data-bs-backdrop="static" data-bs-keyboard="false" tabindex="-1" aria-labelledby="addPayAccountLabel" aria-hidden="true">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title" id="addPayAccountLabel">계좌 등록하기</h5>
+                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
             </div>
+            <form th:action="@{/pay/account/add}" method="post" th:object="${payAccountSaveForm}">
+                <div class="modal-body">
+                    <h5>임우택님,<br>계좌정보를 입력해주세요.</h5>
+                    <select class="form-select mt-3" aria-label="Default select example" th:field="*{bank}">
+                        <option th:each="bank : ${banks}" th:value="${bank}" th:text="${bank.description}">은행이름</option>
+                    </select>
+                    <div class="mt-3">
+                        <label for="accountNumber" class="form-label">계좌번호</label>
+                        <input th:field="*{accountNumber}" type="text" class="form-control" id="accountNumber" placeholder="숫자만 입력하세요" th:errorclass="field-error">
+                        <div class="field-error" th:errors="*{accountNumber}"></div>
+                    </div>
+                </div>
+                <div class="modal-footer">
+                    <button type="submit" class="btn baemin-btn w-100">등록하기</button>
+                    <p class="fs-custom text-muted text-start w-100">가상계좌, 적금, 펀드계좌, 평생계좌는 등록 불가합니다. 계좌를 등록하기 위해서 ARS 출금동의가 필요합니다.</p>
+                </div>
+            </form>
+        </div>
+    </div>
+</div>
+<!-- addPayCard -->
+<div class="modal fade" id="addPayCard" data-bs-backdrop="static" data-bs-keyboard="false" tabindex="-1" aria-labelledby="addPayCardLabel" aria-hidden="true">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title" id="addPayCardLabel">카드 등록하기</h5>
+                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+            </div>
+            <form th:action="@{/pay/card/add}" method="post" th:object="${payCardSaveForm}">
+                <div class="modal-body">
+                    <h5>임우택님,<br>카드정보를 입력해주세요.</h5>
+                    <select class="form-select mt-3" aria-label="Default select example" th:field="*{card}">
+                        <option th:each="card : ${cards}" th:value="${card}" th:text="${card.description}">카드이름</option>
+                    </select>
+                    <div class="mt-3">
+                        <label for="cardNumber" class="form-label">카드번호</label>
+                        <input th:field="*{cardNumber}" type="text" class="form-control" id="cardNumber" placeholder="숫자만 입력하세요" th:errorclass="field-error" maxlength="16">
+                        <div class="field-error" th:errors="*{cardNumber}"></div>
+                        <p class="fs-custom text-muted text-start">신용/체크카드, 개인형 법인카드만 가능</p>
+                    </div>
+                    <div class="mt-3">
+                        <label for="expirationDate" class="form-label">유효기간(월/년)</label>
+                        <input th:field="*{expirationDate}" type="password" class="form-control" id="expirationDate" placeholder="MM/YY" th:errorclass="field-error" maxlength="4">
+                        <div class="field-error" th:errors="*{expirationDate}"></div>
+                    </div>
+                    <div class="mt-3">
+                        <label for="cvc" class="form-label">뒷면 보안코드 3자리</label>
+                        <input th:field="*{cvc}" type="password" class="form-control" id="cvc" placeholder="CVC" th:errorclass="field-error" maxlength="3">
+                        <div class="field-error" th:errors="*{cvc}"></div>
+                    </div>
+                    <div class="mt-3">
+                        <label for="password" class="form-label">비밀번호 앞 2자리</label>
+                        <div class="row">
+                            <div class="col">
+                                <input th:field="*{password}" id="password" type="password" class="form-control" placeholder="**" th:errorclass="field-error" maxlength="2">
+                                <div class="field-error" th:errors="*{password}"></div>
+                            </div>
+                            <div class="col">
+                                <input type="password" class="form-control" value="00" aria-label="none" disabled>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="modal-footer">
+                    <button type="submit" class="btn baemin-btn w-100">등록하기</button>
+                </div>
+            </form>
         </div>
     </div>
 </div>
 
 <footer th:replace="fragments/footer::footer"></footer>
+<script th:inline="javascript">
+    const chargeModal = [[${chargeModal}]];
+    const changePayPasswordModal = [[${changePayPasswordModal}]];
+    const addPayAccountModal = [[${addPayAccount}]];
+    const addPayCardModal = [[${addPayCard}]];
+
+    window.onload = function () {
+        if (chargeModal) {
+            $('#button-charge').click();
+        } else if (changePayPasswordModal) {
+            $('#button-changePayPassword').click();
+        } else if (addPayAccountModal) {
+            $('#button-addPayAccount').click();
+        } else if (addPayCardModal) {
+            $('#button-addPayCard').click();
+        }
+    }
+</script>
 </body>
 
 </html>

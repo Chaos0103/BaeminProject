@@ -21,6 +21,10 @@ public class PayCard extends TimeBaseEntity {
     @JoinColumn(name = "pay_id")
     private Pay pay;
 
+    @Enumerated(EnumType.STRING)
+    private Card card;
+    @Column(nullable = false, length = 20)
+    private String nickname;
     @Column(updatable = false, nullable = false, length = 16)
     private String cardNumber;
     @Column(updatable = false, nullable = false, length = 4)
@@ -30,15 +34,22 @@ public class PayCard extends TimeBaseEntity {
     @Column(updatable = false, nullable = false, length = 2)
     private String password;
 
-    public PayCard(String cardNumber, String expirationDate, String cvc, String password) {
+    public PayCard(Card card, String cardNumber, String expirationDate, String cvc, String password) {
+        this.card = card;
         this.cardNumber = cardNumber;
         this.expirationDate = expirationDate;
         this.cvc = cvc;
         this.password = password;
+        this.nickname = card.getDescription();
     }
 
     //==연관관계 메서드==//
     public void addPay(Pay pay) {
         this.pay = pay;
+    }
+
+    //==비즈니스 로직==//
+    public void changeNickname(String nickname) {
+        this.nickname = nickname;
     }
 }

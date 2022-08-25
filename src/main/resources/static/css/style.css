@@ -34,3 +34,7 @@ header {
     max-width: 400px;
     padding: 15px;
 }
+
+.fs-custom {
+    font-size: 90%;
+}
