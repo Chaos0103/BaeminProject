@@ -1,14 +1,14 @@
 package project.delivery.controller;
 
-import lombok.Data;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
-import org.hibernate.validator.constraints.Length;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.validation.BindingResult;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
+import project.delivery.controller.form.NicknameUpdateForm;
+import project.delivery.controller.form.PasswordUpdateForm;
 import project.delivery.domain.Member;
 import project.delivery.domain.Notification;
 import project.delivery.exception.NoSuchException;
@@ -18,7 +18,6 @@ import project.delivery.service.NotificationService;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpSession;
-import javax.validation.constraints.NotBlank;
 import java.util.List;
 
 @Slf4j
@@ -35,14 +34,14 @@ public class MemberController {
         return loginMember;
     }
 
-    @ModelAttribute("changeNicknameForm")
-    public ChangeNicknameForm changeNicknameForm() {
-        return new ChangeNicknameForm();
+    @ModelAttribute("nicknameUpdateForm")
+    public NicknameUpdateForm changeNicknameForm() {
+        return new NicknameUpdateForm();
     }
 
-    @ModelAttribute("changePasswordForm")
-    public ChangePasswordForm changePasswordForm() {
-        return new ChangePasswordForm();
+    @ModelAttribute("passwordUpdateForm")
+    public PasswordUpdateForm changePasswordForm() {
+        return new PasswordUpdateForm();
     }
 
     @ModelAttribute("notifications")
@@ -52,8 +51,8 @@ public class MemberController {
 
     @GetMapping
     public String memberInfo(
-            @ModelAttribute("changeNicknameForm") ChangeNicknameForm changeNicknameForm,
-            @ModelAttribute("changePasswordForm") ChangePasswordForm changePasswordForm,
+            @ModelAttribute("nicknameUpdateForm") NicknameUpdateForm changeNicknameForm,
+            @ModelAttribute("passwordUpdateForm") PasswordUpdateForm changePasswordForm,
             @Login Member loginMember) {
 
         changeNicknameForm.setNewNickname(loginMember.getNickname());
@@ -62,16 +61,16 @@ public class MemberController {
 
     @PostMapping("/nickname")
     public String changeNickname(
-            @Validated @ModelAttribute("changeNicknameForm") ChangeNicknameForm changeNicknameForm,
+            @Validated @ModelAttribute NicknameUpdateForm changeNicknameForm,
             BindingResult bindingResult,
             @Login Member loginMember, Model model) {
-
-        String nickname = changeNicknameForm.getNewNickname();
 
         if (bindingResult.hasErrors()) {
             log.debug("폼 데이터 검증시 예외 발생: {}개", bindingResult.getErrorCount());
             return "member/updateMemberForm";
         }
+
+        String nickname = changeNicknameForm.getNewNickname();
 
         if (loginMember.getNickname().equals(nickname)) {
             log.debug("기존 닉네임과 동일합니다");
@@ -94,7 +93,7 @@ public class MemberController {
 
     @PostMapping("/password")
     public String changePassword(
-            @Validated @ModelAttribute("changePasswordForm") ChangePasswordForm changePasswordForm,
+            @Validated @ModelAttribute PasswordUpdateForm changePasswordForm,
             BindingResult bindingResult,
             @Login Member loginMember, Model model) {
 
@@ -135,11 +134,7 @@ public class MemberController {
         try {
             memberService.deleteMember(loginMember.getId());
             log.info("회원번호 {} 탈퇴", loginMember.getId());
-
-            HttpSession httpSession = request.getSession(false);
-            if (httpSession != null) {
-                httpSession.invalidate();
-            }
+            expiredSession(request);
 
         } catch (NoSuchException e) {
             log.error("잘못된 접근이 발생하였습니다: {}", e.getMessage());
@@ -147,20 +142,10 @@ public class MemberController {
         return "redirect:/";
     }
 
-    @Data
-    static class ChangeNicknameForm {
-        @NotBlank(message = "닉네임을 입력해주세요")
-        @Length(min = 2, max = 10, message = "닉네임을 2~10자로 입력해주세요")
-        private String newNickname;
-    }
-
-    @Data
-    static class ChangePasswordForm {
-        @NotBlank(message = "현재 비밀번호를 입력해주세요")
-        @Length(min = 10, max = 20, message = "비밀번호를 10~20자로 입력해주세요")
-        private String nowPassword;
-        @NotBlank(message = "신규 비밀번호를 입력해주세요")
-        @Length(min = 10, max = 20, message = "비밀번호를 10~20자로 입력해주세요")
-        private String newPassword;
+    private static void expiredSession(HttpServletRequest request) {
+        HttpSession httpSession = request.getSession(false);
+        if (httpSession != null) {
+            httpSession.invalidate();
+        }
     }
 }

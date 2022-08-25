@@ -8,6 +8,6 @@ public class PasswordChangeForm {
 
     @Length(min = 10, max = 16)
     private String password;
-    @Length(min = 10, max = 16, message = "비밀번호가 일치하지 않습니다")
+    @Length(min = 10, max = 16)
     private String checkPassword;
 }

@@ -21,8 +21,8 @@
                                 <form method="post" action="/members/nickname">
                                     <div class="row ms-1">
                                         <label class="col-sm-4">
-                                            <input type="text" class="form-control" value="독고배달" th:field="${changeNicknameForm.newNickname}" maxlength="10">
-                                            <div class="field-error text-start" th:errors="${changeNicknameForm.newNickname}"></div>
+                                            <input type="text" class="form-control" value="독고배달" th:field="${nicknameUpdateForm.newNickname}" maxlength="10">
+                                            <div class="field-error text-start" th:errors="${nicknameUpdateForm.newNickname}"></div>
                                         </label>
                                         <div class="col">
                                             <button class="btn btn-light border-dark" type="submit">닉네임 변경</button>
@@ -59,7 +59,7 @@
                         <tr>
                             <th scope="row" class="ps-4 col-md-2 bg-secondary" style="--bs-bg-opacity: .3;">비밀번호 변경</th>
                             <td>
-                                <form method="post" th:action="@{/members/password}" th:object="${changePasswordForm}">
+                                <form method="post" th:action="@{/members/password}" th:object="${passwordUpdateForm}">
                                     <div class="mb-3 mt-3 row ms-2">
                                         <label for="nowPassword" class="col-sm-2 col-form-label">현재 비밀번호</label>
                                         <div class="col-sm-4">
