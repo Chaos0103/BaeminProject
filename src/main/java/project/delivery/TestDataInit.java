@@ -6,6 +6,7 @@ import project.delivery.domain.*;
 import project.delivery.repository.*;
 
 import javax.annotation.PostConstruct;
+import java.time.LocalDateTime;
 
 @Component
 @RequiredArgsConstructor
@@ -16,6 +17,7 @@ public class TestDataInit {
     private final NotificationRepository notificationRepository;
     private final PayAccountRepository payAccountRepository;
     private final PayCardRepository payCardRepository;
+    private final CouponRepository couponRepository;
 
     @PostConstruct
     private void init() {
@@ -58,5 +60,15 @@ public class TestDataInit {
         PayCard payCard = new PayCard(Card.KAKAO, "1234123412341234", "1225", "000", "12");
         payCard.addPay(pay);
         payCardRepository.save(payCard);
+
+        Coupon coupon1 = new Coupon(member, "2222222222222222", "BBQ 간석중앙점", 20000, 1000, LocalDateTime.now().plusMonths(1));
+        coupon1.changeStatus(CouponStatus.EXPIRE);
+        Coupon coupon2 = new Coupon(member, "3333333333333333", "BBQ 간석중앙점", 20000, 1000, LocalDateTime.now().plusHours(12));
+        coupon2.changeStatus(CouponStatus.USE);
+        Coupon coupon3 = new Coupon(member, "4444444444444444", "BBQ 간석중앙점", 20000, 1000, LocalDateTime.now().plusHours(12));
+        coupon3.changeStatus(CouponStatus.UNUSE);
+        couponRepository.save(coupon1);
+        couponRepository.save(coupon2);
+        couponRepository.save(coupon3);
     }
 }
