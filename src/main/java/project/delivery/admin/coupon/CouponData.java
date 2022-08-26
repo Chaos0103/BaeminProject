@@ -1,4 +1,4 @@
-package project.delivery.admin;
+package project.delivery.admin.coupon;
 
 import lombok.AccessLevel;
 import lombok.Getter;

@@ -1,4 +1,4 @@
-package project.delivery.admin;
+package project.delivery.admin.coupon;
 
 import org.springframework.data.jpa.repository.JpaRepository;
 
