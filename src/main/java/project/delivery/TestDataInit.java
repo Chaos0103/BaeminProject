@@ -28,8 +28,8 @@ public class TestDataInit {
         pay.addMoney(1000000);
 
         Point point = new Point(member);
-        PointHistory pointHistory = new PointHistory(1000, "BBQ 간석중앙점", PointType.USE);
-        pointHistory.addPoint(point);
+        point.addTotalPoint(10000);
+        PointHistory pointHistory = new PointHistory(point, 1000, "BBQ 간석중앙점", PointType.USE);
         memberRepository.save(member);
 
         Store store1 = new Store("BBQ 간석중앙점", Category.CHICKEN, new UploadFile("/file/bbq.png", "/file/bbq.png"), "0324297326", "안녕하세요!BBQ 간석중앙점을 찾아주셔서 감사합니다!",

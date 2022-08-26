@@ -2,11 +2,10 @@ package project.delivery.service.impl.v0;
 
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
-import project.delivery.admin.CouponData;
-import project.delivery.admin.CouponDataRepository;
-import project.delivery.admin.CouponDateStatus;
+import project.delivery.admin.coupon.CouponData;
+import project.delivery.admin.coupon.CouponDataRepository;
+import project.delivery.admin.coupon.CouponDateStatus;
 import project.delivery.domain.Coupon;
-import project.delivery.domain.CouponStatus;
 import project.delivery.domain.Member;
 import project.delivery.exception.DuplicateException;
 import project.delivery.exception.NoSuchException;
@@ -27,7 +26,7 @@ public class CouponServiceImplV0 implements CouponService {
     public Long addCoupon(Member member, String couponCode) {
         CouponData couponData = couponDataRepository.findByCouponCode(couponCode).orElse(null);
         if (couponData == null) {
-            throw new NoSuchException("쿠폰번호가 잘못되었습니다");
+            throw new NoSuchException("유효하지 않은 쿠폰입니다. 쿠폰코드를 다시한번 확인해주세요.");
         }
         if (couponData.getStatus() == CouponDateStatus.IMPOSSIBLE) {
             throw new DuplicateException("이미 등록된 쿠폰입니다");

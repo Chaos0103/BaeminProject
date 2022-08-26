@@ -24,7 +24,7 @@
                                 </div>
                             </div>
                             <div class="row align-self-center fs-1 ps-3">
-                                <div class="col text-end" th:text="${loginMember.grade}">
+                                <div class="col text-end" th:text="${loginMember.grade.description}">
                                     VIP
                                 </div>
                             </div>
@@ -58,7 +58,7 @@
                                 <div class="col-sm-4 align-self-center text-start fs-5">
                                     포인트
                                 </div>
-                                <div class="col align-self-center text-end">
+                                <div class="col align-self-center text-end" th:text="|${#numbers.formatInteger(loginMember.point.totalPoint, 0, 'COMMA')}원|">
                                     500,000 원
                                 </div>
                             </div>
@@ -66,7 +66,7 @@
                                 <div class="col-sm-4 align-self-center text-start fs-5">
                                     페이
                                 </div>
-                                <div class="col align-self-center text-end">
+                                <div class="col align-self-center text-end" th:text="|${#numbers.formatInteger(loginMember.pay.money, 0, 'COMMA')}원|">
                                     500,000 원
                                 </div>
                             </div>
@@ -106,11 +106,18 @@
                         <div class="col text-start">
                             <div class="m-4">
                                 <div class="row mb-1">
-                                    <div class="col">
-                                        <h2>포인트</h2>
+                                    <div class="col-sm-2">
+                                        <h2>배민포인트</h2>
+                                    </div>
+                                    <div class="col d-flex align-items-center">
+                                        <button type="button" class="btn btn-outline-dark btn-sm" data-bs-toggle="modal" data-bs-target="#usageInformation">
+                                            이용안내
+                                        </button>
                                     </div>
                                     <div class="col text-end align-self-center">
-                                        <button type="button" class="btn btn-outline-primary" onclick="beforeService()">+ 상품권 등록</button>
+                                        <button id="button-addVoucher" type="button" class="btn btn-outline-primary" data-bs-toggle="modal" data-bs-target="#addVoucher">
+                                            + 상품권 등록
+                                        </button>
                                     </div>
                                 </div>
                                 <div class="row bg-secondary border" style="--bs-bg-opacity: .1;">
@@ -121,17 +128,17 @@
                                             </div>
                                         </div>
                                         <div class="row">
-                                            <div class="col text-center fs-1 p-4" th:text="|${point.totalPoint}원|">
+                                            <div class="col text-center fs-1 p-4" th:text="|${#numbers.formatInteger(point.totalPoint, 0, 'COMMA')}원|">
                                                 500,000원
                                             </div>
                                         </div>
                                     </div>
                                     <div class="col">
                                         <div class="row h-50 border-bottom">
-                                            <div class="col align-self-center fs-4 ms-3">
-                                                소멸 예정 포인트
+                                            <div class="col-sm-7 align-self-center fs-4 ms-3">
+                                                소멸 예정 포인트(이번달)
                                             </div>
-                                            <div class="col text-end align-self-center fs-4 me-3" th:text="|${point.removePoint}원|">
+                                            <div class="col text-end align-self-center fs-4 me-3" th:text="|${#numbers.formatInteger(point.removePoint, 0, 'COMMA')}원|">
                                                 10,000원
                                             </div>
                                         </div>
@@ -139,26 +146,24 @@
                                             <div class="col align-self-center fs-4 ms-3">
                                                 예치금
                                             </div>
-                                            <div class="col text-end align-self-center fs-4 me-3" th:text="|${point.balance}원|">
+                                            <div class="col text-end align-self-center fs-4 me-3" th:text="|${#numbers.formatInteger(point.balance, 0, 'COMMA')}원|">
                                                 0원
                                             </div>
                                         </div>
                                     </div>
                                 </div>
                             </div>
-                            <form class="m-4">
-                                <div class="row justify-content-end">
+                            <div class="m-4">
+                                <form class="row justify-content-end" th:action method="get" th:object="${search}">
                                     <div class="col-md-2">
-                                        <select class="form-select" aria-label="Default select example" name="d">
-                                            <option value="1">전체</option>
-                                            <option value="2">적립</option>
-                                            <option value="3">사용</option>
-                                            <option value="4">전환</option>
-                                            <option value="5">만료</option>
+                                        <select class="form-select" aria-label="Default select example" th:field="*{type}">
+                                            <option value="">전체</option>
+                                            <option th:each="pointType : ${pointTypes}" th:value="${pointType}"
+                                                    th:text="${pointType.description}">data</option>
                                         </select>
                                     </div>
                                     <div class="col-md-2">
-                                        <select class="form-select" aria-label="Default select example" name="w">
+                                        <select class="form-select" aria-label="Default select example" th:field="*{month}">
                                             <option value="1">1개월</option>
                                             <option value="3">3개월</option>
                                             <option value="6">6개월</option>
@@ -170,7 +175,7 @@
                                             <img th:src="@{/icon/search.svg}" alt="검색 아이콘">
                                         </button>
                                     </div>
-                                </div>
+                                </form>
                                 <table class="table text-center mt-3">
                                     <thead>
                                     <tr>
@@ -183,13 +188,14 @@
                                     <tbody class="table-group-divider">
                                     <tr th:each="pointHistory:${pointHistories}">
                                         <th scope="row" class="fw-bold" th:text="${pointHistory.content}">BBQ XX점</th>
-                                        <td th:text="${pointHistory.createdDate}">2022.07.26</td>
-                                        <td th:text="${pointHistory.pointValue}">+50원</td>
-                                        <td class="fw-bold" th:text="${pointHistory.type}">적립</td>
+                                        <td th:text="|${#temporals.format(pointHistory.createdDate, 'yyyy.MM.dd')}|">2022.07.26</td>
+                                        <td th:text="|${#numbers.formatInteger(pointHistory.pointValue, 0, 'COMMA')}원|">+50원</td>
+                                        <td class="fw-bold" th:text="${pointHistory.type.description}">적립</td>
                                     </tr>
                                     </tbody>
                                 </table>
-                            </form>
+                                <p class="text-center fs-custom text-muted">최근 1년 내역만 확인할 수 있습니다</p>
+                            </div>
                         </div>
                     </div>
                 </div>
@@ -198,7 +204,83 @@
     </div>
 </article>
 
+<!-- usageInformation -->
+<div class="modal fade" id="usageInformation" tabindex="-1" aria-labelledby="usageInformationLabel" aria-hidden="true">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title" id="usageInformationLabel">배민포인트 이용안내</h5>
+                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+            </div>
+            <div class="modal-body">
+                <ul>
+                    <li class="mt-2 me-3">배민포인트는 1원 이상 1원 단위로 사용이 가능합니다.</li>
+                    <li class="mt-2 me-3">배민페이머니 적립 포인트는 주문 다음날 적립되고, 제휴카드 적립 포인트는 카드 이용금액 결제일 기준으로 10일 이내 적립됩니다.</li>
+                    <li class="mt-2 me-3">보유 가능한 배민포인트는 최대 50만 포인트입니다.</li>
+                    <li class="mt-2 me-3">50만원이 넘은 포인트는 대기 포인트로 관리되며, 보유하신 포인트에 따라 사용 가능한 포인트로 전환됩니다.</li>
+                    <li class="mt-2 me-3">배민포인트 적립 기준 금액에서 배달팁, 쿠폰, 포인트 사용금액은 제외됩니다. 주문완료 후 적립된 포인트는 환불되지 않습니다.</li>
+                </ul>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-light w-100" data-bs-dismiss="modal">확인</button>
+            </div>
+        </div>
+    </div>
+</div>
+<!-- addVoucher -->
+<div class="modal fade" id="addVoucher" data-bs-backdrop="static" data-bs-keyboard="false" tabindex="-1" aria-labelledby="addVoucherLabel" aria-hidden="true">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title" id="addVoucherLabel">상품권 등록하기</h5>
+                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+            </div>
+            <div class="modal-body">
+                <h5>배달의민족 상품권이 있나요?</h5>
+                <form class="row g-3 mt-2" method="post" th:action="@{/points/addVoucher}" th:object="${voucherSaveForm}">
+                    <div class="col-auto w-75">
+                        <label for="voucherCode" class="visually-hidden"></label>
+                        <input type="text" th:field="*{voucherCode}" class="form-control" id="voucherCode" placeholder="상품권 번호 12자리를 입력해주세요" maxlength="12" th:errorclass="field-error">
+                        <!-- 글로벌 오류 메세지 -->
+                        <div th:if="${#fields.hasGlobalErrors()}">
+                            <p class="field-error" th:each="err : ${#fields.globalErrors()}" th:text="${err}">전체 오류 메시지</p>
+                        </div>
+                    </div>
+                    <div class="col-auto w-25">
+                        <button id="addVoucherButton" type="submit" class="btn btn-outline-dark mb-3 w-100" disabled="disabled">등록</button>
+                    </div>
+                </form>
+                <strong>주의해주세요</strong>
+                <ul>
+                    <li>배달의민족 상품권은 12자리의 영문과 숫자로 이루어져 있습니다.</li>
+                    <li>배민포인트는 최대 50만원까지 보유할 수 있습니다.</li>
+                    <li>상품권 등록은 하루에 최대 10회까지 가능합니다.</li>
+                    <li>포인트는 상품권 번호 입력 즉시 충전됩니다.</li>
+                </ul>
+            </div>
+        </div>
+    </div>
+</div>
+
 <footer th:replace="fragments/footer::footer"></footer>
+<script th:inline="javascript">
+    const voucherError = [[${voucherError}]];
+
+    window.onload = function () {
+        if (voucherError) {
+            $('#button-addVoucher').click();
+        }
+    }
+
+    $("#voucherCode").keyup(function(e){
+        const content = $(this).val();
+        if (content.length == 12) {
+            $('#addVoucherButton').prop('disabled', false);
+        } else {
+            $('#addVoucherButton').prop('disabled', true);
+        }
+    })
+</script>
 </body>
 
 </html>

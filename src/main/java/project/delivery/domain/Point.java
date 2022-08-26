@@ -43,4 +43,15 @@ public class Point extends TimeBaseEntity {
     public void addPointHistory(PointHistory pointHistory) {
         pointHistories.add(pointHistory);
     }
+
+    //==비즈니스 로직==//
+    public void addTotalPoint(int totalPoint) {
+        int add = this.totalPoint + totalPoint;
+        if (add > 500000) {
+            this.balance += add - 500000;
+            this.totalPoint = 500000;
+        } else {
+            this.totalPoint = add;
+        }
+    }
 }

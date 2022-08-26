@@ -1,5 +1,6 @@
 package project.delivery.repository.impl;
 
+import com.querydsl.core.types.dsl.BooleanExpression;
 import com.querydsl.jpa.impl.JPAQueryFactory;
 import project.delivery.domain.PointHistory;
 import project.delivery.domain.PointType;
@@ -27,9 +28,13 @@ public class PointRepositoryImpl implements PointRepositoryCustom {
                 .selectFrom(pointHistory)
                 .where(
                         pointHistory.point.id.eq(pointId),
-                        pointHistory.type.eq(type),
-                        pointHistory.createdDate.goe(date)
-                )
+                        pointHistory.createdDate.goe(date),
+                        typeEq(type)
+                        )
                 .fetch();
+    }
+
+    private BooleanExpression typeEq(PointType type) {
+        return type != null ? pointHistory.type.eq(type) : null;
     }
 }

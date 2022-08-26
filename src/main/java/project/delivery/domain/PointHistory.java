@@ -25,7 +25,8 @@ public class PointHistory extends TimeBaseEntity {
     private String content;
     private PointType type;
 
-    public PointHistory(int pointValue, String content, PointType type) {
+    public PointHistory(Point point, int pointValue, String content, PointType type) {
+        addPoint(point);
         this.pointValue = pointValue;
         this.content = content;
         this.type = type;
