@@ -36,9 +36,11 @@ public class PayServiceImplV0 implements PayService {
     }
 
     @Override
-    public void refundPayMoney(Long memberId, String content) {
+    public Integer refundPayMoney(Long memberId, String content) {
         Pay findPay = getPay(memberId);
-        createPayHistory(memberId, findPay.getMoney(), content, TransactionType.REFUND);
+        int refundMoney = findPay.getMoney();
+        createPayHistory(memberId, refundMoney, content, TransactionType.REFUND);
+        return refundMoney;
     }
 
     @Override

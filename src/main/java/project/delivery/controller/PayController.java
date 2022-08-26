@@ -99,13 +99,15 @@ public class PayController {
 
         String content = "배민페이-" + form.getBank().getDescription();
         payService.createPayHistory(loginMember.getId(), form.getMoney(), content, TransactionType.CHARGE);
+        log.info("회원번호 {}, 배민페이 {}원 충전", loginMember.getId(), form.getMoney());
         return "redirect:/pay";
     }
 
     @PostMapping("/refund")
     public String refundPayMoney(@ModelAttribute PayMoneyRefundForm form, @Login Member loginMember) {
         String content = "배민페이-" + form.getBank().getDescription();
-        payService.refundPayMoney(loginMember.getId(), content);
+        Integer refundMoney = payService.refundPayMoney(loginMember.getId(), content);
+        log.info("회원번호 {}, 배민페이 {}원 환불", loginMember.getId(), refundMoney);
         return "redirect:/pay";
     }
 

@@ -19,7 +19,7 @@ public interface PayService {
     void chargePayMoney(Long memberId, int money);
 
     @Transactional
-    void refundPayMoney(Long memberId, String content);
+    Integer refundPayMoney(Long memberId, String content);
 
     /**
      * 페이내역등록
