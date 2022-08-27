@@ -18,6 +18,7 @@ public class TestDataInit {
     private final PayAccountRepository payAccountRepository;
     private final PayCardRepository payCardRepository;
     private final CouponRepository couponRepository;
+    private final BookmarkRepository bookmarkRepository;
 
     @PostConstruct
     private void init() {
@@ -70,5 +71,10 @@ public class TestDataInit {
         couponRepository.save(coupon1);
         couponRepository.save(coupon2);
         couponRepository.save(coupon3);
+
+        Bookmark bookmark1 = new Bookmark(member, store1);
+        Bookmark bookmark2 = new Bookmark(member, store2);
+        bookmarkRepository.save(bookmark1);
+        bookmarkRepository.save(bookmark2);
     }
 }

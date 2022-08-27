@@ -1,0 +1,135 @@
+<!DOCTYPE html>
+<html lang="ko" xmlns:th="http://www.thymeleaf.org">
+<head th:replace="fragments/head::head(~{::title})">
+    <title>배달의 민족 | 찜 리스트</title>
+</head>
+<body>
+<header th:replace="fragments/loginHeader::loginHeader"></header>
+<div th:replace="fragments/notifications::notifications(${notifications})"></div>
+<article>
+    <div class="container px-4 py-5">
+        <div>
+            <!-- top info -->
+            <section>
+                <div class="container text-center">
+                    <div class="row bg-main text-white" style="">
+                        <div class="col-sm-2 align-self-center fs-1 bg-main">
+                            MY배민
+                        </div>
+                        <div class="col border-start">
+                            <div class="row align-self-center text-start p-2">
+                                <div class="col fs-5">
+                                    회원등급
+                                </div>
+                            </div>
+                            <div class="row align-self-center fs-1 ps-3">
+                                <div class="col text-end" th:text="${loginMember.grade.description}">
+                                    VIP
+                                </div>
+                            </div>
+                        </div>
+                        <div class="col border-start">
+                            <div class="row align-self-center text-start p-2">
+                                <div class="col fs-5">
+                                    할인쿠폰
+                                </div>
+                            </div>
+                            <div class="row align-self-center fs-1 ps-3">
+                                <div class="col text-end">
+                                    0장
+                                </div>
+                            </div>
+                        </div>
+                        <div class="col border-start">
+                            <div class="row align-self-center text-start p-2">
+                                <div class="col fs-5">
+                                    리뷰작성
+                                </div>
+                            </div>
+                            <div class="row align-self-center fs-1 ps-3">
+                                <div class="col text-end">
+                                    0개
+                                </div>
+                            </div>
+                        </div>
+                        <div class="col border-start">
+                            <div class="row border-bottom h-50">
+                                <div class="col-sm-4 align-self-center text-start fs-5">
+                                    포인트
+                                </div>
+                                <div class="col align-self-center text-end" th:text="|${#numbers.formatInteger(loginMember.point.totalPoint, 0, 'COMMA')}원|">
+                                    500,000 원
+                                </div>
+                            </div>
+                            <div class="row h-50">
+                                <div class="col-sm-4 align-self-center text-start fs-5">
+                                    페이
+                                </div>
+                                <div class="col align-self-center text-end" th:text="|${#numbers.formatInteger(loginMember.pay.money, 0, 'COMMA')}원|">
+                                    500,000 원
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </section>
+
+            <section>
+                <div class="container text-center">
+                    <div class="row">
+                        <div th:replace="fragments/mypageSidebar::mypageSidebar"></div>
+                        <div class="col text-start">
+                            <div class="m-4">
+                                <div class="row mb-1">
+                                    <div class="col">
+                                        <h2>찜 리스트</h2>
+                                    </div>
+                                </div>
+                            </div>
+
+                            <div class="m-4">
+                                <div class="row row-cols-1 row-cols-md-2 g-4">
+                                    <div th:if="${bookmarks.size()} == 0">
+                                        찜 리스트가 없습니다
+                                    </div>
+                                    <div class="col" th:each="bookmark : ${bookmarks}">
+                                        <div class="card" th:onclick="|location.href='@{/stores/{storeId}/detail(storeId=${bookmark.store.id})}'|" style="cursor: pointer">
+                                            <div class="card-body">
+                                                <div class="d-flex position-relative">
+                                                    <img src="https://via.placeholder.com/125x125" th:src="${bookmark.store.uploadFile.storeFileName}" class="flex-shrink-0 me-3" alt="store img" style="height: 125px;">
+                                                    <ul style="list-style: none; padding-left: 0;">
+                                                        <li th:text="${bookmark.store.storeName}">store name</li>
+                                                        <li th:text="|별 ${bookmark.store.rating} (${bookmark.store.reviewCount})|">rating (review count)</li>
+                                                        <li th:text="|최소주문 ${#numbers.formatInteger(bookmark.store.deliveryInfo.minOrderPrice, 0, 'COMMA')}원|">minOrderPrice, deliveryTip</li>
+                                                        <li th:text="${bookmark.store.id}">status</li>
+                                                    </ul>
+                                                    <div class="position-absolute top-0 end-0">
+                                                        <button type="button" class="btn-close" aria-label="Close" th:onclick="'javascript:remove('+${bookmark.id}+')'"></button>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </section>
+        </div>
+    </div>
+</article>
+
+<footer th:replace="fragments/footer::footer"></footer>
+<script>
+    function remove(id) {
+        const form = document.createElement("form");
+        form.setAttribute("method", "post");
+        form.setAttribute("action", "/bookmarks/" + id + "/delete");
+        document.body.appendChild(form);
+        form.submit();
+    }
+</script>
+</body>
+
+</html>
