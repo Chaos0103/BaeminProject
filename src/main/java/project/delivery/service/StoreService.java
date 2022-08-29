@@ -1,8 +1,7 @@
 package project.delivery.service;
 
 import org.springframework.transaction.annotation.Transactional;
-import project.delivery.domain.Category;
-import project.delivery.domain.Store;
+import project.delivery.domain.*;
 
 import java.util.List;
 
@@ -12,7 +11,13 @@ public interface StoreService {
     @Transactional
     Long createNewStore(Store store);
 
-    List<Store> searchStores(Category category);
+    List<Store> findStoresByCategory(Category category);
 
-    Store detailStore(Long storeId);
+    Store findStoreById(Long storeId);
+
+    //카테고리 조회
+    List<MenuCategory> findCategory(Long storeId);
+
+    //가게배너사진 조회
+    List<StoreImage> findStoreBannerImages(Long storeId);
 }

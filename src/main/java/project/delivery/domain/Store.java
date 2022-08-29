@@ -6,6 +6,9 @@ import lombok.NoArgsConstructor;
 
 import javax.persistence.*;
 
+import java.util.ArrayList;
+import java.util.List;
+
 import static javax.persistence.FetchType.*;
 
 @Entity
@@ -22,8 +25,6 @@ public class Store extends TimeBaseEntity {
     @Enumerated(EnumType.STRING)
     @Column(updatable = false, nullable = false)
     private Category category;
-    @Embedded
-    private UploadFile uploadFile;
     @Column(nullable = false, length = 11)
     private String tel;
     @Lob
@@ -49,6 +50,9 @@ public class Store extends TimeBaseEntity {
     @Lob
     @Column(nullable = false)
     private String announcement;
+    @Lob
+    @Column(nullable = false)
+    private String countryOfPlace;
 
     @Column(nullable = false)
     private float rating;
@@ -61,13 +65,15 @@ public class Store extends TimeBaseEntity {
     @Column(nullable = false)
     private int recentOrderCount;
 
-    @OneToOne(mappedBy = "store", optional = false, cascade = CascadeType.ALL, fetch = LAZY)
+    @OneToOne(mappedBy = "store", orphanRemoval = true, cascade = CascadeType.ALL, fetch = LAZY)
     private DeliveryInfo deliveryInfo;
 
-    public Store(String storeName, Category category, UploadFile uploadFile, String tel, String introduction, String tradeName, String openTime, String holiday, String deliveryArea, String deliveryTip, String representativeName, String businessAddress, String businessNumber, String announcement) {
+    @OneToMany(mappedBy = "store", orphanRemoval = true, cascade = CascadeType.ALL)
+    private List<StoreImage> storeImages = new ArrayList<>();
+
+    public Store(String storeName, Category category, String tel, String introduction, String tradeName, String openTime, String holiday, String deliveryArea, String deliveryTip, String representativeName, String businessAddress, String businessNumber, String announcement, String countryOfPlace) {
         this.storeName = storeName;
         this.category = category;
-        this.uploadFile = uploadFile;
         this.tel = tel;
         this.introduction = introduction;
         this.tradeName = tradeName;
@@ -79,6 +85,7 @@ public class Store extends TimeBaseEntity {
         this.businessAddress = businessAddress;
         this.businessNumber = businessNumber;
         this.announcement = announcement;
+        this.countryOfPlace = countryOfPlace;
 
         this.rating = 0.0f;
         this.reviewCount = 0;
@@ -90,5 +97,14 @@ public class Store extends TimeBaseEntity {
     //==연관관계 메서드==//
     public void addDeliveryInfo(DeliveryInfo deliveryInfo) {
         this.deliveryInfo = deliveryInfo;
+    }
+
+    public void addStoreImage(StoreImage storeImage) {
+        this.storeImages.add(storeImage);
+    }
+
+    //==비즈니스 로직==//
+    public void updateRating(float rating) {
+        this.rating = rating;
     }
 }

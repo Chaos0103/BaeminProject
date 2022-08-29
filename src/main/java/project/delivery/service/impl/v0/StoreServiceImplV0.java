@@ -2,9 +2,12 @@ package project.delivery.service.impl.v0;
 
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
-import project.delivery.domain.Category;
-import project.delivery.domain.Store;
+import project.delivery.domain.*;
 import project.delivery.exception.DuplicateException;
+import project.delivery.exception.NoSuchException;
+import project.delivery.repository.DeliveryInfoRepository;
+import project.delivery.repository.MenuCategoryRepository;
+import project.delivery.repository.StoreImageRepository;
 import project.delivery.repository.StoreRepository;
 import project.delivery.service.StoreService;
 
@@ -16,6 +19,9 @@ import java.util.Optional;
 public class StoreServiceImplV0 implements StoreService {
 
     private final StoreRepository storeRepository;
+    private final MenuCategoryRepository menuCategoryRepository;
+    private final StoreImageRepository storeImageRepository;
+    private final DeliveryInfoRepository deliveryInfoRepository;
 
     @Override
     public Long createNewStore(Store store) {
@@ -26,13 +32,23 @@ public class StoreServiceImplV0 implements StoreService {
     }
 
     @Override
-    public List<Store> searchStores(Category category) {
-        return storeRepository.findAllByCondition(category);
+    public List<Store> findStoresByCategory(Category category) {
+        return storeRepository.findAllByCategory(category);
     }
 
     @Override
-    public Store detailStore(Long storeId) {
-        return storeRepository.findStore(storeId).orElse(null);
+    public Store findStoreById(Long storeId) {
+        return storeRepository.findDetailByStoreId(storeId);
+    }
+
+    @Override
+    public List<MenuCategory> findCategory(Long storeId) {
+        return menuCategoryRepository.findAllByStoreId(storeId);
+    }
+
+    @Override
+    public List<StoreImage> findStoreBannerImages(Long storeId) {
+        return storeImageRepository.findBannerByStoreId(storeId);
     }
 
     private void duplicatedBusinessNumber(String businessNumber) {

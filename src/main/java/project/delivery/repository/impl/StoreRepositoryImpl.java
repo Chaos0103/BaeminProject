@@ -1,16 +1,12 @@
 package project.delivery.repository.impl;
 
 import com.querydsl.jpa.impl.JPAQueryFactory;
-import project.delivery.domain.Category;
-import project.delivery.domain.QDeliveryInfo;
-import project.delivery.domain.QStore;
-import project.delivery.domain.Store;
+import project.delivery.domain.*;
 import project.delivery.repository.custom.StoreRepositoryCustom;
 
 import javax.persistence.EntityManager;
 import java.util.List;
 
-import static project.delivery.domain.QDeliveryInfo.*;
 import static project.delivery.domain.QStore.*;
 
 public class StoreRepositoryImpl implements StoreRepositoryCustom {
@@ -25,9 +21,8 @@ public class StoreRepositoryImpl implements StoreRepositoryCustom {
     @Override
     public List<Store> findAllByCondition(Category category) {
         return queryFactory
-                .selectFrom(store)
-                .join(store.deliveryInfo, deliveryInfo)
-                .fetchJoin()
+                .selectDistinct(store)
+                .from(store)
                 .where(
                         store.category.eq(category)
                 )

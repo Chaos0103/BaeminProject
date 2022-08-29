@@ -1,0 +1,112 @@
+<!DOCTYPE html>
+<html lang="ko" xmlns:th="http://www.thymeleaf.org">
+<!-- 장바구니 -->
+<section th:fragment="basket">
+    <div class="modal fade" id="cartList" data-bs-backdrop="static" data-bs-keyboard="false" tabindex="-1" aria-labelledby="staticBackdropLabel" aria-hidden="true">
+        <div class="modal-dialog modal-dialog-scrollable">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title" id="staticBackdropLabel">장바구니</h5>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                </div>
+                <div class="modal-body">
+                    <div class="row ms-1">
+                        <div class="col fw-bolder">
+                            BBQ XX점
+                        </div>
+                    </div>
+                    <!-- 주문 내역 -->
+                    <div class="card mt-3">
+                        <div class="card-body">
+                            <div class="row mb-3">
+                                <div class="col fw-bolder">
+                                    핫 황금올리브 핫크리스피
+                                </div>
+                                <div class="col d-grid gap-2 d-md-flex justify-content-md-end">
+                                    <button type="button" class="btn-close"></button>
+                                </div>
+                            </div>
+                            <div class="row">
+                                <div class="col">
+                                    <div class="d-flex position-relative">
+                                        <img src="https://via.placeholder.com/100x100" class="flex-shrink-0" alt="img" style="height: 100px;">
+                                        <div>
+                                            <ul>
+                                                <li>가격 : <span>윙.봉 (22,000원)</span></li>
+                                                <li>사이드메뉴 추가선택 : <span>더블치즈볼 5개 (5,000원)</span></li>
+                                            </ul>
+                                            <div class="ms-3">27,000원</div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <!-- 주문 내역 -->
+                    <!-- 주문 내역 -->
+                    <div class="card mt-3">
+                        <div class="card-body">
+                            <div class="row mb-3">
+                                <div class="col fw-bolder">
+                                    핫 황금올리브 핫크리스피
+                                </div>
+                                <div class="col d-grid gap-2 d-md-flex justify-content-md-end">
+                                    <button type="button" class="btn-close"></button>
+                                </div>
+                            </div>
+                            <div class="row">
+                                <div class="col">
+                                    <div class="d-flex position-relative">
+                                        <img src="https://via.placeholder.com/100x100" class="flex-shrink-0" alt="img" style="height: 100px;">
+                                        <div>
+                                            <ul>
+                                                <li>가격 : <span>한마리 (21,000원)</span></li>
+                                                <li>사이드메뉴 추가선택 : <span>소떡소떡(매운) (3,000원) / 케이준감자 (3,000원)</span></li>
+                                            </ul>
+                                            <div class="ms-3">27,000원</div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <!-- 주문 내역 -->
+                    <!-- 주문 가격 -->
+                    <div class="card mt-3">
+                        <div class="card-body">
+                            <div class="row">
+                                <div class="col text-start">
+                                    총 주문금액
+                                </div>
+                                <div class="col text-end">
+                                    54,000원
+                                </div>
+                            </div>
+                            <div class="row">
+                                <div class="col text-start">
+                                    배달팁
+                                </div>
+                                <div class="col text-end">
+                                    3,000원
+                                </div>
+                            </div>
+                            <div class="row border-top fw-bolder">
+                                <div class="col text-start">
+                                    결제예정금액
+                                </div>
+                                <div class="col text-end">
+                                    57,000원
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <!-- 주문 가격 -->
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">나가기</button>
+                    <button type="button" class="btn btn-primary">주문하기</button>
+                </div>
+            </div>
+        </div>
+    </div>
+</section>

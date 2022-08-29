@@ -36,6 +36,7 @@ public class DeliveryInfo extends TimeBaseEntity {
         this.type = type;
         this.deliveryTime = deliveryTime;
         this.deliveryTip = deliveryTip;
+
         store.addDeliveryInfo(this);
     }
 }
