@@ -39,3 +39,5 @@ out/
 ### custom ###
 *.json
 TestDataController.java
+TestDataInit.java
+AdminTestDataInit.java
