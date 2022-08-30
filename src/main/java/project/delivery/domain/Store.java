@@ -107,4 +107,8 @@ public class Store extends TimeBaseEntity {
     public void updateRating(float rating) {
         this.rating = rating;
     }
+
+    public void addReviewCount() {
+        this.reviewCount++;
+    }
 }
