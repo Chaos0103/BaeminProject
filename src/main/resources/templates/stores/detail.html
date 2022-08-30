@@ -108,7 +108,8 @@
                                         <path d="M3.612 15.443c-.386.198-.824-.149-.746-.592l.83-4.73L.173 6.765c-.329-.314-.158-.888.283-.95l4.898-.696L7.538.792c.197-.39.73-.39.927 0l2.184 4.327 4.898.696c.441.062.612.636.282.95l-3.522 3.356.83 4.73c.078.443-.36.79-.746.592L8 13.187l-4.389 2.256z"/>
                                     </svg>
                                 </span>
-                                <span th:text="*{rating}">4.9</span>
+                                <span th:text="*{#numbers.formatDecimal(rating, 1, 1)}">4.9</span>
+
                             </div>
                         </div>
                         <div class="row text-muted">
@@ -169,7 +170,7 @@
                             </tr>
                             <tr>
                                 <td>배달팁</td>
-                                <td th:text="${store.deliveryInfo.deliveryTip}"></td>
+                                <td th:text="|${#numbers.formatInteger(minDeliveryTip, 0, 'COMMA')}원| + '~' + |${#numbers.formatInteger(maxDeliveryTip, 0, 'COMMA')}원|"></td>
                             </tr>
                             </tbody>
                         </table>
@@ -180,7 +181,7 @@
                             <tbody>
                             <tr>
                                 <td>최소주문금액</td>
-                                <td>없음</td>
+                                <td th:if="${store.packingInfo.minOrderPrice} == 0 ? '없음' : ${#numbers.formatInteger(store.packingInfo.minOrderPrice, 0, 'COMMA')} + '원'">없음</td>
                             </tr>
                             <tr>
                                 <td>이용방법</td>
@@ -188,11 +189,11 @@
                             </tr>
                             <tr>
                                 <td>픽업시간</td>
-                                <td>17~27분 소요 예상</td>
+                                <td th:text="${store.packingInfo.pickUpTime}">17~27분 소요 예상</td>
                             </tr>
                             <tr>
                                 <td>위치안내</td>
-                                <td>인천광역시 남동구 간석동 303-11 1층 일부호(간석동)</td>
+                                <td th:text="${store.packingInfo.position}">인천광역시 남동구 간석동 303-11 1층 일부호(간석동)</td>
                             </tr>
                             <tr>
                                 <td>결제방법</td>
@@ -536,13 +537,12 @@
                                 <h5>주문금액 별 배달팁</h5>
                                 <table class="table table-bordered">
                                     <tbody class="table-group-divider">
-                                    <tr>
-                                        <td>100,000원 이상</td>
-                                        <td class="text-end">0원</td>
-                                    </tr>
-                                    <tr>
-                                        <td>15,000원~100,000원 미만</td>
-                                        <td class="text-end">2,900원</td>
+                                    <tr th:each="deliveryTipByAmount : ${deliveryTipByAmounts}">
+                                        <td th:if="${deliveryTipByAmount.maxAmount} == null"
+                                            th:text="|${#numbers.formatInteger(deliveryTipByAmount.minAmount, 0, 'COMMA')}원 이상|">100,000원 이상</td>
+                                        <td th:if="${deliveryTipByAmount.maxAmount} != null"
+                                            th:text="|${#numbers.formatInteger(deliveryTipByAmount.minAmount, 0, 'COMMA')}원| +'~'+ |${#numbers.formatInteger(deliveryTipByAmount.maxAmount, 0, 'COMMA')}원 미만|">7,600원~14,000원 미만</td>
+                                        <td class="text-end" th:text="|${#numbers.formatInteger(deliveryTipByAmount.deliveryTip, 0, 'COMMA')}원|">0원</td>
                                     </tr>
                                     </tbody>
                                 </table>
@@ -551,17 +551,10 @@
                                 <h5>지역별 추가 배달팁</h5>
                                 <table class="table table-bordered">
                                     <tbody class="table-group-divider">
-                                    <tr>
-                                        <td>십정1동, 십정2동</td>
-                                        <td class="text-end">+1,600원</td>
-                                    </tr>
-                                    <tr>
-                                        <td>관교동, 남촌도림동, 만수1동, 문학동, 주안5동, 주안7동, 주안8동</td>
-                                        <td class="text-end">+2,100원</td>
-                                    </tr>
-                                    <tr>
-                                        <td>만수6동</td>
-                                        <td class="text-end">+2,600원</td>
+                                    <tr th:each="deliveryTipByArea : ${deliveryTipByAreas}">
+                                        <td th:text="${deliveryTipByArea.areaInfo}">십정1동, 십정2동</td>
+                                        <td class="text-end"
+                                            th:text="|+${#numbers.formatInteger(deliveryTipByArea.deliveryTip, 0, 'COMMA')}원|">+1,600원</td>
                                     </tr>
                                     </tbody>
                                 </table>
@@ -614,16 +607,16 @@
                     <div class="card-body">
                         <div class="d-flex justify-content-between">
                             <h5>사장님 공지</h5>
-                            <h6 class="text-muted">2022년 05월 01일</h6>
+                            <h6 class="text-muted" th:text="${#temporals.format(store.announcement.createdDate, 'yyyy년 MM월 dd일')}">2022년 05월 01일</h6>
                         </div>
-                        <p th:utext="${store.announcement}">사장님 공지 내용</p>
+                        <p th:utext="${store.announcement.content}">사장님 공지 내용</p>
                     </div>
                 </div>
                 <div class="card mt-3">
                     <div class="card-body">
                         <div class="row">
                             <div class="col align-self-center text-center">
-                                <h1 th:text="${store.rating}">4.9</h1>
+                                <h1 th:text="${#numbers.formatDecimal(store.rating, 1, 1)}">4.9</h1>
                                 <div class="col fs-2 align-self-center" th:object="${store}">
                                     <span>
                                         <svg th:if="*{rating == 0}" xmlns="http://www.w3.org/2000/svg" width="30" height="30" fill="currentColor" class="bi bi-star text-warning" viewBox="0 0 16 16">
@@ -748,75 +741,119 @@
                 </div>
                 <div class="card mt-3">
                     <div class="card-body">
-                        <h5 th:text="|최근 리뷰 ${store.reviewCount}|">최근 리뷰 9,999개</h5>
+                        <h5 th:text="|최근 리뷰 ${reviews.size()}|">최근 리뷰 9,999개</h5>
                         <h6 th:text="|사장님댓글 ${store.commentCount}개|">사장님댓글 9,999개</h6>
-                        <div>
-                            <ul class="nav justify-content-end">
-                                <li class="nav-item">
-                                    <a class="nav-link active" aria-current="page" href="#">사진리뷰만</a>
-                                </li>
-                                <li class="nav-item">
-                                    <a class="nav-link" href="#">최신순</a>
-                                </li>
-                                <li class="nav-item">
-                                    <a class="nav-link" href="#">별점높은순</a>
-                                </li>
-                                <li class="nav-item">
-                                    <a class="nav-link disabled">별점낮은순</a>
-                                </li>
-                            </ul>
+                        <div class="row">
+                            <div class="col align-self-center">
+                                <div class="form-check">
+                                    <input class="form-check-input" type="checkbox" id="photo">
+                                    <label class="form-check-label" for="photo">
+                                        사진리뷰만
+                                    </label>
+                                </div>
+                            </div>
+                            <div class="col">
+                                <ul class="nav justify-content-end">
+                                    <li class="nav-item">
+                                        <p class="nav-link text-dark fw-bold" id="recent" onclick="searchReview('recent')">최신순</p>
+                                    </li>
+                                    <li class="nav-item">
+                                        <p class="nav-link text-muted" id="highRating" onclick="searchReview('highRating')">별점높은순</p>
+                                    </li>
+                                    <li class="nav-item">
+                                        <p class="nav-link text-muted" id="lowRating" onclick="searchReview('lowRating')">별점낮은순</p>
+                                    </li>
+                                </ul>
+                            </div>
                         </div>
-                        <!-- review -->
-                        <h4 th:if="${reviews.size()} == 0" class="text-center">등록된 리뷰가 없습니다!</h4>
-                        <div class="card" th:each="review : ${reviews}">
-                            <div class="card-body">
-                                <!-- 작성자 정보 -->
-                                <div class="row">
-                                    <div class="col">
-                                        <div class="d-flex position-relative">
-                                            <img src="https://via.placeholder.com/50x50" class="flex-shrink-0" alt="img" style="height: 50px;">
-                                            <div>
-                                                <ul style="list-style:none;">
-                                                    <li th:text="${review.member.nickname}">닉네임</li>
-                                                    <li>
-                                                        <img src="/icon/star-fill.svg" alt="star-fill">
-                                                        <img src="/icon/star-fill.svg" alt="star-fill">
-                                                        <img src="/icon/star-fill.svg" alt="star-fill">
-                                                        <img src="/icon/star-fill.svg" alt="star-fill">
-                                                        <img src="/icon/star-fill.svg" alt="star-fill">
-                                                        <span th:text="${#temporals.format(review.lastModifiedDate, 'yyyy.MM.dd')}">0000.00.00</span>
-                                                    </li>
-                                                </ul>
+                        <div id="review">
+                            <!-- review -->
+                            <h4 th:if="${reviews.size()} == 0" class="text-center">등록된 리뷰가 없습니다!</h4>
+                            <div class="card mt-3" th:each="review : ${reviews}">
+                                <div class="card-body">
+                                    <!-- 작성자 정보 -->
+                                    <div class="row">
+                                        <div class="col">
+                                            <div class="d-flex position-relative">
+                                                <img src="https://via.placeholder.com/50x50" class="flex-shrink-0" alt="img" style="height: 50px;">
+                                                <div>
+                                                    <ul style="list-style:none;">
+                                                        <li th:text="${review.member.nickname}">닉네임</li>
+                                                        <li>
+                                                            <span>
+                                                                <svg th:if="${review.rating} == 0" xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-star" viewBox="0 0 16 16">
+                                                                    <path d="M2.866 14.85c-.078.444.36.791.746.593l4.39-2.256 4.389 2.256c.386.198.824-.149.746-.592l-.83-4.73 3.522-3.356c.33-.314.16-.888-.282-.95l-4.898-.696L8.465.792a.513.513 0 0 0-.927 0L5.354 5.12l-4.898.696c-.441.062-.612.636-.283.95l3.523 3.356-.83 4.73zm4.905-2.767-3.686 1.894.694-3.957a.565.565 0 0 0-.163-.505L1.71 6.745l4.052-.576a.525.525 0 0 0 .393-.288L8 2.223l1.847 3.658a.525.525 0 0 0 .393.288l4.052.575-2.906 2.77a.565.565 0 0 0-.163.506l.694 3.957-3.686-1.894a.503.503 0 0 0-.461 0z"/>
+                                                                </svg>
+                                                                <svg th:if="1 <= ${review.rating}" xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-star-fill text-warning" viewBox="0 0 16 16">
+                                                                    <path d="M3.612 15.443c-.386.198-.824-.149-.746-.592l.83-4.73L.173 6.765c-.329-.314-.158-.888.283-.95l4.898-.696L7.538.792c.197-.39.73-.39.927 0l2.184 4.327 4.898.696c.441.062.612.636.282.95l-3.522 3.356.83 4.73c.078.443-.36.79-.746.592L8 13.187l-4.389 2.256z"/>
+                                                                </svg>
+                                                            </span>
+                                                            <span>
+                                                                <svg th:if="${review.rating} <= 1" xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-star" viewBox="0 0 16 16">
+                                                                    <path d="M2.866 14.85c-.078.444.36.791.746.593l4.39-2.256 4.389 2.256c.386.198.824-.149.746-.592l-.83-4.73 3.522-3.356c.33-.314.16-.888-.282-.95l-4.898-.696L8.465.792a.513.513 0 0 0-.927 0L5.354 5.12l-4.898.696c-.441.062-.612.636-.283.95l3.523 3.356-.83 4.73zm4.905-2.767-3.686 1.894.694-3.957a.565.565 0 0 0-.163-.505L1.71 6.745l4.052-.576a.525.525 0 0 0 .393-.288L8 2.223l1.847 3.658a.525.525 0 0 0 .393.288l4.052.575-2.906 2.77a.565.565 0 0 0-.163.506l.694 3.957-3.686-1.894a.503.503 0 0 0-.461 0z"/>
+                                                                </svg>
+                                                                <svg th:if="2 <= ${review.rating}" xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-star-fill text-warning" viewBox="0 0 16 16">
+                                                                    <path d="M3.612 15.443c-.386.198-.824-.149-.746-.592l.83-4.73L.173 6.765c-.329-.314-.158-.888.283-.95l4.898-.696L7.538.792c.197-.39.73-.39.927 0l2.184 4.327 4.898.696c.441.062.612.636.282.95l-3.522 3.356.83 4.73c.078.443-.36.79-.746.592L8 13.187l-4.389 2.256z"/>
+                                                                </svg>
+                                                            </span>
+                                                            <span>
+                                                                <svg th:if="${review.rating} <= 2" xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-star" viewBox="0 0 16 16">
+                                                                    <path d="M2.866 14.85c-.078.444.36.791.746.593l4.39-2.256 4.389 2.256c.386.198.824-.149.746-.592l-.83-4.73 3.522-3.356c.33-.314.16-.888-.282-.95l-4.898-.696L8.465.792a.513.513 0 0 0-.927 0L5.354 5.12l-4.898.696c-.441.062-.612.636-.283.95l3.523 3.356-.83 4.73zm4.905-2.767-3.686 1.894.694-3.957a.565.565 0 0 0-.163-.505L1.71 6.745l4.052-.576a.525.525 0 0 0 .393-.288L8 2.223l1.847 3.658a.525.525 0 0 0 .393.288l4.052.575-2.906 2.77a.565.565 0 0 0-.163.506l.694 3.957-3.686-1.894a.503.503 0 0 0-.461 0z"/>
+                                                                </svg>
+                                                                <svg th:if="3 <= ${review.rating}" xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-star-fill text-warning" viewBox="0 0 16 16">
+                                                                    <path d="M3.612 15.443c-.386.198-.824-.149-.746-.592l.83-4.73L.173 6.765c-.329-.314-.158-.888.283-.95l4.898-.696L7.538.792c.197-.39.73-.39.927 0l2.184 4.327 4.898.696c.441.062.612.636.282.95l-3.522 3.356.83 4.73c.078.443-.36.79-.746.592L8 13.187l-4.389 2.256z"/>
+                                                                </svg>
+                                                            </span>
+                                                            <span>
+                                                                <svg th:if="${review.rating} <= 3" xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-star" viewBox="0 0 16 16">
+                                                                    <path d="M2.866 14.85c-.078.444.36.791.746.593l4.39-2.256 4.389 2.256c.386.198.824-.149.746-.592l-.83-4.73 3.522-3.356c.33-.314.16-.888-.282-.95l-4.898-.696L8.465.792a.513.513 0 0 0-.927 0L5.354 5.12l-4.898.696c-.441.062-.612.636-.283.95l3.523 3.356-.83 4.73zm4.905-2.767-3.686 1.894.694-3.957a.565.565 0 0 0-.163-.505L1.71 6.745l4.052-.576a.525.525 0 0 0 .393-.288L8 2.223l1.847 3.658a.525.525 0 0 0 .393.288l4.052.575-2.906 2.77a.565.565 0 0 0-.163.506l.694 3.957-3.686-1.894a.503.503 0 0 0-.461 0z"/>
+                                                                </svg>
+                                                                <svg th:if="4 <= ${review.rating}" xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-star-fill text-warning" viewBox="0 0 16 16">
+                                                                    <path d="M3.612 15.443c-.386.198-.824-.149-.746-.592l.83-4.73L.173 6.765c-.329-.314-.158-.888.283-.95l4.898-.696L7.538.792c.197-.39.73-.39.927 0l2.184 4.327 4.898.696c.441.062.612.636.282.95l-3.522 3.356.83 4.73c.078.443-.36.79-.746.592L8 13.187l-4.389 2.256z"/>
+                                                                </svg>
+                                                            </span>
+                                                            <span>
+                                                                <svg th:if="${review.rating} <= 4" xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-star" viewBox="0 0 16 16">
+                                                                    <path d="M2.866 14.85c-.078.444.36.791.746.593l4.39-2.256 4.389 2.256c.386.198.824-.149.746-.592l-.83-4.73 3.522-3.356c.33-.314.16-.888-.282-.95l-4.898-.696L8.465.792a.513.513 0 0 0-.927 0L5.354 5.12l-4.898.696c-.441.062-.612.636-.283.95l3.523 3.356-.83 4.73zm4.905-2.767-3.686 1.894.694-3.957a.565.565 0 0 0-.163-.505L1.71 6.745l4.052-.576a.525.525 0 0 0 .393-.288L8 2.223l1.847 3.658a.525.525 0 0 0 .393.288l4.052.575-2.906 2.77a.565.565 0 0 0-.163.506l.694 3.957-3.686-1.894a.503.503 0 0 0-.461 0z"/>
+                                                                </svg>
+                                                                <svg th:if="5 <= ${review.rating}" xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-star-fill text-warning" viewBox="0 0 16 16">
+                                                                    <path d="M3.612 15.443c-.386.198-.824-.149-.746-.592l.83-4.73L.173 6.765c-.329-.314-.158-.888.283-.95l4.898-.696L7.538.792c.197-.39.73-.39.927 0l2.184 4.327 4.898.696c.441.062.612.636.282.95l-3.522 3.356.83 4.73c.078.443-.36.79-.746.592L8 13.187l-4.389 2.256z"/>
+                                                                </svg>
+                                                            </span>
+                                                            <span th:text="${#temporals.format(review.lastModifiedDate, 'yyyy.MM.dd')}">0000.00.00</span>
+                                                        </li>
+                                                    </ul>
+                                                </div>
                                             </div>
                                         </div>
+                                        <div class="col d-grid gap-2 d-md-flex justify-content-md-end">
+                                            <button type="button" class="btn btn-danger">신고하기</button>
+                                        </div>
                                     </div>
-                                    <div class="col d-grid gap-2 d-md-flex justify-content-md-end">
-                                        <button type="button" class="btn btn-danger">신고하기</button>
+                                    <!-- 주문 메뉴 -->
+                                    <!--                                <div class="row mb-3">-->
+                                    <!--                                    <div class="col">-->
+                                    <!--                                        핫 황금올리브 핫크리스피-->
+                                    <!--                                    </div>-->
+                                    <!--                                </div>-->
+                                    <!-- 리뷰 사진 -->
+                                    <div class="row mb-3 ms-1" th:if="${review.uploadFile} != null">
+                                        <div class="col img-wrapper">
+                                            <img src="https://via.placeholder.com/100x100" th:src="${review.uploadFile.storeFileName}" alt="review img" style="width: 100px; height: 100px;">
+                                        </div>
                                     </div>
-                                </div>
-                                <!-- 주문 메뉴 -->
-<!--                                <div class="row mb-3">-->
-<!--                                    <div class="col">-->
-<!--                                        핫 황금올리브 핫크리스피-->
-<!--                                    </div>-->
-<!--                                </div>-->
-                                <!-- 리뷰 사진 -->
-                                <div class="row mb-3" th:if="${review.uploadFile} != null">
-                                    <div class="col">
-                                        <img src="https://via.placeholder.com/100x100" th:src="${review.uploadFile.storeFileName}" alt="review img" style="width: 100px; height: 100px;">
-                                    </div>
-                                </div>
-                                <!-- 리뷰글 -->
-                                <div class="row">
-                                    <div class="col">
-                                        <p th:text="${review.content}">
-                                            Lorem Ipsum is simply dummy text of the printing and typesetting industry.
-                                            Lorem Ipsum has been the industry's standard dummy text ever since the 1500s,
-                                            when an unknown printer took a galley of type and scrambled it to make a type specimen book.
-                                            It has survived not only five centuries, but also the leap into electronic typesetting, remaining essentially unchanged.
-                                            It was popularised in the 1960s with the release of Letraset sheets containing Lorem Ipsum passages,
-                                            and more recently with desktop publishing software like Aldus PageMaker including versions of Lorem Ipsum.
-                                        </p>
+                                    <!-- 리뷰글 -->
+                                    <div class="row">
+                                        <div class="col">
+                                            <p th:text="${review.content}">
+                                                Lorem Ipsum is simply dummy text of the printing and typesetting industry.
+                                                Lorem Ipsum has been the industry's standard dummy text ever since the 1500s,
+                                                when an unknown printer took a galley of type and scrambled it to make a type specimen book.
+                                                It has survived not only five centuries, but also the leap into electronic typesetting, remaining essentially unchanged.
+                                                It was popularised in the 1r960s with the release of Letraset sheets containing Lorem Ipsum passages,
+                                                and more recently with desktop publishing software like Aldus PageMaker including versions of Lorem Ipsum.
+                                            </p>
+                                        </div>
                                     </div>
                                 </div>
                             </div>
@@ -839,6 +876,41 @@
         });
     });
 
+    $('#photo').change(function () {
+        if ($('#photo').is(':checked')) {
+            searchReview("recent")
+        } else {
+            searchReview("recent")
+        }
+    })
+
+    $('#recent').click(function () {
+        $('#recent').removeClass("text-muted");
+        $("#recent").addClass("text-dark fw-bold");
+        $('#highRating').removeClass("text-dark fw-bold");
+        $("#highRating").addClass("text-muted");
+        $('#lowRating').removeClass("text-dark fw-bold");
+        $("#lowRating").addClass("text-muted");
+    });
+
+    $('#highRating').click(function () {
+        $('#highRating').removeClass("text-muted");
+        $("#highRating").addClass("text-dark fw-bold");
+        $('#recent').removeClass("text-dark fw-bold");
+        $("#recent").addClass("text-muted");
+        $('#lowRating').removeClass("text-dark fw-bold");
+        $("#lowRating").addClass("text-muted");
+    });
+
+    $('#lowRating').click(function () {
+        $('#lowRating').removeClass("text-muted");
+        $("#lowRating").addClass("text-dark fw-bold");
+        $('#highRating').removeClass("text-dark fw-bold");
+        $("#highRating").addClass("text-muted");
+        $('#recent').removeClass("text-dark fw-bold");
+        $("#recent").addClass("text-muted");
+    });
+
     function addBookmark(id) {
         const form = document.createElement("form");
         form.setAttribute("method", "post");
@@ -849,6 +921,31 @@
 
     const popoverTriggerList = document.querySelectorAll('[data-bs-toggle="popover"]')
     const popoverList = [...popoverTriggerList].map(popoverTriggerEl => new bootstrap.Popover(popoverTriggerEl))
+
+    function searchReview(type) {
+        const storeId = [[${store.id}]];
+        let photo = false;
+
+        if ($("#photo").is(":checked")) {
+            photo = true;
+        }
+
+        const reviewSearch = {
+            "storeId": storeId,
+            "photo": photo,
+            "type": type
+        };
+
+        $.ajax({
+            url: "/stores/review",
+            data: reviewSearch,
+            type: "GET",
+            cache: false,
+            success: function (fragment) {
+                $('#review').replaceWith(fragment);
+            }
+        });
+    }
 </script>
 </body>
 </html>

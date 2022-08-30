@@ -36,5 +36,6 @@ public class PackingInfo extends TimeBaseEntity {
         this.pickUpTime = pickUpTime;
         this.position = position;
         this.paymentType = paymentType;
+        store.addPackingInfo(this);
     }
 }

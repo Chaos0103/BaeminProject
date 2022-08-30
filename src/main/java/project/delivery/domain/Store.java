@@ -25,7 +25,7 @@ public class Store extends TimeBaseEntity {
     @Enumerated(EnumType.STRING)
     @Column(updatable = false, nullable = false)
     private Category category;
-    @Column(nullable = false, length = 11)
+    @Column(nullable = false, length = 13)
     private String tel;
     @Lob
     @Column(nullable = false)
@@ -38,18 +38,14 @@ public class Store extends TimeBaseEntity {
     private String holiday;
     @Column(nullable = false)
     private String deliveryArea;
-    @Lob
-    @Column(nullable = false)
-    private String deliveryTip;
     @Column(nullable = false, length = 20)
     private String representativeName;
     @Column(nullable = false)
     private String businessAddress;
     @Column(nullable = false)
     private String businessNumber;
-    @Lob
-    @Column(nullable = false)
-    private String announcement;
+    @Embedded
+    private Announcement announcement;
     @Lob
     @Column(nullable = false)
     private String countryOfPlace;
@@ -68,10 +64,13 @@ public class Store extends TimeBaseEntity {
     @OneToOne(mappedBy = "store", orphanRemoval = true, cascade = CascadeType.ALL, fetch = LAZY)
     private DeliveryInfo deliveryInfo;
 
+    @OneToOne(mappedBy = "store", orphanRemoval = true, cascade = CascadeType.ALL, fetch = LAZY)
+    private PackingInfo packingInfo;
+
     @OneToMany(mappedBy = "store", orphanRemoval = true, cascade = CascadeType.ALL)
     private List<StoreImage> storeImages = new ArrayList<>();
 
-    public Store(String storeName, Category category, String tel, String introduction, String tradeName, String openTime, String holiday, String deliveryArea, String deliveryTip, String representativeName, String businessAddress, String businessNumber, String announcement, String countryOfPlace) {
+    public Store(String storeName, Category category, String tel, String introduction, String tradeName, String openTime, String holiday, String deliveryArea, String representativeName, String businessAddress, String businessNumber, Announcement announcement, String countryOfPlace) {
         this.storeName = storeName;
         this.category = category;
         this.tel = tel;
@@ -80,7 +79,6 @@ public class Store extends TimeBaseEntity {
         this.openTime = openTime;
         this.holiday = holiday;
         this.deliveryArea = deliveryArea;
-        this.deliveryTip = deliveryTip;
         this.representativeName = representativeName;
         this.businessAddress = businessAddress;
         this.businessNumber = businessNumber;
@@ -99,6 +97,10 @@ public class Store extends TimeBaseEntity {
         this.deliveryInfo = deliveryInfo;
     }
 
+    public void addPackingInfo(PackingInfo packingInfo) {
+        this.packingInfo = packingInfo;
+    }
+
     public void addStoreImage(StoreImage storeImage) {
         this.storeImages.add(storeImage);
     }
@@ -110,5 +112,9 @@ public class Store extends TimeBaseEntity {
 
     public void addReviewCount() {
         this.reviewCount++;
+    }
+
+    public void removeReviewCount() {
+        this.reviewCount--;
     }
 }

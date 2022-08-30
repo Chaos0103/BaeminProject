@@ -25,7 +25,7 @@ public class Member extends TimeBaseEntity {
     private String username;
     @Column(updatable = false, nullable = false, length = 8)
     private String birth;
-    @Column(nullable = false, length = 11)
+    @Column(nullable = false, length = 13)
     private String phone;
     @Column(nullable = false, length = 10)
     private String nickname;

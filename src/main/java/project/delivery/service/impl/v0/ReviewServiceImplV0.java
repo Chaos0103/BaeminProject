@@ -5,6 +5,7 @@ import org.springframework.stereotype.Service;
 import project.delivery.domain.Member;
 import project.delivery.domain.Review;
 import project.delivery.domain.Store;
+import project.delivery.dto.ReviewSearch;
 import project.delivery.exception.NoSuchException;
 import project.delivery.repository.MemberRepository;
 import project.delivery.repository.ReviewRepository;
@@ -33,7 +34,11 @@ public class ReviewServiceImplV0 implements ReviewService {
         }
         Review review = new Review(findMember, findStore, saveReview.getRating(), saveReview.getContent(), saveReview.getUploadFile());
         Review savedReview = reviewRepository.save(review);
+
         findStore.addReviewCount();
+        Float avg = reviewRepository.ratingAvgByStoreId(storeId);
+        findStore.updateRating(avg);
+
         return savedReview.getId();
     }
 
@@ -43,7 +48,7 @@ public class ReviewServiceImplV0 implements ReviewService {
     }
 
     @Override
-    public List<Review> findAllByStoreId(Long storeId) {
-        return reviewRepository.findAllByStoreId(storeId);
+    public List<Review> findAllByStoreId(ReviewSearch search) {
+        return reviewRepository.findAllByStoreId(search);
     }
 }

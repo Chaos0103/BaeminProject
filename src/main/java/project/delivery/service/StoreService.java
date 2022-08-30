@@ -20,4 +20,10 @@ public interface StoreService {
 
     //가게배너사진 조회
     List<StoreImage> findStoreBannerImages(Long storeId);
+
+    //주문금액 별 배달팁 조회
+    List<DeliveryTipByAmount> findDeliveryTipByAmountByDeliveryId(Long deliveryId);
+
+    //지역별 추가 배달팁 조회
+    List<DeliveryTipByArea> findDeliveryTipByAreaByDeliveryId(Long deliveryId);
 }

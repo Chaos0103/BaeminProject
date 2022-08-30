@@ -27,15 +27,12 @@ public class DeliveryInfo extends TimeBaseEntity {
     private PaymentType type;
     @Column(nullable = false)
     private String deliveryTime;
-    @Column(nullable = false)
-    private String deliveryTip;
 
-    public DeliveryInfo(Store store, int minOrderPrice, PaymentType type, String deliveryTime, String deliveryTip) {
+    public DeliveryInfo(Store store, int minOrderPrice, PaymentType type, String deliveryTime) {
         this.store = store;
         this.minOrderPrice = minOrderPrice;
         this.type = type;
         this.deliveryTime = deliveryTime;
-        this.deliveryTip = deliveryTip;
 
         store.addDeliveryInfo(this);
     }

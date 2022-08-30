@@ -5,10 +5,7 @@ import org.springframework.stereotype.Service;
 import project.delivery.domain.*;
 import project.delivery.exception.DuplicateException;
 import project.delivery.exception.NoSuchException;
-import project.delivery.repository.DeliveryInfoRepository;
-import project.delivery.repository.MenuCategoryRepository;
-import project.delivery.repository.StoreImageRepository;
-import project.delivery.repository.StoreRepository;
+import project.delivery.repository.*;
 import project.delivery.service.StoreService;
 
 import java.util.List;
@@ -21,7 +18,8 @@ public class StoreServiceImplV0 implements StoreService {
     private final StoreRepository storeRepository;
     private final MenuCategoryRepository menuCategoryRepository;
     private final StoreImageRepository storeImageRepository;
-    private final DeliveryInfoRepository deliveryInfoRepository;
+    private final DeliveryTipByAmountRepository deliveryTipByAmountRepository;
+    private final DeliveryTipByAreaRepository deliveryTipByAreaRepository;
 
     @Override
     public Long createNewStore(Store store) {
@@ -49,6 +47,16 @@ public class StoreServiceImplV0 implements StoreService {
     @Override
     public List<StoreImage> findStoreBannerImages(Long storeId) {
         return storeImageRepository.findBannerByStoreId(storeId);
+    }
+
+    @Override
+    public List<DeliveryTipByAmount> findDeliveryTipByAmountByDeliveryId(Long deliveryId) {
+        return deliveryTipByAmountRepository.findAllByDeliveryId(deliveryId);
+    }
+
+    @Override
+    public List<DeliveryTipByArea> findDeliveryTipByAreaByDeliveryId(Long deliveryId) {
+        return deliveryTipByAreaRepository.findAllByDeliveryId(deliveryId);
     }
 
     private void duplicatedBusinessNumber(String businessNumber) {
