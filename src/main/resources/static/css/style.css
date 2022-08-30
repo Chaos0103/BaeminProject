@@ -55,3 +55,7 @@ header {
     object-fit: cover;
     margin: auto;
 }
+
+html {
+    scroll-behavior: smooth;
+}

@@ -7,7 +7,7 @@
 <header th:replace="fragments/loginHeader::loginHeader"></header>
 <!--<div th:replace="fragments/notifications::notifications(${notifications})"></div>-->
 <section th:replace="fragments/basket::basket"></section>
-
+<div onclick="scrollToTop()" id="top-btn" style="position: fixed" class="border bottom-0 end-0 m-4 p-3">top</div>
 <article>
     <div class="container px-4 py-5">
         <div class="row pb-3">
@@ -826,8 +826,8 @@
                                                 </div>
                                             </div>
                                         </div>
-                                        <div class="col d-grid gap-2 d-md-flex justify-content-md-end">
-                                            <button type="button" class="btn btn-danger">신고하기</button>
+                                        <div class="col d-grid gap-2 d-md-flex justify-content-md-end h-25">
+                                            <button type="button" class="btn btn-outline-danger">신고하기</button>
                                         </div>
                                     </div>
                                     <!-- 주문 메뉴 -->
@@ -945,6 +945,11 @@
                 $('#review').replaceWith(fragment);
             }
         });
+    }
+
+    function scrollToTop() {
+        document.body.scrollTop = 0;
+        document.documentElement.scrollTop = 0;
     }
 </script>
 </body>
