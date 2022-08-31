@@ -1,4 +1,4 @@
-package project.delivery.service.impl.v0;
+package project.delivery.service;
 
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
