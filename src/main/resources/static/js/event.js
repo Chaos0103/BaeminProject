@@ -36,3 +36,8 @@ function test() {
 function beforeService() {
     alert('서비스 준비중입니다');
 }
+
+function scrollToTop() {
+    document.body.scrollTop = 0;
+    document.documentElement.scrollTop = 0;
+}

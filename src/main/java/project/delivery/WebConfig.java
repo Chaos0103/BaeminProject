@@ -9,7 +9,7 @@ import project.delivery.login.LoginArgumentResolver;
 
 import java.util.List;
 
-//@Configuration
+@Configuration
 public class WebConfig implements WebMvcConfigurer {
 
     @Override

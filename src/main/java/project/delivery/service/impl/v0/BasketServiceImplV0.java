@@ -46,6 +46,11 @@ public class BasketServiceImplV0 implements BasketService {
         return basketId;
     }
 
+    @Override
+    public List<Basket> findAllByMemberId(Long memberId) {
+        return basketRepository.findAllByMemberId(memberId);
+    }
+
     private Member findMember(Long memberId) {
         Member member = memberRepository.findById(memberId).orElse(null);
         if (member == null) {

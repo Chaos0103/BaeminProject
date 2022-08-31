@@ -1,17 +1,18 @@
 package project.delivery.controller;
 
-import lombok.Data;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
+import project.delivery.controller.form.BasketAddForm;
 import project.delivery.domain.*;
+import project.delivery.domain.basket.Basket;
+import project.delivery.dto.BasketDto;
 import project.delivery.dto.ReviewSearch;
 import project.delivery.login.Login;
 import project.delivery.service.*;
 
-import java.util.ArrayList;
 import java.util.List;
 
 @Slf4j
@@ -25,15 +26,16 @@ public class StoreController {
     private final BookmarkService bookmarkService;
     private final NotificationService notificationService;
     private final ReviewService reviewService;
+    private final BasketService basketService;
 
     @ModelAttribute("notifications")
     public List<Notification> notifications(@Login Member loginMember) {
         return notificationService.findByMemberId(loginMember.getId());
     }
 
-    @ModelAttribute("testData")
-    public TestData testData() {
-        return new TestData();
+    @ModelAttribute("basketAddForm")
+    public BasketAddForm basketAddForm() {
+        return new BasketAddForm();
     }
 
     @GetMapping
@@ -44,7 +46,7 @@ public class StoreController {
     }
 
     @GetMapping("/{storeId}/detail")
-    public String store(@PathVariable Long storeId, Model model) {
+    public String store(@PathVariable Long storeId, Model model, @Login Member loginMember) {
         Store store = storeService.findStoreById(storeId);
         List<DeliveryTipByAmount> deliveryTipByAmounts = storeService.findDeliveryTipByAmountByDeliveryId(store.getDeliveryInfo().getId());
         List<DeliveryTipByArea> deliveryTipByAreas = storeService.findDeliveryTipByAreaByDeliveryId(store.getDeliveryInfo().getId());
@@ -61,6 +63,8 @@ public class StoreController {
         List<MenuSubOption> menuSubOptions = menuService.findMenuSubOption(categoryIds);
 
         List<Review> reviews = reviewService.findAllByStoreId(new ReviewSearch(storeId, false, "recent"));
+
+        List<Basket> baskets = basketService.findAllByMemberId(loginMember.getId());
 
         int[] ratingData = getRatingData(reviews);
         float[] ratingPercent = getRatingPercent(reviews, ratingData);
@@ -83,6 +87,8 @@ public class StoreController {
         model.addAttribute("reviews", reviews);
         model.addAttribute("ratingData", ratingData);
         model.addAttribute("ratingPercent", ratingPercent);
+
+        model.addAttribute("baskets", baskets);
         return "/stores/detail";
     }
 
@@ -97,6 +103,15 @@ public class StoreController {
     @PostMapping("/{storeId}/bookmark")
     public String addBookmark(@PathVariable Long storeId, @Login Member loginMember) {
         bookmarkService.addBookmark(loginMember, storeId);
+        return "redirect:/stores/{storeId}/detail";
+    }
+
+    @PostMapping("/{storeId}/basket")
+    public String addBasket(@PathVariable Long storeId, BasketAddForm form, @Login Member loginMember) {
+        BasketDto basketDto = new BasketDto(form.getMenuOptionId(), form.getMenuSubOptionIds(), form.getCount());
+
+        Long basketId = basketService.addBasket(loginMember.getId(), storeId, basketDto);
+        log.debug("장바구니 담기 성공 = {}", basketId);
         return "redirect:/stores/{storeId}/detail";
     }
 
@@ -129,11 +144,5 @@ public class StoreController {
         return menuSubOptionCategorise.stream()
                 .map(MenuSubCategory::getId)
                 .toList();
-    }
-
-    @Data
-    static class TestData {
-        private Long menuId;
-        private List<Long> sideIds = new ArrayList<>();
     }
 }
