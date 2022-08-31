@@ -11,4 +11,7 @@ public interface MenuSubOptionRepository extends JpaRepository<MenuSubOption, Lo
 
     @Query("select mso from MenuSubOption mso where mso.category.id in :categoryIds")
     List<MenuSubOption> findAllByMenuIds(@Param("categoryIds") List<Long> categoryIds);
+
+    @Query("select mso from MenuSubOption mso where mso.id in :ids")
+    List<MenuSubOption> findAllByIds(@Param("ids") List<Long> ids);
 }

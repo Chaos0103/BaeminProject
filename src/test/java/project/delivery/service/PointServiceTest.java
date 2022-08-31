@@ -27,7 +27,7 @@ class PointServiceTest {
     void createPointHistory() {
         Member member = createMember();
         Point point = createPoint(member);
-        PointHistory pointHistory = new PointHistory(10000, "test", PointType.SAVE);
+        PointHistory pointHistory = new PointHistory(point, 10000, "test", PointType.SAVE);
 
         pointService.createPointHistory(member.getId(), pointHistory);
         em.flush();
