@@ -15,7 +15,7 @@ public interface MenuService {
     List<MenuOption> findMenuOptionByMenuIds(List<Long> menuIds);
 
     //서브카테고리이름 조회
-    List<MenuSubOptionCategory> findMenuSubOptionCategory(List<Long> menuIds);
+    List<MenuSubCategory> findMenuSubOptionCategory(List<Long> menuIds);
 
     //서브메뉴
     List<MenuSubOption> findMenuSubOption(List<Long> categoryIds);

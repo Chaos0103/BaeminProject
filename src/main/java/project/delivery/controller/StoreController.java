@@ -1,5 +1,6 @@
 package project.delivery.controller;
 
+import lombok.Data;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Controller;
@@ -30,6 +31,11 @@ public class StoreController {
         return notificationService.findByMemberId(loginMember.getId());
     }
 
+    @ModelAttribute("testData")
+    public TestData testData() {
+        return new TestData();
+    }
+
     @GetMapping
     public String stores(@RequestParam Category category, Model model) {
         List<Store> stores = storeService.findStoresByCategory(category);
@@ -49,7 +55,7 @@ public class StoreController {
 
         List<Long> menuIds = getMenuIds(menus);
         List<MenuOption> menuOptions = menuService.findMenuOptionByMenuIds(menuIds);
-        List<MenuSubOptionCategory> menuSubOptionCategorise = menuService.findMenuSubOptionCategory(menuIds);
+        List<MenuSubCategory> menuSubOptionCategorise = menuService.findMenuSubOptionCategory(menuIds);
 
         List<Long> categoryIds = getCategoryIds(menuSubOptionCategorise);
         List<MenuSubOption> menuSubOptions = menuService.findMenuSubOption(categoryIds);
@@ -119,9 +125,15 @@ public class StoreController {
                 .toList();
     }
 
-    private static List<Long> getCategoryIds(List<MenuSubOptionCategory> menuSubOptionCategorise) {
+    private static List<Long> getCategoryIds(List<MenuSubCategory> menuSubOptionCategorise) {
         return menuSubOptionCategorise.stream()
-                .map(MenuSubOptionCategory::getId)
+                .map(MenuSubCategory::getId)
                 .toList();
+    }
+
+    @Data
+    static class TestData {
+        private Long menuId;
+        private List<Long> sideIds = new ArrayList<>();
     }
 }

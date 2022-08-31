@@ -368,7 +368,7 @@
                                     <!-- Modal -->
                                     <div class="modal fade" th:id="'menuDetail' + ${menu.id}" data-bs-backdrop="static" data-bs-keyboard="false" tabindex="-1" aria-labelledby="staticBackdropLabel" aria-hidden="true">
                                         <div class="modal-dialog modal-dialog-scrollable">
-                                            <div class="modal-content">
+                                            <form class="modal-content" method="post" th:action="@{/stores/order}" th:object="${testData}">
                                                 <div class="modal-header">
                                                     <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
                                                 </div>
@@ -387,7 +387,8 @@
                                                         <div class="card-body">
                                                             <h4>가격</h4>
                                                             <div class="form-check mt-3"  th:each="menuOption : ${menuOptions}" th:if="${menuOption.menu.id} == ${menu.id}">
-                                                                <input class="form-check-input" type="radio" name="flexRadioDefault" id="selectMain2" th:id="|${menu.id}selectMenuOption${menuOptionStat.index}|">
+                                                                <input class="form-check-input" type="radio" name="flexRadioDefault" id="selectMain2" th:id="|${menu.id}selectMenuOption${menuOptionStat.index}|"
+                                                                       th:field="*{menuId}" th:value="${menu.id}">
                                                                 <label class="form-check-label w-100" for="selectMain2" th:for="|${menu.id}selectMenuOption${menuOptionStat.index}|">
                                                                     <div class="row">
                                                                         <div class="col text-start fw-bold" th:if="${menuOption.optionName} == null">
@@ -409,7 +410,8 @@
                                                         <div class="card-body">
                                                             <h4 th:text="${menuSubOptionCategory.categoryName}">사이드메뉴 추가선택</h4>
                                                             <div class="form-check mt-3" th:each="menuSubOption : ${menuSubOptions}" th:if="${menuSubOption.category.id} == ${menuSubOptionCategory.id}">
-                                                                <input class="form-check-input" type="checkbox" name="flexRadioDefault" id="sideMenu2" th:id="|menuSubOption${menuSubOptionStat.index}|">
+                                                                <input class="form-check-input" type="checkbox" name="flexRadioDefault" id="sideMenu2" th:id="|menuSubOption${menuSubOptionStat.index}|"
+                                                                th:field="*{sideIds}" th:value="${menuSubOption.id}">
                                                                 <label class="form-check-label w-100" for="sideMenu2" th:for="|menuSubOption${menuSubOptionStat.index}|">
                                                                     <div class="row">
                                                                         <div class="col" th:text="${menuSubOption.name}">
@@ -431,9 +433,9 @@
                                                     </div>
                                                 </div>
                                                 <div class="modal-footer">
-                                                    <button type="button" class="btn baemin-btn w-25">담기</button>
+                                                    <button type="submit" class="btn baemin-btn w-25">담기</button>
                                                 </div>
-                                            </div>
+                                            </form>
                                         </div>
                                     </div>
                                     <!-- menu end -->

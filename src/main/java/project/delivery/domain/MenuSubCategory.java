@@ -9,10 +9,10 @@ import javax.persistence.*;
 @Entity
 @Getter
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
-public class MenuSubOptionCategory {
+public class MenuSubCategory {
 
     @Id @GeneratedValue
-    @Column(name = "menu_sub_option_category_id")
+    @Column(name = "menu_sub_category_id")
     private Long id;
 
     @ManyToOne(fetch = FetchType.LAZY)
@@ -24,7 +24,7 @@ public class MenuSubOptionCategory {
     @Column(nullable = false)
     private String categoryName;
 
-    public MenuSubOptionCategory(Menu menu, int priority, String categoryName) {
+    public MenuSubCategory(Menu menu, int priority, String categoryName) {
         this.menu = menu;
         this.priority = priority;
         this.categoryName = categoryName;

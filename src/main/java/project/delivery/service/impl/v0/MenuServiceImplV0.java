@@ -5,7 +5,7 @@ import org.springframework.stereotype.Service;
 import project.delivery.domain.*;
 import project.delivery.repository.MenuOptionRepository;
 import project.delivery.repository.MenuRepository;
-import project.delivery.repository.MenuSubOptionCategoryRepository;
+import project.delivery.repository.MenuSubCategoryRepository;
 import project.delivery.repository.MenuSubOptionRepository;
 import project.delivery.service.MenuService;
 
@@ -16,7 +16,7 @@ import java.util.List;
 public class MenuServiceImplV0 implements MenuService {
 
     private final MenuRepository menuRepository;
-    private final MenuSubOptionCategoryRepository menuSubOptionCategoryRepository;
+    private final MenuSubCategoryRepository menuSubOptionCategoryRepository;
     private final MenuSubOptionRepository menuSubOptionRepository;
     private final MenuOptionRepository menuOptionRepository;
 
@@ -31,7 +31,7 @@ public class MenuServiceImplV0 implements MenuService {
     }
 
     @Override
-    public List<MenuSubOptionCategory> findMenuSubOptionCategory(List<Long> menuIds) {
+    public List<MenuSubCategory> findMenuSubOptionCategory(List<Long> menuIds) {
         return menuSubOptionCategoryRepository.findAllByMenuIds(menuIds);
     }
 
