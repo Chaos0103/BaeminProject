@@ -7,8 +7,12 @@ import lombok.NoArgsConstructor;
 @Data
 @NoArgsConstructor
 @AllArgsConstructor
-public class BasketDto {
+public class BasketMenuDto {
 
-    private String storeName;
+    private Long basketMenuId;
+    private String menuMainTitle;
     private String storeFileName;
+    private String optionName;
+    private Integer optionPrice;
+    private Integer orderPrice;
 }

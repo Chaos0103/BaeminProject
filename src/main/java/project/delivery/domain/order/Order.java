@@ -4,6 +4,7 @@ import lombok.AccessLevel;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import project.delivery.domain.Member;
+import project.delivery.domain.Store;
 import project.delivery.domain.TimeBaseEntity;
 
 import javax.persistence.*;
@@ -27,6 +28,10 @@ public class Order extends TimeBaseEntity {
     @JoinColumn(name = "member_id")
     private Member member;
 
+    @ManyToOne(fetch = LAZY)
+    @JoinColumn(name = "store_id")
+    private Store store;
+
     @OneToOne(fetch = LAZY, cascade = CascadeType.ALL)
     @JoinColumn(name = "delivery_id")
     private Delivery delivery;
@@ -45,8 +50,9 @@ public class Order extends TimeBaseEntity {
     @OneToMany(mappedBy = "order", cascade = CascadeType.ALL)
     private List<MenuOrder> menuOrders = new ArrayList<>();
 
-    public Order(Member member, Delivery delivery, ReceiptType receiptType, Boolean disposable, Boolean sideDish, String requirement) {
+    public Order(Member member, Store store, Delivery delivery, ReceiptType receiptType, Boolean disposable, Boolean sideDish, String requirement) {
         this.member = member;
+        this.store = store;
         this.delivery = delivery;
         this.receiptType = receiptType;
         this.disposable = disposable;
@@ -56,8 +62,8 @@ public class Order extends TimeBaseEntity {
     }
 
     //==생성 메서드==//
-    public static Order createOrder(Member member, Delivery delivery, ReceiptType receiptType, Boolean disposable, Boolean sideDish, String requirement, List<MenuOrder> menuOrders) {
-        Order order = new Order(member, delivery, receiptType, disposable, sideDish, requirement);
+    public static Order createOrder(Member member, Store store, Delivery delivery, ReceiptType receiptType, Boolean disposable, Boolean sideDish, String requirement, List<MenuOrder> menuOrders) {
+        Order order = new Order(member, store, delivery, receiptType, disposable, sideDish, requirement);
         for (MenuOrder menuOrder : menuOrders) {
             order.addMenuOrder(menuOrder);
         }

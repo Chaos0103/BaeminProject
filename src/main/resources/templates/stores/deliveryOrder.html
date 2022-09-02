@@ -1,51 +1,19 @@
 <!DOCTYPE html>
 <html lang="ko" xmlns:th="http://www.thymeleaf.org">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1">
-    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.2.0/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-gH2yIJqKdNHPEq0n4Mqa/HGKIhSkIHeL5AyhkYV8i59U5AR6csBvApHHNl/vI1Bx" crossorigin="anonymous">
-    <link rel="stylesheet" href="../../static/css/style.css">
-    <link rel="stylesheet" href="../../static/css/baeminStyle.css">
-    <link href="../../static/icon/favicon.ico" rel="shortcut icon" type="image/x-icon">
-    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
-    <script type="text/javascript" src="../../static/js/event.js"></script>
-    <title>배달의 민족</title>
+<head th:replace="fragments/head::head(~{::title})">
+    <title>배달의 민족 | 주문하기</title>
 </head>
 <body>
-<!-- header -->
-<header class="p-3">
-    <div class="container">
-        <div class="d-flex flex-wrap align-items-center justify-content-center justify-content-lg-start">
-            <a href="#" class="d-flex align-items-center mb-2 mb-lg-0 ms-3 text-white text-decoration-none">
-                <img src="../../static/img/logo.png" alt="main_icon" height="20"/>
-            </a>
-
-            <ul class="nav col-12 col-lg-auto me-lg-auto mb-2 ms-2 justify-content-center mb-md-0">
-                <li><a href="#" class="nav-link px-2 text-white">Home</a></li>
-                <li><a href="#" class="nav-link px-2 text-white">찜</a></li>
-                <li><a href="#" class="nav-link px-2 text-white">주문내역</a></li>
-                <li><a href="#" class="nav-link px-2 text-white">마이페이지</a></li>
-                <li><a href="#" class="nav-link px-2 text-white">About</a></li>
-            </ul>
-
-            <form class="col-12 col-lg-auto mb-3 mb-lg-0 me-lg-3" role="search">
-                <input type="search" class="form-control form-control-dark text-bg-light" placeholder="Search..." aria-label="Search">
-            </form>
-
-            <ul class="nav pe-2">
-                <li class="nav-item"><a href="#" class="nav-link link-light px-2">Login</a></li>
-                <li class="nav-item"><a href="#" class="nav-link link-light px-2">Sign up</a></li>
-            </ul>
-        </div>
-    </div>
-</header>
+<header th:replace="fragments/loginHeader::loginHeader"></header>
+<!--<section th:replace="fragments/notifications::notifications(${notifications})"></section>-->
+<!--<section th:replace="stores/fragments/basket::basket(${baskets})"></section>-->
 
 <article>
-    <div class="container px-4 py-3 w-50 border rounded mt-3" style="background-color: rgb(244, 244, 244)">
+    <form class="container px-4 py-3 w-50 border rounded mt-3" style="background-color: rgb(244, 244, 244)"
+          method="post" th:action>
         <section>
             <h2 class="text-center">주문하기</h2>
         </section>
-
         <section>
             <div class="card mt-3">
                 <div class="card-body">
@@ -53,19 +21,17 @@
                     <div class="card">
                         <div class="card-body">
                             <div>
-                                <label for="detailAddress" class="form-label">서울시 서초구 반포동 20-43</label>
-                                <input type="text" class="form-control" id="detailAddress">
+                                <input th:field="${deliveryAddForm.mainAddress}" type="text" id="mainAddress" name="mainAddress" value="서울시 서초구 반포동 20-43" class="form-control-plaintext" readonly>
+                                <input th:field="${deliveryAddForm.detailAddress}" type="text" class="form-control" id="detailAddress">
                             </div>
                         </div>
                     </div>
                     <div class="card mt-3">
                         <div class="card-body">
-                            <div class="card-text">
-                                010-1234-5678
-                            </div>
+                            <input th:field="${deliveryAddForm.phone}" type="text" id="phone" name="phone" value="010-1234-5678" class="form-control-plaintext" readonly>
                             <div class="form-check">
-                                <input class="form-check-input" type="checkbox" value="" id="useReliefNumber">
-                                <label class="form-check-label" for="useReliefNumber">안심번호 사용</label>
+                                <input th:field="${deliveryAddForm.safeNumber}" class="form-check-input" type="checkbox" value="" id="safeNumber">
+                                <label class="form-check-label" for="safeNumber">안심번호 사용</label>
                                 <button type="button" class="btn btn-secondary btn-sm" data-bs-toggle="modal" data-bs-target="#useReliefNumberDetail">자세히</button>
                             </div>
                         </div>
@@ -83,11 +49,11 @@
                                 <div class="card-body">
                                     <div class="card-text">
                                         <div class="form-check">
-                                            <input class="form-check-input" type="checkbox" value="" id="disposable">
+                                            <input th:field="${orderAddForm.disposable}" class="form-check-input" type="checkbox" value="" id="disposable">
                                             <label class="form-check-label" for="disposable">일회용 수저, 포크는 안 주셔도 돼요</label>
                                         </div>
                                         <div class="form-check">
-                                            <input class="form-check-input" type="checkbox" value="" id="sideDish">
+                                            <input th:field="${orderAddForm.sideDish}" class="form-check-input" type="checkbox" value="" id="sideDish">
                                             <label class="form-check-label" for="sideDish">김치, 단무지는 안 주셔도 돼요</label>
                                         </div>
                                     </div>
@@ -95,20 +61,20 @@
                             </div>
                             <div class="mt-3">
                                 <label for="toStore" class="form-label text-muted">가게 사장님께</label>
-                                <input type="text" class="form-control" id="toStore" placeholder="예) 견과류 빼주세요, 덜 맵게 해주세요">
+                                <input th:field="${orderAddForm.requirement}" type="text" class="form-control" id="toStore" placeholder="예) 견과류 빼주세요, 덜 맵게 해주세요">
                             </div>
                         </div>
                     </div>
                     <div class="card mt-3">
                         <div class="card-body">
                             <label for="toRider" class="form-label text-muted">라이더님께</label>
-                            <select class="form-select" id="toRider" onchange="test()">
-                                <option value="1">조심히 안전하게 와주세요 :)</option>
-                                <option value="2">문앞에 두고 벨 눌러주세요</option>
-                                <option value="3">벨 누르지 말고 노크해주세요</option>
-                                <option value="4">도착하기 전에 전화해주세요</option>
-                                <option value="5">요청사항 없음</option>
-                                <option value="6">직접 입력</option>
+                            <select th:field="${deliveryAddForm.requirement}" class="form-select" id="toRider" onchange="test()">
+                                <option value="조심히 안전하게 와주세요 :)">조심히 안전하게 와주세요 :)</option>
+                                <option value="문앞에 두고 벨 눌러주세요">문앞에 두고 벨 눌러주세요</option>
+                                <option value="벨 누르지 말고 노크해주세요">벨 누르지 말고 노크해주세요</option>
+                                <option value="도착하기 전에 전화해주세요">도착하기 전에 전화해주세요</option>
+                                <option value="요청사항 없음">요청사항 없음</option>
+                                <option value="write">직접 입력</option>
                             </select>
                             <div id="toRiderForm" style="display: none">
                                 <label for="request" class="form-label"></label>
@@ -267,9 +233,9 @@
             </div>
         </section>
         <section>
-            <button type="button" class="btn baemin-btn btn-lg w-100 mt-3">결제하기</button>
+            <button type="submit" class="btn baemin-btn btn-lg w-100 mt-3">결제하기</button>
         </section>
-    </div>
+    </form>
 </article>
 
 <!-- 안심번호 모달 -->
@@ -403,6 +369,7 @@
         </div>
     </div>
 </div>
+
 <!-- 할인쿠폰 모달 -->
 <div class="modal fade" id="baeminPoint" tabindex="-1" aria-labelledby="baeminPointLabel" aria-hidden="true">
     <div class="modal-dialog">
@@ -433,19 +400,7 @@
         </div>
     </div>
 </div>
-<!-- footer -->
-<div class="container">
-    <footer class="py-3 my-4">
-        <ul class="nav justify-content-center border-bottom pb-3 mb-3">
-            <li class="nav-item"><a href="#" class="nav-link px-2 text-muted">Home</a></li>
-            <li class="nav-item"><a href="#" class="nav-link px-2 text-muted">찜</a></li>
-            <li class="nav-item"><a href="#" class="nav-link px-2 text-muted">주문내역</a></li>
-            <li class="nav-item"><a href="#" class="nav-link px-2 text-muted">마이페이지</a></li>
-            <li class="nav-item"><a href="#" class="nav-link px-2 text-muted">About</a></li>
-        </ul>
-        <p class="text-center text-muted">&copy; 2022 Company, Inc</p>
-    </footer>
-</div>
-<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.2.0/dist/js/bootstrap.bundle.min.js" integrity="sha384-A3rJD856KowSb7dwlZdYEkO39Gagi7vIsF0jrRAoQmDKKtQBHUuLZ9AsSv4jD4Xa" crossorigin="anonymous"></script>
+
+<footer th:replace="fragments/footer::footer"></footer>
 </body>
 </html>

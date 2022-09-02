@@ -1,8 +1,8 @@
 package project.delivery.service;
 
 import org.springframework.transaction.annotation.Transactional;
-import project.delivery.domain.basket.Basket;
 import project.delivery.dto.BasketDto;
+import project.delivery.dto.BasketMenuDto;
 
 import java.util.List;
 
@@ -10,10 +10,12 @@ import java.util.List;
 public interface BasketService {
 
     @Transactional
-    Long addBasket(Long memberId, Long storeId, BasketDto basketDto);
+    Long addBasket(Long memberId, Long storeId, Long menuOptionId, List<Long> menuSubOptionIds, Integer count);
 
     @Transactional
-    Long removeBasket(Long basketId);
+    Long removeBasketMenu(Long basketMenuId);
 
-    List<Basket> findAllByMemberId(Long memberId);
+    List<BasketMenuDto> findAllByMemberId(Long memberId);
+
+    BasketDto findBasketDto(Long memberId);
 }

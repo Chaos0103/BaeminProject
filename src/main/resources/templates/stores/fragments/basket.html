@@ -1,7 +1,7 @@
 <!DOCTYPE html>
 <html lang="ko" xmlns:th="http://www.thymeleaf.org">
 <!-- 장바구니 -->
-<section th:fragment="basket (baskets)">
+<section th:fragment="basket (basket, basketMenus)">
     <div class="modal fade" id="cartList" data-bs-backdrop="static" data-bs-keyboard="false" tabindex="-1" aria-labelledby="staticBackdropLabel" aria-hidden="true">
         <div class="modal-dialog modal-dialog-scrollable">
             <div class="modal-content">
@@ -9,70 +9,88 @@
                     <h5 class="modal-title" id="staticBackdropLabel">장바구니</h5>
                     <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
                 </div>
-                <div class="modal-body">
-                    <div class="row">
-                        <div class="col fw-bolder" th:text="${baskets.get(0).store.storeName}">
-                            BBQ XX점
-                        </div>
+                <div class="modal-body text-center" th:if="${basket} == null" style="background-color: rgb(240, 243, 245);">
+                    <div class="mt-5 mb-4">
+                        <img src="/img/empty.jpg" alt="img" class="w-50">
                     </div>
-                    <!-- 주문 내역 -->
-                    <div class="card mt-3" th:each="basket : ${baskets}">
-                        <div class="card-body">
-                            <div class="row mb-3">
-                                <div class="col fw-bolder" th:text="${basket.menuOption.menu.mainTitle}">
-                                    핫 황금올리브 핫크리스피
-                                </div>
-                                <div class="col-sm-1 d-grid gap-2 d-md-flex justify-content-md-end">
-                                    <button type="button" class="btn-close"></button>
-                                </div>
+                    <h6>장바구니가 텅비었어요</h6>
+                </div>
+                <div th:if="${basket} != null">
+                    <div class="modal-body" style="background-color: rgb(240, 243, 245);">
+                        <div class="row">
+                            <div class="col fw-bolder" th:text="${basket.storeName}">
+                                BBQ XX점
                             </div>
-                            <div class="row">
-                                <div class="col">
-                                    <div class="d-flex position-relative">
-                                        <img src="https://via.placeholder.com/100x100" th:src="${basket.menuOption.menu.uploadFile.storeFileName}" class="flex-shrink-0 border" alt="img" style="height: 100px;">
-                                        <div>
-                                            <ul class="text-muted fs-custom">
-                                                <li th:if="${basket.menuOption.optionName} == null">가격 : <span th:text="|${#numbers.formatInteger(basket.menuOption.price, 0, 'COMMA')}원|">22,000원</span></li>
-                                                <li th:if="${basket.menuOption.optionName} != null">가격 : <span th:text="|${basket.menuOption.optionName} (${#numbers.formatInteger(basket.menuOption.price, 0, 'COMMA')}원)|">윙.봉 (22,000원)</span></li>
-                                                <li>사이드메뉴 추가선택 : <span>더블치즈볼 5개 (5,000원)</span></li>
-                                            </ul>
-                                            <div class="ms-3" th:name="${#ids.seq('data')}" th:value="${basket.orderPrice}" th:text="|${#numbers.formatInteger(basket.orderPrice, 0, 'COMMA')}원|">27,000원</div>
-                                            <input type="hidden" readonly th:name="${#ids.seq('data')}" class="form-control-plaintext ms-3" id="staticEmail" th:value="${basket.orderPrice}" onload="alert('test')">
+                        </div>
+                        <!-- 주문 내역 -->
+                        <div class="card mt-3" th:each="basketMenu : ${basketMenus}">
+                            <div class="card-body">
+                                <div class="row mb-3">
+                                    <div class="col fw-bolder" th:text="${basketMenu.menuMainTitle}">
+                                        핫 황금올리브 핫크리스피
+                                    </div>
+                                    <form class="col-sm-1 d-grid gap-2 d-md-flex justify-content-md-end">
+                                        <button type="button" class="btn-close" th:onclick="'javascript:removeBasket('+${basketMenu.basketMenuId}+')'"></button>
+                                    </form>
+                                </div>
+                                <div class="row">
+                                    <div class="col">
+                                        <div class="d-flex position-relative">
+                                            <img src="https://via.placeholder.com/100x100" th:src="${basketMenu.storeFileName}" class="flex-shrink-0 border" alt="img" style="height: 100px;">
+                                            <div>
+                                                <ul class="text-muted fs-custom">
+                                                    <li th:if="${basketMenu.optionName} == null">가격 : <span th:text="|${#numbers.formatInteger(basketMenu.optionPrice, 0, 'COMMA')}원|">22,000원</span></li>
+                                                    <li th:if="${basketMenu.optionName} != null">가격 : <span th:text="|${basketMenu.optionName} (${#numbers.formatInteger(basketMenu.optionPrice, 0, 'COMMA')}원)|">윙.봉 (22,000원)</span></li>
+                                                    <li>사이드메뉴 추가선택 : <span>더블치즈볼 5개 (5,000원)</span></li>
+                                                </ul>
+                                                <div class="ms-3" th:name="${#ids.seq('data')}" th:value="${basketMenu.orderPrice}" th:text="|${#numbers.formatInteger(basketMenu.orderPrice, 0, 'COMMA')}원|">27,000원</div>
+                                                <input type="hidden" readonly th:name="${#ids.seq('data')}" class="form-control-plaintext ms-3" id="staticEmail" th:value="${basketMenu.orderPrice}" onload="alert('test')">
+                                            </div>
                                         </div>
                                     </div>
                                 </div>
                             </div>
                         </div>
-                    </div>
-                    <!-- 주문 내역 -->
-                    <!-- 주문 가격 -->
-                    <div class="card mt-3">
-                        <div class="card-body">
-                            <div class="row">
-                                <label for="totalOrderPrice" class="col-sm-3 col-form-label">총 주문금액</label>
-                                <div class="col-sm-9">
-                                    <input type="text" id="totalOrderPrice" name="totalOrderPrice" class="form-control-plaintext ms-3 pe-3 text-end" readonly>
-                                </div>
+                        <!-- 주문 내역 -->
+                        <!-- 포장 & 배달 -->
+                        <div class="card mt-3">
+                            <div class="card-body">
+                                <select class="form-select" aria-label="Default select example" onchange="changeReceiptType(this.value)">
+                                    <option value="delivery">배달로 받을게요</option>
+                                    <option value="packing">포장해서 직접 가져갈게요</option>
+                                </select>
                             </div>
-                            <div class="row">
-                                <label for="deliveryTip" class="col-sm-3 col-form-label">배달팁</label>
-                                <div class="col-sm-9">
-                                    <input type="text" id="deliveryTip" name="deliveryTip" value="3,000원" class="form-control-plaintext ms-3 pe-3 text-end" readonly>
+                        </div>
+                        <!-- 포장 & 배달 -->
+                        <!-- 주문 가격 -->
+                        <div class="card mt-3">
+                            <div class="card-body">
+                                <div class="row">
+                                    <label for="totalOrderPrice" class="col-sm-3 col-form-label">총 주문금액</label>
+                                    <div class="col-sm-9">
+                                        <input type="text" id="totalOrderPrice" name="totalOrderPrice" class="form-control-plaintext ms-3 pe-3 text-end" readonly>
+                                    </div>
                                 </div>
-                            </div>
-                            <div class="row border-top">
-                                <label for="totalPrice" class="col-sm-3 col-form-label fw-bold">결제예정금액</label>
-                                <div class="col-sm-9">
-                                    <input type="text" id="totalPrice" name="totalPrice" class="form-control-plaintext ms-3 pe-3 text-end fw-bold" readonly>
+                                <div class="row" id="deliveryTipInfo">
+                                    <label for="deliveryTip" class="col-sm-3 col-form-label">배달팁</label>
+                                    <div class="col-sm-9">
+                                        <input type="text" id="deliveryTip" name="deliveryTip" value="3,000원" class="form-control-plaintext ms-3 pe-3 text-end" readonly>
+                                    </div>
+                                </div>
+                                <div class="row border-top">
+                                    <label for="totalPrice" class="col-sm-3 col-form-label fw-bold">결제예정금액</label>
+                                    <div class="col-sm-9">
+                                        <input type="text" id="totalPrice" name="totalPrice" class="form-control-plaintext ms-3 pe-3 text-end fw-bold" readonly>
+                                    </div>
                                 </div>
                             </div>
                         </div>
+                        <p class="fs-custom text-muted mt-3">(주)우아한형제들은 상품거래에 대한 통신판매중개자이며, 통신판매의 당사자가 아닙니다. 따라서, (주)우아한형제들은 상품, 거래정보 및 거래에 대하여 책임을 지지 않습니다.</p>
                     </div>
-                    <p class="fs-custom text-muted mt-3">(주)우아한형제들은 상품거래에 대한 통신판매중개자이며, 통신판매의 당사자가 아닙니다. 따라서, (주)우아한형제들은 상품, 거래정보 및 거래에 대하여 책임을 지지 않습니다.</p>
-                    <!-- 주문 가격 -->
-                </div>
-                <div class="modal-footer">
-                    <button type="button" class="btn baemin-btn w-100">주문하기</button>
+                    <div class="modal-footer">
+                        <button type="button" class="btn baemin-btn w-100" id="deliveryOrder" th:onclick="|location.href='@{/orders/delivery}'|">배달 주문하기</button>
+                        <button type="button" class="btn baemin-btn w-100" id="packingOrder" th:onclick="|location.href='@{/orders/packing}'|">포장 주문하기</button>
+                    </div>
                 </div>
             </div>
         </div>

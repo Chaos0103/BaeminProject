@@ -7,8 +7,8 @@ import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
 import project.delivery.controller.form.BasketAddForm;
 import project.delivery.domain.*;
-import project.delivery.domain.basket.Basket;
 import project.delivery.dto.BasketDto;
+import project.delivery.dto.BasketMenuDto;
 import project.delivery.dto.ReviewSearch;
 import project.delivery.login.Login;
 import project.delivery.service.*;
@@ -64,7 +64,8 @@ public class StoreController {
 
         List<Review> reviews = reviewService.findAllByStoreId(new ReviewSearch(storeId, false, "recent"));
 
-        List<Basket> baskets = basketService.findAllByMemberId(loginMember.getId());
+        List<BasketMenuDto> basketMenus = basketService.findAllByMemberId(loginMember.getId());
+        BasketDto basket = basketService.findBasketDto(loginMember.getId());
 
         int[] ratingData = getRatingData(reviews);
         float[] ratingPercent = getRatingPercent(reviews, ratingData);
@@ -88,7 +89,8 @@ public class StoreController {
         model.addAttribute("ratingData", ratingData);
         model.addAttribute("ratingPercent", ratingPercent);
 
-        model.addAttribute("baskets", baskets);
+        model.addAttribute("basketMenus", basketMenus);
+        model.addAttribute("basket", basket);
         return "/stores/detail";
     }
 
@@ -108,11 +110,17 @@ public class StoreController {
 
     @PostMapping("/{storeId}/basket")
     public String addBasket(@PathVariable Long storeId, BasketAddForm form, @Login Member loginMember) {
-        BasketDto basketDto = new BasketDto(form.getMenuOptionId(), form.getMenuSubOptionIds(), form.getCount());
-
-        Long basketId = basketService.addBasket(loginMember.getId(), storeId, basketDto);
+        Long basketId = basketService.addBasket(loginMember.getId(), storeId, form.getMenuOptionId(), form.getMenuSubOptionIds(), form.getCount());
         log.debug("장바구니 담기 성공 = {}", basketId);
         return "redirect:/stores/{storeId}/detail";
+    }
+
+    @ResponseBody
+    @PostMapping("/basket/{basketId}/remove")
+    public String removeBasket(@PathVariable Long basketId) {
+        Long removeBasketId = basketService.removeBasketMenu(basketId);
+        log.debug("removeBasketId = {}", removeBasketId);
+        return "ok";
     }
 
     private static float[] getRatingPercent(List<Review> reviews, int[] ratingData) {

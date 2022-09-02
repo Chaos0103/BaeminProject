@@ -20,15 +20,15 @@ public class BasketSubOptionInfo extends TimeBaseEntity {
     private Long id;
 
     @ManyToOne(fetch = LAZY)
-    @JoinColumn(name = "basket_id")
-    private Basket basket;
+    @JoinColumn(name = "basket_menu_id")
+    private BasketMenu basketMenu;
 
     @ManyToOne(fetch = LAZY)
     @JoinColumn(name = "menu_sub_option_id")
     private MenuSubOption menuSubOption;
 
-    public BasketSubOptionInfo(Basket basket, MenuSubOption menuSubOption) {
-        this.basket = basket;
+    public BasketSubOptionInfo(BasketMenu basketMenu, MenuSubOption menuSubOption) {
+        this.basketMenu = basketMenu;
         this.menuSubOption = menuSubOption;
     }
 }

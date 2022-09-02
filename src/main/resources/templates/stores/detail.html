@@ -6,7 +6,7 @@
 <body>
 <header th:replace="fragments/loginHeader::loginHeader"></header>
 <section th:replace="fragments/notifications::notifications(${notifications})"></section>
-<section th:replace="stores/fragments/basket::basket(${baskets})"></section>
+<section th:replace="stores/fragments/basket::basket(${basket}, ${basketMenus})"></section>
 
 <div onclick="scrollToTop()" id="top-btn" style="position: fixed; cursor: pointer;" class="border bottom-0 end-0 m-4 p-3">top</div>
 <article>
@@ -41,8 +41,6 @@
                     </button>
                 </div>
             </div>
-
-
             <div class="col">
                 <!-- store information start -->
                 <div class="card text-center mb-3">
@@ -110,7 +108,6 @@
                                     </svg>
                                 </span>
                                 <span th:text="*{#numbers.formatDecimal(rating, 1, 1)}">4.9</span>
-
                             </div>
                         </div>
                         <div class="row text-muted">
@@ -876,9 +873,8 @@
 
 <footer th:replace="fragments/footer::footer"></footer>
 <script th:inline="javascript">
-    const tel = [[${store.tel}]]
-
     $(document).ready(function () {
+        const tel = [[${store.tel}]]
         $('#button-tel').click(function () {
             alert('매장 번호: ' + tel);
         });
@@ -930,6 +926,21 @@
     const popoverTriggerList = document.querySelectorAll('[data-bs-toggle="popover"]')
     const popoverList = [...popoverTriggerList].map(popoverTriggerEl => new bootstrap.Popover(popoverTriggerEl))
 
+    $(document).ready(function () {
+        $("#packingOrder").hide()
+        let price = 0;
+        $("input[name*='data']").each(function () {
+            if (!isNaN($(this).val())) {
+                price += parseInt($(this).val());
+            }
+        });
+        let totalPrice = price + 3000;
+        price = price.toLocaleString('ko-KR');
+        $("input[name=totalOrderPrice]").val(price + '원');
+        totalPrice = totalPrice.toLocaleString('ko-KR');
+        $("input[name=totalPrice]").val(totalPrice + '원');
+    });
+
     function searchReview(type) {
         const storeId = [[${store.id}]];
         let photo = false;
@@ -954,22 +965,6 @@
             }
         });
     }
-
-    $(document).ready(function () {
-        let price = 0;
-        $("input[name*='data']").each(function () {
-            if (!isNaN($(this).val())) {
-                price += parseInt($(this).val());
-            }
-        });
-        let totalPrice = price + 3000;
-        price = price.toLocaleString('ko-KR');
-        $("input[name=totalOrderPrice]").val(price + '원');
-        totalPrice = totalPrice.toLocaleString('ko-KR');
-        $("input[name=totalPrice]").val(totalPrice + '원');
-    });
-
-
 </script>
 </body>
 </html>
