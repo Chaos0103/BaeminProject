@@ -4,9 +4,13 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import project.delivery.domain.Address;
 import project.delivery.domain.Member;
+import project.delivery.domain.Pay;
+import project.delivery.domain.Point;
 import project.delivery.exception.DuplicateException;
 import project.delivery.exception.NoSuchException;
 import project.delivery.repository.MemberRepository;
+import project.delivery.repository.PayRepository;
+import project.delivery.repository.PointRepository;
 import project.delivery.service.MemberService;
 
 import java.util.Optional;
@@ -16,6 +20,8 @@ import java.util.Optional;
 public class MemberServiceImplV0 implements MemberService {
 
     private final MemberRepository memberRepository;
+    private final PointRepository pointRepository;
+    private final PayRepository payRepository;
 
     @Override
     public Long joinMember(Member member) {
@@ -24,6 +30,12 @@ public class MemberServiceImplV0 implements MemberService {
         duplicatedNickname(member.getNickname());
 
         Member savedMember = memberRepository.save(member);
+
+        Point point = new Point(savedMember);
+        pointRepository.save(point);
+
+        Pay pay = new Pay(savedMember, "000000");
+        payRepository.save(pay);
 
         return savedMember.getId();
     }

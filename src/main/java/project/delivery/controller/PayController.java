@@ -124,7 +124,8 @@ public class PayController {
             return "member/pay";
         }
 
-        if (!loginMember.getPay().getPassword().equals(form.getNowPassword())) {
+        Pay pay = payService.findPay(loginMember.getId());
+        if (!pay.getPassword().equals(form.getNowPassword())) {
             bindingResult.reject("notEqualPassword");
             inputModel(loginMember, model);
             model.addAttribute("changePayPasswordModal", true);

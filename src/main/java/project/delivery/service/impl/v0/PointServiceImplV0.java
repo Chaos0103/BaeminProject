@@ -44,8 +44,7 @@ public class PointServiceImplV0 implements PointService {
 
     @Override
     public void createPointHistory(Long memberId, PointHistory pointHistory) {
-        Member findMember = getMember(memberId);
-        Point point = findMember.getPoint();
+        Point point = getPointByMember(memberId);
         pointHistory.addPoint(point);
     }
 

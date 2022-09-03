@@ -36,7 +36,6 @@ public class Point extends TimeBaseEntity {
         this.totalPoint = 0;
         this.removePoint = 0;
         this.balance = 0;
-        member.addPoint(this);
     }
 
     //==연관관계 메서드==//
