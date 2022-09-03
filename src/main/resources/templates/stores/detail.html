@@ -8,7 +8,7 @@
 <section th:replace="fragments/notifications::notifications(${notifications})"></section>
 <section th:replace="stores/fragments/basket::basket(${basket}, ${basketMenus})"></section>
 
-<div onclick="scrollToTop()" id="top-btn" style="position: fixed; cursor: pointer;" class="border bottom-0 end-0 m-4 p-3">top</div>
+<div onclick="scrollToTop()" id="top-btn" style="position: fixed; cursor: pointer;" class="border bottom-0 end-0 m-4 p-2">top</div>
 <article>
     <div class="container px-4 py-5">
         <div class="row pb-3">
@@ -168,7 +168,10 @@
                             </tr>
                             <tr>
                                 <td>배달팁</td>
-                                <td th:text="|${#numbers.formatInteger(minDeliveryTip, 0, 'COMMA')}원| + '~' + |${#numbers.formatInteger(maxDeliveryTip, 0, 'COMMA')}원|"></td>
+                                <td>
+                                    <span th:text="|${#numbers.formatInteger(minDeliveryTip, 0, 'COMMA')}원| + ' ~ ' + |${#numbers.formatInteger(maxDeliveryTip, 0, 'COMMA')}원|"></span>
+                                    <span class="badge rounded-pill text-bg-secondary" data-bs-toggle="modal" data-bs-target="#deliveryTipModal">자세히</span>
+                                </td>
                             </tr>
                             </tbody>
                         </table>
@@ -191,7 +194,7 @@
                             </tr>
                             <tr>
                                 <td>위치안내</td>
-                                <td th:text="${store.packingInfo.position}">인천광역시 남동구 간석동 303-11 1층 일부호(간석동)</td>
+                                <td th:text="|${store.businessAddress.mainAddress} ${store.businessAddress.detailAddress}|">인천광역시 남동구 간석동 303-11 1층 일부호(간석동)</td>
                             </tr>
                             <tr>
                                 <td>결제방법</td>
@@ -585,7 +588,7 @@
                                     </tr>
                                     <tr>
                                         <td>사업자주소</td>
-                                        <td th:text="*{businessAddress}"></td>
+                                        <td th:text="*{businessAddress.mainAddress}"></td>
                                     </tr>
                                     <tr>
                                         <td></td>
@@ -870,6 +873,44 @@
         <!-- menu information end -->
     </div>
 </article>
+<!-- 배달팁 자세히 -->
+<section>
+    <div class="modal fade" id="deliveryTipModal" tabindex="-1" aria-labelledby="deliveryTipModalLabel" aria-hidden="true">
+        <div class="modal-dialog">
+            <div class="modal-content">
+                <div class="modal-body">
+                    <h5>배달팁 안내</h5>
+                    <ul>
+                        <li>배달팁은 가게에서 책정한 금액입니다.</li>
+                        <li>배민은 배달팁 결제만 대행할 뿐, 금액은 가게로 전달됩니다.</li>
+                    </ul>
+                    <table class="table table-sm table-borderless border-top">
+                        <thead>
+                        <tr>
+                            <th scope="col">주문금액</th>
+                            <th scope="col" class="text-end">배달팁</th>
+                        </tr>
+                        </thead>
+                        <tbody>
+                        <tr>
+                        <tr th:each="deliveryTipByAmount : ${deliveryTipByAmounts}">
+                            <td th:if="${deliveryTipByAmount.maxAmount} == null"
+                                th:text="|${#numbers.formatInteger(deliveryTipByAmount.minAmount, 0, 'COMMA')}원 이상|">100,000원 이상</td>
+                            <td th:if="${deliveryTipByAmount.maxAmount} != null"
+                                th:text="|${#numbers.formatInteger(deliveryTipByAmount.minAmount, 0, 'COMMA')}원| +'~'+ |${#numbers.formatInteger(deliveryTipByAmount.maxAmount, 0, 'COMMA')}원 미만|">7,600원~14,000원 미만</td>
+                            <td class="text-end" th:text="|${#numbers.formatInteger(deliveryTipByAmount.deliveryTip, 0, 'COMMA')}원|">0원</td>
+                        </tr>
+                        </tr>
+                        </tbody>
+                    </table>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-light w-100" data-bs-dismiss="modal">확인</button>
+                </div>
+            </div>
+        </div>
+    </div>
+</section>
 
 <footer th:replace="fragments/footer::footer"></footer>
 <script th:inline="javascript">
