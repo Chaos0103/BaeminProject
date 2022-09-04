@@ -8,6 +8,8 @@ import project.delivery.domain.Member;
 import project.delivery.domain.Point;
 import project.delivery.domain.PointHistory;
 import project.delivery.domain.PointType;
+import project.delivery.dto.PointDto;
+import project.delivery.dto.PointHistoryDto;
 import project.delivery.dto.PointHistorySearch;
 import project.delivery.exception.DuplicateException;
 import project.delivery.exception.NoSuchException;
@@ -17,7 +19,6 @@ import project.delivery.service.PointService;
 
 import java.time.LocalDateTime;
 import java.util.List;
-import java.util.Optional;
 
 @Service
 @RequiredArgsConstructor
@@ -37,29 +38,25 @@ public class PointServiceImplV0 implements PointService {
             throw new DuplicateException("이미 등록된 상품권 번호입니다.");
         }
         findVoucher.changeUsed();
-        Point findPoint = getPointByMember(memberId);
-        PointHistory pointHistory = new PointHistory(findPoint, findVoucher.getPointValue(), findVoucher.getVoucherName(), PointType.SAVE);
+//        Point findPoint = findPointByMemberId(memberId);
+//        PointHistory pointHistory = new PointHistory(findPoint, findVoucher.getPointValue(), findVoucher.getVoucherName(), PointType.SAVE);
         return findVoucher.getPointValue();
     }
 
     @Override
-    public void createPointHistory(Long memberId, PointHistory pointHistory) {
-        Member findMember = getMember(memberId);
-        Point point = findMember.getPoint();
-        pointHistory.addPoint(point);
+    public PointDto findPointByMemberId(Long memberId) {
+        return pointRepository.findPointByMemberId(memberId);
     }
 
     @Override
-    public Point getPointByMember(Long memberId) {
-        return pointRepository.findByMemberId(memberId).orElseThrow(() -> {
-            throw new NoSuchException("데이터가 존재하지 않습니다");
-        });
+    public List<PointHistoryDto> findPointHistoryByPointId(Long pointId, PointHistorySearch search) {
+        LocalDateTime period = LocalDateTime.now().minusMonths(search.getMonth());
+        return pointRepository.findPointHistoryByPointId(pointId, search.getType(), period);
     }
 
     @Override
-    public List<PointHistory> findPointHistory(Long pointId, PointHistorySearch search) {
-        LocalDateTime date = LocalDateTime.now().minusMonths(search.getMonth());
-        return pointRepository.findHistory(pointId, search.getType(), date);
+    public Integer findTotalPoint(Long memberId) {
+        return pointRepository.findTotalPoint(memberId);
     }
 
     private Member getMember(Long memberId) {

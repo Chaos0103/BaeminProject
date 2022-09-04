@@ -23,18 +23,24 @@ public class PointHistory extends TimeBaseEntity {
 
     private int pointValue;
     private String content;
+//    @Enumerated(EnumType.STRING)
     private PointType type;
 
     public PointHistory(Point point, int pointValue, String content, PointType type) {
-        addPoint(point);
+        this.point = point;
         this.pointValue = pointValue;
         this.content = content;
         this.type = type;
     }
 
-    //==연관관계 메서드==//
-    public void addPoint(Point point) {
-        this.point = point;
-        point.addPointHistory(this);
+    //==생성 메서드==//
+    public static void createPointHistory(Point point, int pointValue, String content, PointType type) {
+        PointHistory pointHistory = new PointHistory(point, pointValue, content, type);
+        point.addPointHistory(pointHistory);
+        if (type == PointType.SAVE) {
+            point.addTotalPoint(pointValue);
+        } else {
+            point.removeTotalPoint(pointValue);
+        }
     }
 }

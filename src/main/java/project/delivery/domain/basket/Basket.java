@@ -29,37 +29,18 @@ public class Basket extends TimeBaseEntity {
     @JoinColumn(name = "store_id")
     private Store store;
 
-    @ManyToOne(fetch = LAZY)
-    @JoinColumn(name = "menu_option_id")
-    private MenuOption menuOption;
-
-    @Column(nullable = false)
-    private Integer count;
-    @Column(nullable = false)
-    private Integer orderPrice;
-
     @OneToMany(mappedBy = "basket", orphanRemoval = true, cascade = CascadeType.ALL)
-    List<BasketSubOptionInfo> basketSubOptionInfos = new ArrayList<>();
+    List<BasketMenu> basketMenus = new ArrayList<>();
 
-    public Basket(Member member, Store store, MenuOption menuOption, Integer count, Integer orderPrice) {
+    public Basket(Member member, Store store, BasketMenu basketMenu) {
         this.member = member;
         this.store = store;
-        this.menuOption = menuOption;
-        this.count = count;
-        this.orderPrice = orderPrice;
-    }
-
-    //==생성 메서드==//
-    public static Basket createBasket(Member member, Store store, MenuOption menuOption, Integer count, Integer orderPrice, List<MenuSubOption> MenuSubOptions) {
-        Basket basket = new Basket(member, store, menuOption, count, orderPrice);
-        for (MenuSubOption menuSubOption : MenuSubOptions) {
-            basket.addBasketSubOptionInfo(new BasketSubOptionInfo(basket, menuSubOption));
-        }
-        return basket;
+        basketMenu.addBasket(this);
+        this.addBasketMenu(basketMenu);
     }
 
     //==연관관계 메서드==//
-    public void addBasketSubOptionInfo(BasketSubOptionInfo basketSubOptionInfo) {
-        this.basketSubOptionInfos.add(basketSubOptionInfo);
+    public void addBasketMenu(BasketMenu basketMenu) {
+        this.basketMenus.add(basketMenu);
     }
 }

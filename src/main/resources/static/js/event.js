@@ -24,12 +24,11 @@ function cashReceiptDetail() {
     }
 }
 
-function test() {
-    const value = $('#toRider option:selected').val();
-    if (value == 6) {
-        $('#toRiderForm').show();
+function toRiderWrite(value) {
+    if (value === "write") {
+        $("#toRiderForm").show();
     } else {
-        $('#toRiderForm').hide();
+        $("#toRiderForm").hide();
     }
 }
 
@@ -40,4 +39,36 @@ function beforeService() {
 function scrollToTop() {
     document.body.scrollTop = 0;
     document.documentElement.scrollTop = 0;
+}
+
+function changeReceiptType(type) {
+    if (type === "delivery") {
+        $("#deliveryTipInfo").show();
+        $("#deliveryOrder").show();
+        $("#packingOrder").hide()
+        let price = 0;
+        $("input[name*='data']").each(function () {
+            if (!isNaN($(this).val())) {
+                price += parseInt($(this).val());
+            }
+        });
+        let totalPrice = price + 3000;
+        price = price.toLocaleString('ko-KR');
+        $("input[name=totalOrderPrice]").val(price + '원');
+        totalPrice = totalPrice.toLocaleString('ko-KR');
+        $("input[name=totalPrice]").val(totalPrice + '원');
+    } else {
+        $("#deliveryTipInfo").hide();
+        $("#deliveryOrder").hide();
+        $("#packingOrder").show()
+        let price = 0;
+        $("input[name*='data']").each(function () {
+            if (!isNaN($(this).val())) {
+                price += parseInt($(this).val());
+            }
+        });
+        price = price.toLocaleString('ko-KR');
+        $("input[name=totalOrderPrice]").val(price + '원');
+        $("input[name=totalPrice]").val(price + '원');
+    }
 }

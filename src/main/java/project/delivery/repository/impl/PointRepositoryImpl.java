@@ -2,15 +2,17 @@ package project.delivery.repository.impl;
 
 import com.querydsl.core.types.dsl.BooleanExpression;
 import com.querydsl.jpa.impl.JPAQueryFactory;
-import project.delivery.domain.PointHistory;
-import project.delivery.domain.PointType;
-import project.delivery.domain.QPointHistory;
+import project.delivery.domain.*;
+import project.delivery.dto.PointDto;
+import project.delivery.dto.PointHistoryDto;
 import project.delivery.repository.custom.PointRepositoryCustom;
 
 import javax.persistence.EntityManager;
 import java.time.LocalDateTime;
 import java.util.List;
 
+import static com.querydsl.core.types.Projections.*;
+import static project.delivery.domain.QPoint.*;
 import static project.delivery.domain.QPointHistory.*;
 
 public class PointRepositoryImpl implements PointRepositoryCustom {
@@ -21,16 +23,33 @@ public class PointRepositoryImpl implements PointRepositoryCustom {
         this.queryFactory = new JPAQueryFactory(em);
     }
 
+    @Override
+    public PointDto findPointByMemberId(Long memberId) {
+        return queryFactory
+                .select(fields(PointDto.class,
+                        point.id,
+                        point.totalPoint,
+                        point.removePoint,
+                        point.balance))
+                .from(point)
+                .where(point.member.id.eq(memberId))
+                .fetchOne();
+    }
 
     @Override
-    public List<PointHistory> findHistory(Long pointId, PointType type, LocalDateTime date) {
+    public List<PointHistoryDto> findPointHistoryByPointId(Long pointId, PointType type, LocalDateTime period) {
         return queryFactory
-                .selectFrom(pointHistory)
+                .select(fields(PointHistoryDto.class,
+                        pointHistory.content,
+                        pointHistory.pointValue,
+                        pointHistory.type,
+                        pointHistory.createdDate))
+                .from(pointHistory)
                 .where(
                         pointHistory.point.id.eq(pointId),
-                        pointHistory.createdDate.goe(date),
+                        pointHistory.createdDate.goe(period),
                         typeEq(type)
-                        )
+                )
                 .fetch();
     }
 

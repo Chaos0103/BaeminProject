@@ -141,6 +141,11 @@ public class PayServiceImplV0 implements PayService {
         return payAccountRepository.findByPayId(payId);
     }
 
+    @Override
+    public Integer findMoney(Long memberId) {
+        return payRepository.findMoney(memberId);
+    }
+
     private Pay createPay(String password, Member findMember) {
         return new Pay(findMember, password);
     }

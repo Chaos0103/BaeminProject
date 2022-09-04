@@ -94,4 +94,6 @@ public interface PayService {
      * @return PayAccountDto
      */
     List<PayAccount> findPayAccount(Long payId);
+
+    Integer findMoney(Long memberId);
 }

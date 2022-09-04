@@ -7,6 +7,8 @@ import project.delivery.repository.custom.StoreRepositoryCustom;
 import javax.persistence.EntityManager;
 import java.util.List;
 
+import static project.delivery.domain.QDeliveryInfo.*;
+import static project.delivery.domain.QDeliveryTipByAmount.*;
 import static project.delivery.domain.QStore.*;
 
 public class StoreRepositoryImpl implements StoreRepositoryCustom {
@@ -27,5 +29,20 @@ public class StoreRepositoryImpl implements StoreRepositoryCustom {
                         store.category.eq(category)
                 )
                 .fetch();
+    }
+
+    @Override
+    public Integer findDeliveryTip(Long storeId, Integer totalAmount) {
+        return queryFactory
+                .select(deliveryTipByAmount.deliveryTip)
+                .from(deliveryTipByAmount)
+                .join(deliveryTipByAmount.deliveryInfo, deliveryInfo)
+                .where(
+                        deliveryTipByAmount.deliveryInfo.store.id.eq(storeId),
+                        deliveryTipByAmount.minAmount.loe(totalAmount),
+                        (deliveryTipByAmount.maxAmount.gt(totalAmount)
+                                .or(deliveryTipByAmount.maxAmount.isNull()))
+                )
+                .fetchOne();
     }
 }

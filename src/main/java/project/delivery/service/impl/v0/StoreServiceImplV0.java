@@ -59,6 +59,11 @@ public class StoreServiceImplV0 implements StoreService {
         return deliveryTipByAreaRepository.findAllByDeliveryId(deliveryId);
     }
 
+    @Override
+    public Integer findDeliveryTip(Long storeId, Integer totalAmount) {
+        return storeRepository.findDeliveryTip(storeId, totalAmount);
+    }
+
     private void duplicatedBusinessNumber(String businessNumber) {
         Optional<Store> findStore = storeRepository.findByBusinessNumber(businessNumber);
         if (findStore.isPresent()) {

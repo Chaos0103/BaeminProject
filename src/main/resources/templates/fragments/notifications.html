@@ -9,8 +9,8 @@
                     <h5 class="modal-title" id="notificationLabel" th:text="#{h5.notification}">알림센터</h5>
                     <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
                 </div>
-                <div class="modal-body">
-                    <h5 class="text-center" th:if="${notifications.size()} == 0">알림이 없습니다!</h5>
+                <div class="modal-body" style="background-color: rgb(240, 243, 245);">
+                    <h6 class="text-center" th:if="${notifications.size()} == 0">새로운 소식이 없어요.<br>오늘의 소식이 생기면 알려드릴게요!</h6>
                     <div class="card mt-3" th:each="notification:${notifications}">
                         <div class="card-body">
                             <h5 class="card-title" th:if="${notification.type.toString()} == 'REVIEW'" th:text="#{h5.notification.review}">리뷰를 남겨보세요.</h5>

@@ -16,7 +16,6 @@ public class Address {
     private String zipcode;
     @Column(nullable = false)
     private String mainAddress;
-    @Column(nullable = false)
     private String detailAddress;
 
     public Address(String zipcode, String mainAddress, String detailAddress) {

@@ -40,8 +40,8 @@ public class Store extends TimeBaseEntity {
     private String deliveryArea;
     @Column(nullable = false, length = 20)
     private String representativeName;
-    @Column(nullable = false)
-    private String businessAddress;
+    @Embedded
+    private Address businessAddress;
     @Column(nullable = false)
     private String businessNumber;
     @Embedded
@@ -70,7 +70,7 @@ public class Store extends TimeBaseEntity {
     @OneToMany(mappedBy = "store", orphanRemoval = true, cascade = CascadeType.ALL)
     private List<StoreImage> storeImages = new ArrayList<>();
 
-    public Store(String storeName, Category category, String tel, String introduction, String tradeName, String openTime, String holiday, String deliveryArea, String representativeName, String businessAddress, String businessNumber, Announcement announcement, String countryOfPlace) {
+    public Store(String storeName, Category category, String tel, String introduction, String tradeName, String openTime, String holiday, String deliveryArea, String representativeName, Address businessAddress, String businessNumber, Announcement announcement, String countryOfPlace) {
         this.storeName = storeName;
         this.category = category;
         this.tel = tel;

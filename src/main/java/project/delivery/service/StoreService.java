@@ -26,4 +26,6 @@ public interface StoreService {
 
     //지역별 추가 배달팁 조회
     List<DeliveryTipByArea> findDeliveryTipByAreaByDeliveryId(Long deliveryId);
+
+    Integer findDeliveryTip(Long storeId, Integer totalAmount);
 }

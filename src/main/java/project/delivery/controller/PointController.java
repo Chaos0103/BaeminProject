@@ -12,14 +12,18 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import project.delivery.controller.form.VoucherSaveForm;
 import project.delivery.domain.*;
+import project.delivery.dto.NotificationDto;
+import project.delivery.dto.PointDto;
+import project.delivery.dto.PointHistoryDto;
 import project.delivery.dto.PointHistorySearch;
 import project.delivery.exception.DuplicateException;
 import project.delivery.exception.NoSuchException;
 import project.delivery.login.Login;
+import project.delivery.service.CouponService;
 import project.delivery.service.NotificationService;
+import project.delivery.service.PayService;
 import project.delivery.service.PointService;
 
-import javax.servlet.http.HttpSession;
 import java.util.List;
 
 @Slf4j
@@ -29,12 +33,9 @@ import java.util.List;
 public class PointController {
 
     private final PointService pointService;
+    private final PayService payService;
+    private final CouponService couponService;
     private final NotificationService notificationService;
-
-    @ModelAttribute("notifications")
-    public List<Notification> notifications(@Login Member loginMember) {
-        return notificationService.findByMemberId(loginMember.getId());
-    }
 
     @ModelAttribute("loginMember")
     public Member loginMember(@Login Member loginMember) {
@@ -51,18 +52,38 @@ public class PointController {
         return new VoucherSaveForm();
     }
 
+    /**
+     * @URL: localhost:8080/points
+     */
     @GetMapping
     public String pointHome(
             @ModelAttribute("search") PointHistorySearch search,
             @Login Member loginMember, Model model) {
-        Point point = pointService.getPointByMember(loginMember.getId());
-        List<PointHistory> pointHistories = pointService.findPointHistory(point.getId(), search);
+
+        //알림 조회
+        List<NotificationDto> notifications = notificationService.findNotificationByMemberId(loginMember.getId());
+        //포인트 데이터 조회
+        PointDto point = pointService.findPointByMemberId(loginMember.getId());
+        //포인트 내역 조회
+        List<PointHistoryDto> pointHistories = pointService.findPointHistoryByPointId(point.getId(), search);
+        //페이머니 잔액 조회
+        Integer money = payService.findMoney(loginMember.getId());
+        //사용 가능한 쿠폰 갯수 조회
+        Integer countCoupon = couponService.countCouponByMemberId(loginMember.getId());
+
+        model.addAttribute("notifications", notifications);
         model.addAttribute("point", point);
         model.addAttribute("pointHistories", pointHistories);
+        model.addAttribute("money", money);
+        model.addAttribute("countCoupon", countCoupon);
+
         model.addAttribute("voucherError", false);
         return "member/point";
     }
 
+    /**
+     * @URL: localhost:8080/points/addVoucher
+     */
     @PostMapping("/addVoucher")
     public String addVoucher(
             @ModelAttribute("search") PointHistorySearch search,
@@ -78,8 +99,8 @@ public class PointController {
             bindingResult.reject("voucherError", e.getMessage());
             model.addAttribute("voucherError", true);
             log.debug(e.getMessage());
-            Point point = pointService.getPointByMember(loginMember.getId());
-            List<PointHistory> pointHistories = pointService.findPointHistory(point.getId(), search);
+            PointDto point = pointService.findPointByMemberId(loginMember.getId());
+            List<PointHistoryDto> pointHistories = pointService.findPointHistoryByPointId(point.getId(), search);
             model.addAttribute("point", point);
             model.addAttribute("pointHistories", pointHistories);
             return "member/point";

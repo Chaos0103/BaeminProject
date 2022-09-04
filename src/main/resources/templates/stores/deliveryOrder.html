@@ -1,51 +1,19 @@
 <!DOCTYPE html>
 <html lang="ko" xmlns:th="http://www.thymeleaf.org">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1">
-    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.2.0/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-gH2yIJqKdNHPEq0n4Mqa/HGKIhSkIHeL5AyhkYV8i59U5AR6csBvApHHNl/vI1Bx" crossorigin="anonymous">
-    <link rel="stylesheet" href="../../static/css/style.css">
-    <link rel="stylesheet" href="../../static/css/baeminStyle.css">
-    <link href="../../static/icon/favicon.ico" rel="shortcut icon" type="image/x-icon">
-    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
-    <script type="text/javascript" src="../../static/js/event.js"></script>
-    <title>배달의 민족</title>
+<head th:replace="fragments/head::head(~{::title})">
+    <title>배달의 민족 | 주문하기</title>
 </head>
 <body>
-<!-- header -->
-<header class="p-3">
-    <div class="container">
-        <div class="d-flex flex-wrap align-items-center justify-content-center justify-content-lg-start">
-            <a href="#" class="d-flex align-items-center mb-2 mb-lg-0 ms-3 text-white text-decoration-none">
-                <img src="../../static/img/logo.png" alt="main_icon" height="20"/>
-            </a>
-
-            <ul class="nav col-12 col-lg-auto me-lg-auto mb-2 ms-2 justify-content-center mb-md-0">
-                <li><a href="#" class="nav-link px-2 text-white">Home</a></li>
-                <li><a href="#" class="nav-link px-2 text-white">찜</a></li>
-                <li><a href="#" class="nav-link px-2 text-white">주문내역</a></li>
-                <li><a href="#" class="nav-link px-2 text-white">마이페이지</a></li>
-                <li><a href="#" class="nav-link px-2 text-white">About</a></li>
-            </ul>
-
-            <form class="col-12 col-lg-auto mb-3 mb-lg-0 me-lg-3" role="search">
-                <input type="search" class="form-control form-control-dark text-bg-light" placeholder="Search..." aria-label="Search">
-            </form>
-
-            <ul class="nav pe-2">
-                <li class="nav-item"><a href="#" class="nav-link link-light px-2">Login</a></li>
-                <li class="nav-item"><a href="#" class="nav-link link-light px-2">Sign up</a></li>
-            </ul>
-        </div>
-    </div>
-</header>
+<header th:replace="fragments/loginHeader::loginHeader"></header>
+<!--<section th:replace="fragments/notifications::notifications(${notifications})"></section>-->
+<!--<section th:replace="stores/fragments/basket::basket(${baskets})"></section>-->
 
 <article>
-    <div class="container px-4 py-3 w-50 border rounded mt-3" style="background-color: rgb(244, 244, 244)">
+    <form class="container px-4 py-3 w-50 border rounded mt-3" style="background-color: rgb(244, 244, 244)"
+          method="post" th:action>
         <section>
             <h2 class="text-center">주문하기</h2>
         </section>
-
         <section>
             <div class="card mt-3">
                 <div class="card-body">
@@ -53,20 +21,18 @@
                     <div class="card">
                         <div class="card-body">
                             <div>
-                                <label for="detailAddress" class="form-label">서울시 서초구 반포동 20-43</label>
-                                <input type="text" class="form-control" id="detailAddress">
+                                <input th:field="${deliveryAddForm.mainAddress}" type="text" class="form-control-plaintext" readonly>
+                                <input th:field="${deliveryAddForm.detailAddress}" type="text" class="form-control">
                             </div>
                         </div>
                     </div>
                     <div class="card mt-3">
                         <div class="card-body">
-                            <div class="card-text">
-                                010-1234-5678
-                            </div>
+                            <input th:field="${deliveryAddForm.phone}" type="text" class="form-control-plaintext" readonly>
                             <div class="form-check">
-                                <input class="form-check-input" type="checkbox" value="" id="useReliefNumber">
-                                <label class="form-check-label" for="useReliefNumber">안심번호 사용</label>
-                                <button type="button" class="btn btn-secondary btn-sm" data-bs-toggle="modal" data-bs-target="#useReliefNumberDetail">자세히</button>
+                                <input th:field="${deliveryAddForm.safeNumber}" class="form-check-input" type="checkbox" id="safeNumber">
+                                <label class="form-check-label" for="safeNumber">안심번호 사용</label>
+                                <span class="badge rounded-pill text-bg-secondary" data-bs-toggle="modal" data-bs-target="#useReliefNumberDetail">자세히</span>
                             </div>
                         </div>
                     </div>
@@ -83,11 +49,11 @@
                                 <div class="card-body">
                                     <div class="card-text">
                                         <div class="form-check">
-                                            <input class="form-check-input" type="checkbox" value="" id="disposable">
+                                            <input th:field="${orderAddForm.disposable}" class="form-check-input" type="checkbox" value="" id="disposable">
                                             <label class="form-check-label" for="disposable">일회용 수저, 포크는 안 주셔도 돼요</label>
                                         </div>
                                         <div class="form-check">
-                                            <input class="form-check-input" type="checkbox" value="" id="sideDish">
+                                            <input th:field="${orderAddForm.sideDish}" class="form-check-input" type="checkbox" value="" id="sideDish">
                                             <label class="form-check-label" for="sideDish">김치, 단무지는 안 주셔도 돼요</label>
                                         </div>
                                     </div>
@@ -95,22 +61,22 @@
                             </div>
                             <div class="mt-3">
                                 <label for="toStore" class="form-label text-muted">가게 사장님께</label>
-                                <input type="text" class="form-control" id="toStore" placeholder="예) 견과류 빼주세요, 덜 맵게 해주세요">
+                                <input th:field="${orderAddForm.requirement}" type="text" class="form-control" id="toStore" placeholder="예) 견과류 빼주세요, 덜 맵게 해주세요">
                             </div>
                         </div>
                     </div>
                     <div class="card mt-3">
                         <div class="card-body">
                             <label for="toRider" class="form-label text-muted">라이더님께</label>
-                            <select class="form-select" id="toRider" onchange="test()">
-                                <option value="1">조심히 안전하게 와주세요 :)</option>
-                                <option value="2">문앞에 두고 벨 눌러주세요</option>
-                                <option value="3">벨 누르지 말고 노크해주세요</option>
-                                <option value="4">도착하기 전에 전화해주세요</option>
-                                <option value="5">요청사항 없음</option>
-                                <option value="6">직접 입력</option>
+                            <select th:field="${deliveryAddForm.requirement}" class="form-select" id="toRider" onchange="toRiderWrite(this.value)">
+                                <option value="조심히 안전하게 와주세요 :)">조심히 안전하게 와주세요 :)</option>
+                                <option value="문앞에 두고 벨 눌러주세요">문앞에 두고 벨 눌러주세요</option>
+                                <option value="벨 누르지 말고 노크해주세요">벨 누르지 말고 노크해주세요</option>
+                                <option value="도착하기 전에 전화해주세요">도착하기 전에 전화해주세요</option>
+                                <option value="요청사항 없음">요청사항 없음</option>
+                                <option value="write">직접 입력</option>
                             </select>
-                            <div id="toRiderForm" style="display: none">
+                            <div id="toRiderForm">
                                 <label for="request" class="form-label"></label>
                                 <input type="text" class="form-control" id="request" placeholder="배달 시 요청사항을 적어주세요.">
                             </div>
@@ -125,25 +91,9 @@
                     <h5 class="card-title">결제수단</h5>
                     <div class="card">
                         <div class="card-body">
-                            <div class="form-check form-check-inline">
-                                <input class="form-check-input" type="radio" name="paymentMethod" id="baeminPay" value="0">
-                                <label class="form-check-label" for="baeminPay">배민페이</label>
-                            </div>
-                            <div class="form-check form-check-inline">
-                                <input class="form-check-input" type="radio" name="paymentMethod" id="card" value="1">
-                                <label class="form-check-label" for="card">신용/체크카드</label>
-                            </div>
-                            <div class="form-check form-check-inline">
-                                <input class="form-check-input" type="radio" name="paymentMethod" id="phone" value="2">
-                                <label class="form-check-label" for="phone">휴대폰결제</label>
-                            </div>
-                            <div class="form-check form-check-inline">
-                                <input class="form-check-input" type="radio" name="paymentMethod" id="naverPay" value="3">
-                                <label class="form-check-label" for="naverPay">네이버페이</label>
-                            </div>
-                            <div class="form-check form-check-inline">
-                                <input class="form-check-input" type="radio" name="paymentMethod" id="toss" value="4">
-                                <label class="form-check-label" for="toss">토스</label>
+                            <div class="form-check form-check-inline" th:each="method : ${paymentMethods}">
+                                <input class="form-check-input" th:field="${paymentAddForm.paymentMethod}" type="radio" th:value="${method.name()}">
+                                <label class="form-check-label" th:for="${#ids.prev('paymentMethod')}" th:text="${method.description}">배민페이</label>
                             </div>
                         </div>
                     </div>
@@ -169,7 +119,7 @@
                                 <h5 class="card-text">할인쿠폰</h5>
                             </div>
                             <div class="col text-end">
-                                <h5 class="card-text text-muted">3개 보유</h5>
+                                <h5 class="card-text text-muted couponInfo">3개 보유</h5>
                             </div>
                         </div>
                     </div>
@@ -179,7 +129,7 @@
                                 <h5 class="card-text">배민포인트</h5>
                             </div>
                             <div class="col text-end">
-                                <h5 class="card-text text-muted">100원 사용가능</h5>
+                                <h5 class="card-text text-muted totalPoint">100원 사용가능</h5>
                             </div>
                         </div>
                     </div>
@@ -233,7 +183,7 @@
         </section>
         <section>
             <div class="card mt-3">
-                <div class="card-body">
+                <div class="card-body" th:object="${paymentAddForm}">
                     <h5 class="card-title">결제금액</h5>
                     <div class="card">
                         <div class="card-body">
@@ -241,25 +191,47 @@
                                 <div class="col text-start">
                                     주문금액
                                 </div>
-                                <div class="col text-end">
+                                <div class="col text-end" th:text="|*{#numbers.formatInteger(orderAmount, 0, 'COMMA')}원|">
                                     54,000원
                                 </div>
+                                <input type="hidden" th:field="*{orderAmount}">
+                            </div>
+                            <div class="row" id="coupon">
+                                <div class="col text-start">
+                                    할인쿠폰
+                                </div>
+                                <div class="col text-end coupon">
+                                    -2,000원
+                                </div>
+                                <input type="hidden" th:field="*{couponId}">
+                                <input type="hidden" name="discountPrice">
+                            </div>
+                            <div class="row" id="point">
+                                <div class="col text-start">
+                                    배민포인트
+                                </div>
+                                <div class="col text-end point">
+                                    -100원
+                                </div>
+                                <input type="hidden" th:field="*{point}">
                             </div>
                             <div class="row">
                                 <div class="col text-start">
                                     배달팁
                                 </div>
-                                <div class="col text-end">
+                                <div class="col text-end" th:text="|*{#numbers.formatInteger(deliveryTip, 0, 'COMMA')}원|">
                                     3,000원
                                 </div>
+                                <input type="hidden" th:field="*{deliveryTip}">
                             </div>
                             <div class="row border-top fw-bolder">
                                 <div class="col text-start">
                                     총 결제금액
                                 </div>
-                                <div class="col text-end">
+                                <div class="col text-end totalAmount">
                                     57,000원
                                 </div>
+                                <input type="hidden" th:field="*{totalAmount}">
                             </div>
                         </div>
                     </div>
@@ -267,9 +239,9 @@
             </div>
         </section>
         <section>
-            <button type="button" class="btn baemin-btn btn-lg w-100 mt-3">결제하기</button>
+            <button type="submit" class="btn baemin-btn btn-lg w-100 mt-3">결제하기</button>
         </section>
-    </div>
+    </form>
 </article>
 
 <!-- 안심번호 모달 -->
@@ -326,71 +298,37 @@
                     <input type="text" class="form-control" placeholder="쿠폰코드를 입력해주세요." aria-label="쿠폰코드를 입력해주세요." aria-describedby="createCouponCode">
                     <button class="btn btn-outline-secondary" type="button" id="createCouponCode">등록</button>
                 </div>
-                <div class="card">
+                <div class="card mb-3" th:each="coupon : ${coupons}">
                     <div class="card-body">
                         <div class="form-check form-check-reverse">
                             <div class="row">
                                 <div class="col">
-                                    <label class="form-check-label text-start w-100" for="radio1">
+                                    <label class="form-check-label text-start w-100" th:for="|coupon${couponStat.index}|">
                                         <div class="row">
-                                            <div class="col">
+                                            <div class="col" th:text="|${#numbers.formatInteger(coupon.discountPrice, 0, 'COMMA')}원|">
                                                 1,000원
                                             </div>
                                         </div>
                                         <div class="row">
-                                            <div class="col">
+                                            <div class="col" th:text="${coupon.couponName}">
                                                 BBQ XX점 쿠폰
                                             </div>
                                         </div>
                                         <div class="row">
-                                            <div class="col">
+                                            <div class="col" th:text="${coupon.expirationDate}">
                                                 13일 후 만료(2022/08/20)
                                             </div>
                                         </div>
                                         <div class="row">
                                             <div class="col">
-                                                최소주문금액 : 20,000원
+                                                <span>최소주문금액 : </span>
+                                                <span th:text="|${#numbers.formatInteger(coupon.minOrderPrice, 0, 'COMMA')}원|">20,000원</span>
                                             </div>
                                         </div>
                                     </label>
                                 </div>
                                 <div class="col-sm-1 align-self-center">
-                                    <input class="form-check-input" type="radio" name="flexRadioDefault" id="radio1">
-                                </div>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-                <div class="card mt-3">
-                    <div class="card-body">
-                        <div class="form-check form-check-reverse">
-                            <div class="row">
-                                <div class="col">
-                                    <label class="form-check-label text-start w-100" for="radio2">
-                                        <div class="row">
-                                            <div class="col">
-                                                1,000원
-                                            </div>
-                                        </div>
-                                        <div class="row">
-                                            <div class="col">
-                                                BBQ XX점 쿠폰
-                                            </div>
-                                        </div>
-                                        <div class="row">
-                                            <div class="col">
-                                                13일 후 만료(2022/08/20)
-                                            </div>
-                                        </div>
-                                        <div class="row">
-                                            <div class="col">
-                                                최소주문금액 : 20,000원
-                                            </div>
-                                        </div>
-                                    </label>
-                                </div>
-                                <div class="col-sm-1 align-self-center">
-                                    <input class="form-check-input" type="radio" name="flexRadioDefault" id="radio2" disabled>
+                                    <input class="form-check-input" type="radio" name="coupon" th:id="|coupon${couponStat.index}|" th:value="${coupon.id}">
                                 </div>
                             </div>
                         </div>
@@ -398,12 +336,13 @@
                 </div>
             </div>
             <div class="modal-footer">
-                <button type="button" class="btn btn-primary">적용하기</button>
+                <button type="button" class="btn baemin-btn w-100" data-bs-dismiss="modal" aria-label="Close" onclick="useCoupon()">적용하기</button>
             </div>
         </div>
     </div>
 </div>
-<!-- 할인쿠폰 모달 -->
+
+<!-- 배민 포인트 -->
 <div class="modal fade" id="baeminPoint" tabindex="-1" aria-labelledby="baeminPointLabel" aria-hidden="true">
     <div class="modal-dialog">
         <div class="modal-content">
@@ -413,10 +352,9 @@
             </div>
             <div class="modal-body">
                 <h5>보유 포인트</h5>
-                <h4>100원</h4>
+                <h4 th:text="|${#numbers.formatInteger(totalPoint, 0, 'COMMA')}원|">100원</h4>
                 <div class="mb-3">
-                    <label for="usingPoint" class="form-label"></label>
-                    <input type="text" class="form-control" id="usingPoint" placeholder="사용할 포인트를 입력해주세요.">
+                    <input type="text" class="form-control" id="inputPoint" name="inputPoint" placeholder="사용할 포인트를 입력해주세요.">
                 </div>
             </div>
             <div class="modal-footer">
@@ -428,24 +366,99 @@
                         <li>적립 예정 포인트는 사용 가능한 포인트에서 제외됩니다.</li>
                     </ul>
                 </div>
-                <button type="button" class="btn btn-primary w-100">사용하기</button>
+                <button type="button" class="btn baemin-btn w-100" data-bs-dismiss="modal" aria-label="Close" onclick="usePoint()">사용하기</button>
             </div>
         </div>
     </div>
 </div>
-<!-- footer -->
-<div class="container">
-    <footer class="py-3 my-4">
-        <ul class="nav justify-content-center border-bottom pb-3 mb-3">
-            <li class="nav-item"><a href="#" class="nav-link px-2 text-muted">Home</a></li>
-            <li class="nav-item"><a href="#" class="nav-link px-2 text-muted">찜</a></li>
-            <li class="nav-item"><a href="#" class="nav-link px-2 text-muted">주문내역</a></li>
-            <li class="nav-item"><a href="#" class="nav-link px-2 text-muted">마이페이지</a></li>
-            <li class="nav-item"><a href="#" class="nav-link px-2 text-muted">About</a></li>
-        </ul>
-        <p class="text-center text-muted">&copy; 2022 Company, Inc</p>
-    </footer>
-</div>
-<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.2.0/dist/js/bootstrap.bundle.min.js" integrity="sha384-A3rJD856KowSb7dwlZdYEkO39Gagi7vIsF0jrRAoQmDKKtQBHUuLZ9AsSv4jD4Xa" crossorigin="anonymous"></script>
+
+<footer th:replace="fragments/footer::footer"></footer>
+<script th:inline="javascript">
+    $(document).ready(function () {
+        $("#toRiderForm").hide();
+        $("#point").hide();
+        $("#coupon").hide();
+        totalAmount();
+        $(".totalPoint").text(Number([[${totalPoint}]]).toLocaleString("ko-KR") + "원 사용가능");
+    });
+
+    /**
+     * 총 결제금액 계산
+     */
+    function totalAmount() {
+        const orderAmount = [[${paymentAddForm.orderAmount}]];
+        const deliveryTip = [[${paymentAddForm.deliveryTip}]];
+        const point = $("input[name=inputPoint]").val();
+        const discountPrice = $("input[name=discountPrice]").val();
+
+        const result = orderAmount + deliveryTip - point - discountPrice;
+        $("#totalAmount").val(result);
+        const totalAmountToString = Number(result).toLocaleString("ko-KR");
+        $(".totalAmount").text(totalAmountToString + "원");
+    }
+
+    /**
+     * 포인트 사용
+     */
+    function usePoint() {
+        const totalPoint = [[${totalPoint}]];
+        const point = $("input[name=inputPoint]").val();
+        $("input[name=point]").val(point);
+        if (point == 0 || point == null) {
+            $("#point").hide();
+            totalPoint = totalPoint.toLocaleString("ko-KR");
+            $(".totalPoint").text(totalPoint + "원 사용가능");
+        } else {
+            $("#point").show();
+            const pointToString = "-" + Number(point).toLocaleString("ko-KR") + "원";
+            $(".point").text(pointToString);
+            $(".totalPoint").text(pointToString);
+        }
+        totalAmount();
+    }
+
+    /**
+     * 포인트 한도 확인
+     */
+    $("#inputPoint").keyup(function () {
+        const maxPoint = [[${totalPoint}]]
+        const point = $("#inputPoint").val();
+        if (maxPoint < point) {
+            alert("사용 가능한 금액을 초과하였습니다.");
+            $("#inputPoint").val(maxPoint);
+        }
+    });
+
+    /**
+     * 쿠폰 사용
+     */
+    function useCoupon() {
+        const couponId = $("input[name='coupon']:checked").val();
+
+        const couponData = {
+            "couponId": couponId
+        }
+
+        $.ajax({
+            url: "/orders/coupons",
+            data: couponData,
+            type: "POST",
+            cache: false,
+            success: function (coupon) {
+                $("input[name=couponId]").val(coupon.couponId);
+                $("input[name=discountPrice]").val(coupon.discountPrice);
+                $("#coupon").show();
+
+                const discountPriceToString = "-" + Number(coupon.discountPrice).toLocaleString("ko-KR") + "원";
+                $(".coupon").text(discountPriceToString);
+                $(".couponInfo").text(discountPriceToString);
+                totalAmount();
+            },
+            error: function () {
+                alert("error");
+            }
+        });
+    }
+</script>
 </body>
 </html>

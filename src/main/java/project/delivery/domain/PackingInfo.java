@@ -26,15 +26,12 @@ public class PackingInfo extends TimeBaseEntity {
     @Column(nullable = false)
     private String pickUpTime;
     @Column(nullable = false)
-    private String position;
-    @Column(nullable = false)
     private PaymentType paymentType;
 
-    public PackingInfo(Store store, int minOrderPrice, String pickUpTime, String position, PaymentType paymentType) {
+    public PackingInfo(Store store, int minOrderPrice, String pickUpTime, PaymentType paymentType) {
         this.store = store;
         this.minOrderPrice = minOrderPrice;
         this.pickUpTime = pickUpTime;
-        this.position = position;
         this.paymentType = paymentType;
         store.addPackingInfo(this);
     }

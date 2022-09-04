@@ -7,7 +7,11 @@ import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
 import project.delivery.domain.Member;
 import project.delivery.domain.Notification;
+import project.delivery.dto.BasketDto;
+import project.delivery.dto.BasketMenuDto;
+import project.delivery.dto.NotificationDto;
 import project.delivery.login.Login;
+import project.delivery.service.BasketService;
 import project.delivery.service.NotificationService;
 
 import java.util.List;
@@ -18,6 +22,7 @@ import java.util.List;
 public class HomeController {
 
     private final NotificationService notificationService;
+    private final BasketService basketService;
 
     @GetMapping
     public String mainHome(@Login Member loginMember, Model model) {
@@ -26,9 +31,13 @@ public class HomeController {
             return "home";
         }
 
-        List<Notification> notifications = notificationService.findByMemberId(loginMember.getId());
-        model.addAttribute("notifications", notifications);
+        List<NotificationDto> notifications = notificationService.findNotificationByMemberId(loginMember.getId());
+        List<BasketMenuDto> basketMenus = basketService.findAllByMemberId(loginMember.getId());
+        BasketDto basket = basketService.findBasketDto(loginMember.getId());
 
+        model.addAttribute("notifications", notifications);
+        model.addAttribute("basketMenus", basketMenus);
+        model.addAttribute("basket", basket);
         return "loginHome";
     }
 }
