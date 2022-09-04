@@ -43,7 +43,7 @@ public class CouponController {
 
     @ModelAttribute("coupons")
     public List<Coupon> coupons(@Login Member loginMember) {
-        return couponService.findCoupon(loginMember.getId());
+        return couponService.findCouponAll(loginMember.getId());
     }
 
     @ModelAttribute("possibleCoupon")

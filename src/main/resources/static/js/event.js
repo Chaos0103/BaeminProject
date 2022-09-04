@@ -24,12 +24,11 @@ function cashReceiptDetail() {
     }
 }
 
-function test() {
-    const value = $('#toRider option:selected').val();
-    if (value == 6) {
-        $('#toRiderForm').show();
+function toRiderWrite(value) {
+    if (value === "write") {
+        $("#toRiderForm").show();
     } else {
-        $('#toRiderForm').hide();
+        $("#toRiderForm").hide();
     }
 }
 

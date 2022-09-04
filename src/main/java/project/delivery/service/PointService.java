@@ -15,10 +15,9 @@ public interface PointService {
     @Transactional
     Integer addVoucher(Long memberId, String voucherCode);
 
-    @Transactional
-    void createPointHistory(Long memberId, PointHistory pointHistory);
-
     Point getPointByMember(Long memberId);
 
     List<PointHistory> findPointHistory(Long pointId, PointHistorySearch search);
+
+    Integer findTotalPoint(Long memberId);
 }

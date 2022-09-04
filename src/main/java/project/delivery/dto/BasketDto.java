@@ -9,6 +9,7 @@ import lombok.NoArgsConstructor;
 @AllArgsConstructor
 public class BasketDto {
 
+    private Long basketId;
     private String storeName;
     private String storeFileName;
 }

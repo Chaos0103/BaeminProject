@@ -3,7 +3,7 @@
 <!-- 장바구니 -->
 <section th:fragment="basket (basket, basketMenus)">
     <div class="modal fade" id="cartList" data-bs-backdrop="static" data-bs-keyboard="false" tabindex="-1" aria-labelledby="staticBackdropLabel" aria-hidden="true">
-        <div class="modal-dialog modal-dialog-scrollable">
+        <div class="modal-dialog">
             <div class="modal-content">
                 <div class="modal-header">
                     <h5 class="modal-title" id="staticBackdropLabel">장바구니</h5>
@@ -88,8 +88,8 @@
                         <p class="fs-custom text-muted mt-3">(주)우아한형제들은 상품거래에 대한 통신판매중개자이며, 통신판매의 당사자가 아닙니다. 따라서, (주)우아한형제들은 상품, 거래정보 및 거래에 대하여 책임을 지지 않습니다.</p>
                     </div>
                     <div class="modal-footer">
-                        <button type="button" class="btn baemin-btn w-100" id="deliveryOrder" th:onclick="|location.href='@{/orders/delivery}'|">배달 주문하기</button>
-                        <button type="button" class="btn baemin-btn w-100" id="packingOrder" th:onclick="|location.href='@{/orders/packing}'|">포장 주문하기</button>
+                        <button type="button" class="btn baemin-btn w-100" id="deliveryOrder" th:onclick="|location.href='@{/orders/{basketId}/delivery(basketId=${basket.basketId})}'|">배달 주문하기</button>
+                        <button type="button" class="btn baemin-btn w-100" id="packingOrder" th:onclick="|location.href='@{/orders/{basketId}/packing(basketId=${basket.basketId})}'|">포장 주문하기</button>
                     </div>
                 </div>
             </div>

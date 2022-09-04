@@ -36,6 +36,10 @@ public class Order extends TimeBaseEntity {
     @JoinColumn(name = "delivery_id")
     private Delivery delivery;
 
+    @OneToOne(fetch = LAZY, cascade = CascadeType.ALL)
+    @JoinColumn(name = "payment_id")
+    private Payment payment;
+
     @Enumerated(EnumType.STRING)
     private OrderStatus status;
     @Enumerated(EnumType.STRING)
@@ -50,10 +54,11 @@ public class Order extends TimeBaseEntity {
     @OneToMany(mappedBy = "order", cascade = CascadeType.ALL)
     private List<MenuOrder> menuOrders = new ArrayList<>();
 
-    public Order(Member member, Store store, Delivery delivery, ReceiptType receiptType, Boolean disposable, Boolean sideDish, String requirement) {
+    public Order(Member member, Store store, Delivery delivery, Payment payment, ReceiptType receiptType, Boolean disposable, Boolean sideDish, String requirement) {
         this.member = member;
         this.store = store;
         this.delivery = delivery;
+        this.payment = payment;
         this.receiptType = receiptType;
         this.disposable = disposable;
         this.sideDish = sideDish;
@@ -62,8 +67,8 @@ public class Order extends TimeBaseEntity {
     }
 
     //==생성 메서드==//
-    public static Order createOrder(Member member, Store store, Delivery delivery, ReceiptType receiptType, Boolean disposable, Boolean sideDish, String requirement, List<MenuOrder> menuOrders) {
-        Order order = new Order(member, store, delivery, receiptType, disposable, sideDish, requirement);
+    public static Order createOrder(Member member, Store store, Delivery delivery, Payment payment, ReceiptType receiptType, Boolean disposable, Boolean sideDish, String requirement, List<MenuOrder> menuOrders) {
+        Order order = new Order(member, store, delivery, payment, receiptType, disposable, sideDish, requirement);
         for (MenuOrder menuOrder : menuOrders) {
             order.addMenuOrder(menuOrder);
         }

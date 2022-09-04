@@ -8,4 +8,6 @@ import java.util.List;
 public interface StoreRepositoryCustom {
 
     List<Store> findAllByCondition(Category category);
+
+    Integer findDeliveryTip(Long storeId, Integer totalAmount);
 }

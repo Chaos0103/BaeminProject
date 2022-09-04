@@ -1,6 +1,7 @@
 package project.delivery.service;
 
 import org.springframework.transaction.annotation.Transactional;
+import project.delivery.domain.basket.Basket;
 import project.delivery.dto.BasketDto;
 import project.delivery.dto.BasketMenuDto;
 
@@ -18,4 +19,6 @@ public interface BasketService {
     List<BasketMenuDto> findAllByMemberId(Long memberId);
 
     BasketDto findBasketDto(Long memberId);
+
+    Basket findBasketById(Long basketId);
 }

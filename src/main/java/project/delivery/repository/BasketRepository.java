@@ -10,4 +10,7 @@ public interface BasketRepository extends JpaRepository<Basket, Long>, BasketRep
 
     @Query("select b from Basket b where b.member.id = :memberId")
     Basket findByMemberId(@Param("memberId") Long memberId);
+
+    @Query("select b from Basket b join fetch b.basketMenus where b.id = :basketId")
+    Basket findBasketById(@Param("basketId") Long basketId);
 }

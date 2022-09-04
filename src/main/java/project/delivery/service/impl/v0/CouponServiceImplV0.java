@@ -38,9 +38,14 @@ public class CouponServiceImplV0 implements CouponService {
     }
 
     @Override
-    public List<Coupon> findCoupon(Long memberId) {
+    public List<Coupon> findCouponAll(Long memberId) {
         LocalDateTime searchDate = LocalDateTime.now().minusMonths(6);
         return couponRepository.findAllByMemberId(memberId, searchDate);
+    }
+
+    @Override
+    public List<Coupon> findCouponUse(Long memberId) {
+        return couponRepository.findCouponUse(memberId);
     }
 
     @Override
@@ -52,6 +57,15 @@ public class CouponServiceImplV0 implements CouponService {
     public Long countDayByMemberId(Long memberId) {
         LocalDateTime date = LocalDateTime.now().plusDays(1);
         return couponRepository.countDayByMemberId(memberId, date);
+    }
+
+    @Override
+    public Coupon findById(Long couponId) {
+        Coupon coupon = couponRepository.findById(couponId).orElse(null);
+        if (coupon == null) {
+            throw new NoSuchException("등록되지 않은 쿠폰입니다");
+        }
+        return coupon;
     }
 
     private static Coupon createCoupon(Member member, CouponData couponData) {

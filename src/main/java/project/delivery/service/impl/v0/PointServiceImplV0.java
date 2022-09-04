@@ -43,12 +43,6 @@ public class PointServiceImplV0 implements PointService {
     }
 
     @Override
-    public void createPointHistory(Long memberId, PointHistory pointHistory) {
-        Point point = getPointByMember(memberId);
-        pointHistory.addPoint(point);
-    }
-
-    @Override
     public Point getPointByMember(Long memberId) {
         return pointRepository.findByMemberId(memberId).orElseThrow(() -> {
             throw new NoSuchException("데이터가 존재하지 않습니다");
@@ -59,6 +53,11 @@ public class PointServiceImplV0 implements PointService {
     public List<PointHistory> findPointHistory(Long pointId, PointHistorySearch search) {
         LocalDateTime date = LocalDateTime.now().minusMonths(search.getMonth());
         return pointRepository.findHistory(pointId, search.getType(), date);
+    }
+
+    @Override
+    public Integer findTotalPoint(Long memberId) {
+        return pointRepository.findTotalPoint(memberId);
     }
 
     private Member getMember(Long memberId) {

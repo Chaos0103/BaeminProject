@@ -8,6 +8,7 @@ import project.delivery.domain.basket.BasketMenu;
 import project.delivery.domain.basket.BasketSubOptionInfo;
 import project.delivery.domain.order.*;
 import project.delivery.dto.OrderDto;
+import project.delivery.dto.PaymentDto;
 import project.delivery.exception.NoSuchException;
 import project.delivery.repository.*;
 import project.delivery.service.NotificationService;
@@ -23,29 +24,43 @@ public class OrderServiceImplV0 implements OrderService {
     private final OrderRepository orderRepository;
     private final MemberRepository memberRepository;
     private final BasketRepository basketRepository;
+    private final PointRepository pointRepository;
+    private final CouponRepository couponRepository;
+
     private final NotificationService notificationService;
 
     @Override
-    public Long order(Long memberId, OrderDto orderDto) {
+    public Long order(Long memberId, OrderDto orderDto, PaymentDto paymentDto) {
         //데이터 찾기
         Member member = findMember(memberId);
         Basket basket = findBasket(memberId);
+
         List<BasketMenu> basketMenus = basketRepository.findBasketMenus(basket.getId());
+        List<MenuOrder> menuOrders = getMenuOrders(basketMenus);
 
-        List<MenuOrder> menuOrders = new ArrayList<>();
+        Payment payment;
+        if (paymentDto.getCouponId() != null) {
+            Coupon coupon = couponRepository.findById(paymentDto.getCouponId()).orElse(null);
+            if (coupon == null) {
+                throw new NoSuchException("존재하지 않는 쿠폰입니다");
+            }
+            //결제 생성
+            payment = new Payment(paymentDto.getPaymentMethod(), paymentDto.getOrderAmount(), coupon.getCouponName(), coupon.getDiscountPrice(), paymentDto.getPoint(), paymentDto.getDeliveryTip(), paymentDto.getTotalAmount());
+            coupon.changeStatus(CouponStatus.USE);
+        } else {
+            payment = new Payment(paymentDto.getPaymentMethod(), paymentDto.getOrderAmount(), null, null, paymentDto.getPoint(), paymentDto.getDeliveryTip(), paymentDto.getTotalAmount());
+        }
 
-        for (BasketMenu basketMenu : basketMenus) {
-            List<BasketSubOptionInfo> basketSubOptionInfos = basketMenu.getBasketSubOptionInfos();
-            List<MenuSubOption> menuSubOptions = basketSubOptionInfos.stream()
-                    .map(BasketSubOptionInfo::getMenuSubOption)
-                    .toList();
-            Integer orderPrice = getOrderPrice(basketMenu.getMenuOption(), menuSubOptions);
-            MenuOrder menuOrder = MenuOrder.createMenuOrder(basketMenu.getMenuOption(), basketMenu.getCount(), orderPrice, menuSubOptions);
-            menuOrders.add(menuOrder);
+        if (paymentDto.getPoint() != null) {
+            Point point = pointRepository.findByMemberId(memberId).orElse(null);
+            if (point == null) {
+                throw new NoSuchException("포인트 내역을 찾을 수 없습니다");
+            }
+            PointHistory.createPointHistory(point, paymentDto.getPoint(), basket.getStore().getStoreName(), PointType.USE);
         }
 
         //주문 생성
-        Order order = Order.createOrder(member, basket.getStore(), orderDto.getDelivery(), orderDto.getReceiptType(), orderDto.getDisposable(), orderDto.getSideDish(), orderDto.getRequirement(), menuOrders);
+        Order order = Order.createOrder(member, basket.getStore(), orderDto.getDelivery(), payment, orderDto.getReceiptType(), orderDto.getDisposable(), orderDto.getSideDish(), orderDto.getRequirement(), menuOrders);
 
         Order savedOrder = orderRepository.save(order);
         basketRepository.delete(basket);
@@ -97,5 +112,19 @@ public class OrderServiceImplV0 implements OrderService {
 
     private Basket findBasket(Long memberId) {
         return basketRepository.findByMemberId(memberId);
+    }
+
+    private List<MenuOrder> getMenuOrders(List<BasketMenu> basketMenus) {
+        List<MenuOrder> menuOrders = new ArrayList<>();
+        for (BasketMenu basketMenu : basketMenus) {
+            List<BasketSubOptionInfo> basketSubOptionInfos = basketMenu.getBasketSubOptionInfos();
+            List<MenuSubOption> menuSubOptions = basketSubOptionInfos.stream()
+                    .map(BasketSubOptionInfo::getMenuSubOption)
+                    .toList();
+            Integer orderPrice = getOrderPrice(basketMenu.getMenuOption(), menuSubOptions);
+            MenuOrder menuOrder = MenuOrder.createMenuOrder(basketMenu.getMenuOption(), basketMenu.getCount(), orderPrice, menuSubOptions);
+            menuOrders.add(menuOrder);
+        }
+        return menuOrders;
     }
 }

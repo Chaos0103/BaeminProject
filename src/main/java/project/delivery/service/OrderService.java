@@ -3,6 +3,7 @@ package project.delivery.service;
 import org.springframework.transaction.annotation.Transactional;
 import project.delivery.domain.order.Order;
 import project.delivery.dto.OrderDto;
+import project.delivery.dto.PaymentDto;
 
 import java.util.List;
 
@@ -10,7 +11,7 @@ import java.util.List;
 public interface OrderService {
 
     @Transactional
-    Long order(Long memberId, OrderDto orderDto);
+    Long order(Long memberId, OrderDto orderDto, PaymentDto paymentDto);
 
     @Transactional
     Long cancel(Long orderId);

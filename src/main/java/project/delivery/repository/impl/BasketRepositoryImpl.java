@@ -74,6 +74,7 @@ public class BasketRepositoryImpl implements BasketRepositoryCustom {
     public BasketDto findStoreInfo(Long memberId) {
         return queryFactory
                 .select(Projections.fields(BasketDto.class,
+                        basket.id.as("basketId"),
                         store.storeName))
                 .from(basket)
                 .join(basket.store, store)
