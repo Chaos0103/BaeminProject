@@ -13,13 +13,15 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import project.delivery.controller.form.CouponSaveForm;
 import project.delivery.domain.Coupon;
 import project.delivery.domain.Member;
-import project.delivery.domain.Notification;
+import project.delivery.dto.CouponDto;
 import project.delivery.dto.NotificationDto;
 import project.delivery.exception.DuplicateException;
 import project.delivery.exception.NoSuchException;
 import project.delivery.login.Login;
 import project.delivery.service.CouponService;
 import project.delivery.service.NotificationService;
+import project.delivery.service.PayService;
+import project.delivery.service.PointService;
 
 import java.util.List;
 
@@ -31,10 +33,12 @@ public class CouponController {
 
     private final CouponService couponService;
     private final NotificationService notificationService;
+    private final PayService payService;
+    private final PointService pointService;
 
-    @ModelAttribute("notifications")
-    public List<NotificationDto> notifications(@Login Member loginMember) {
-        return notificationService.findNotificationByMemberId(loginMember.getId());
+    @ModelAttribute("couponSaveForm")
+    public CouponSaveForm couponSaveForm() {
+        return new CouponSaveForm();
     }
 
     @ModelAttribute("loginMember")
@@ -42,28 +46,24 @@ public class CouponController {
         return loginMember;
     }
 
-    @ModelAttribute("coupons")
-    public List<Coupon> coupons(@Login Member loginMember) {
-        return couponService.findCouponAll(loginMember.getId());
-    }
-
-    @ModelAttribute("possibleCoupon")
-    public Long possibleCoupon(@Login Member loginMember) {
-        return couponService.countByMemberId(loginMember.getId());
-    }
-
-    @ModelAttribute("dayPossibleCoupon")
-    public Long dayPossibleCoupon(@Login Member loginMember) {
-        return couponService.countDayByMemberId(loginMember.getId());
-    }
-
-    @ModelAttribute("couponSaveForm")
-    public CouponSaveForm couponSaveForm() {
-        return new CouponSaveForm();
-    }
-
     @GetMapping
-    public String couponHome() {
+    public String couponHome(@Login Member loginMember, Model model) {
+        List<NotificationDto> notifications = notificationService.findNotificationByMemberId(loginMember.getId());
+        List<CouponDto> coupons = couponService.findCouponByMemberId(loginMember.getId());
+        Integer possibleCoupon = couponService.countCouponByMemberId(loginMember.getId());
+        Long dayPossibleCoupon = couponService.countDayByMemberId(loginMember.getId());
+        //페이머니 잔액 조회
+        Integer money = payService.findMoney(loginMember.getId());
+        //포인트 잔액 조회
+        Integer totalPoint = pointService.findTotalPoint(loginMember.getId());
+
+        model.addAttribute("notifications", notifications);
+        model.addAttribute("coupons", coupons);
+        model.addAttribute("possibleCoupon", possibleCoupon);
+        model.addAttribute("dayPossibleCoupon", dayPossibleCoupon);
+        model.addAttribute("money", money);
+        model.addAttribute("totalPoint", totalPoint);
+
         return "member/coupon";
     }
 
@@ -88,7 +88,6 @@ public class CouponController {
             model.addAttribute("addCouponError", e.getMessage());
             return "member/coupon";
         }
-
 
         return "redirect:/coupons";
     }

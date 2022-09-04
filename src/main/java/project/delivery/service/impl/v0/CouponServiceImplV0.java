@@ -7,6 +7,7 @@ import project.delivery.admin.coupon.CouponDataRepository;
 import project.delivery.admin.coupon.CouponDateStatus;
 import project.delivery.domain.Coupon;
 import project.delivery.domain.Member;
+import project.delivery.dto.CouponDto;
 import project.delivery.exception.DuplicateException;
 import project.delivery.exception.NoSuchException;
 import project.delivery.repository.CouponRepository;
@@ -38,9 +39,9 @@ public class CouponServiceImplV0 implements CouponService {
     }
 
     @Override
-    public List<Coupon> findCouponAll(Long memberId) {
-        LocalDateTime searchDate = LocalDateTime.now().minusMonths(6);
-        return couponRepository.findAllByMemberId(memberId, searchDate);
+    public List<CouponDto> findCouponByMemberId(Long memberId) {
+        LocalDateTime period = LocalDateTime.now().minusMonths(6);
+        return couponRepository.findCouponByMemberId(memberId, period);
     }
 
     @Override
@@ -49,7 +50,7 @@ public class CouponServiceImplV0 implements CouponService {
     }
 
     @Override
-    public Long countByMemberId(Long memberId) {
+    public Integer countCouponByMemberId(Long memberId) {
         return couponRepository.countByMemberId(memberId);
     }
 
@@ -66,11 +67,6 @@ public class CouponServiceImplV0 implements CouponService {
             throw new NoSuchException("등록되지 않은 쿠폰입니다");
         }
         return coupon;
-    }
-
-    @Override
-    public Integer countCoupon(Long memberId) {
-        return couponRepository.countCoupon(memberId);
     }
 
     private static Coupon createCoupon(Member member, CouponData couponData) {

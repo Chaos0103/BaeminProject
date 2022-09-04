@@ -69,7 +69,7 @@ public class PointController {
         //페이머니 잔액 조회
         Integer money = payService.findMoney(loginMember.getId());
         //사용 가능한 쿠폰 갯수 조회
-        Integer countCoupon = couponService.countCoupon(loginMember.getId());
+        Integer countCoupon = couponService.countCouponByMemberId(loginMember.getId());
 
         model.addAttribute("notifications", notifications);
         model.addAttribute("point", point);
