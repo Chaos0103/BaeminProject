@@ -21,4 +21,6 @@ public interface CouponService {
     Long countDayByMemberId(Long memberId);
 
     Coupon findById(Long couponId);
+
+    Integer countCoupon(Long memberId);
 }

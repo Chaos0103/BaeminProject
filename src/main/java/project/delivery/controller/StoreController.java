@@ -9,6 +9,7 @@ import project.delivery.controller.form.BasketAddForm;
 import project.delivery.domain.*;
 import project.delivery.dto.BasketDto;
 import project.delivery.dto.BasketMenuDto;
+import project.delivery.dto.NotificationDto;
 import project.delivery.dto.ReviewSearch;
 import project.delivery.login.Login;
 import project.delivery.service.*;
@@ -29,8 +30,8 @@ public class StoreController {
     private final BasketService basketService;
 
     @ModelAttribute("notifications")
-    public List<Notification> notifications(@Login Member loginMember) {
-        return notificationService.findByMemberId(loginMember.getId());
+    public List<NotificationDto> notifications(@Login Member loginMember) {
+        return notificationService.findNotificationByMemberId(loginMember.getId());
     }
 
     @ModelAttribute("basketAddForm")

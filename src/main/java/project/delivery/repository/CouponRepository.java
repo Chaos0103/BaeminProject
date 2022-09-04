@@ -22,4 +22,7 @@ public interface CouponRepository extends JpaRepository<Coupon, Long> {
 
     @Query("select c from Coupon c where c.member.id = :memberId and c.status = 'UNUSE'")
     List<Coupon> findCouponUse(@Param("memberId") Long memberId);
+
+    @Query("select count(c) from Coupon c where c.member.id = :memberId and c.status = 'UNUSE'")
+    Integer countCoupon(@Param("memberId") Long memberId);
 }

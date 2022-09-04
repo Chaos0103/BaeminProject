@@ -8,6 +8,7 @@ import org.springframework.web.bind.annotation.*;
 import project.delivery.domain.Bookmark;
 import project.delivery.domain.Member;
 import project.delivery.domain.Notification;
+import project.delivery.dto.NotificationDto;
 import project.delivery.login.Login;
 import project.delivery.service.BookmarkService;
 import project.delivery.service.NotificationService;
@@ -24,8 +25,8 @@ public class BookmarkController {
     private final NotificationService notificationService;
 
     @ModelAttribute("notifications")
-    public List<Notification> notifications(@Login Member loginMember) {
-        return notificationService.findByMemberId(loginMember.getId());
+    public List<NotificationDto> notifications(@Login Member loginMember) {
+        return notificationService.findNotificationByMemberId(loginMember.getId());
     }
 
     @ModelAttribute("loginMember")

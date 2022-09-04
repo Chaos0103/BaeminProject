@@ -10,7 +10,7 @@ import java.util.Optional;
 
 public interface PointRepository extends JpaRepository<Point, Long>, PointRepositoryCustom {
 
-    @Query("select p from Point p join fetch p.member m where m.id = :memberId")
+    @Query("select p from Point p where p.member.id = :memberId")
     Optional<Point> findByMemberId(@Param("memberId") Long memberId);
 
     @Query("select p.totalPoint from Point p where p.member.id = :memberId")

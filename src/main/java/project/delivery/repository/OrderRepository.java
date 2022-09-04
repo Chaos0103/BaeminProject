@@ -9,6 +9,6 @@ import java.util.List;
 
 public interface OrderRepository extends JpaRepository<Order, Long> {
 
-//    @Query("select o from Order o join fetch o.")
-//    List<Order> findOrderList(@Param("memberId") Long memberId);
+    @Query("select o from Order o where o.member.id = :memberId")
+    List<Order> findOrderList(@Param("memberId") Long memberId);
 }

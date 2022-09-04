@@ -9,12 +9,12 @@ import project.delivery.domain.Member;
 import project.delivery.domain.Notification;
 import project.delivery.dto.BasketDto;
 import project.delivery.dto.BasketMenuDto;
+import project.delivery.dto.NotificationDto;
 import project.delivery.login.Login;
 import project.delivery.service.BasketService;
 import project.delivery.service.NotificationService;
 
 import java.util.List;
-import java.util.Map;
 
 @Slf4j
 @Controller
@@ -31,7 +31,7 @@ public class HomeController {
             return "home";
         }
 
-        List<Notification> notifications = notificationService.findByMemberId(loginMember.getId());
+        List<NotificationDto> notifications = notificationService.findNotificationByMemberId(loginMember.getId());
         List<BasketMenuDto> basketMenus = basketService.findAllByMemberId(loginMember.getId());
         BasketDto basket = basketService.findBasketDto(loginMember.getId());
 

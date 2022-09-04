@@ -1,7 +1,7 @@
 <!DOCTYPE html>
 <html lang="ko" xmlns:th="http://www.thymeleaf.org">
 <head th:replace="fragments/head::head(~{::title})">
-    <title>배달의 민족</title>
+    <title>배달의 민족 | 주문내역</title>
 </head>
 <body>
 <header th:replace="fragments/loginHeader::loginHeader"></header>
@@ -96,12 +96,12 @@
                                 </div>
                             </div>
                             <!-- 주문내역시작 -->
-<!--                            <div class="card m-4" th:each="order : ${orders}">-->
-                            <div class="card m-4">
+                            <div class="card m-4" th:each="order : ${orders}">
+<!--                            <div class="card m-4">-->
                                 <div class="card-body">
                                     <div class="row">
                                         <div class="col">
-                                            <h5>08/10 (수) 배달완료</h5>
+                                            <h5 th:text="|${#temporals.format(order.createdDate, 'MM/dd')} (${#temporals.dayOfWeekNameShort(order.createdDate)})|">08/10 (수) 배달완료</h5>
                                         </div>
                                         <div class="col text-end">
                                             <div class="nav-link link-primary" data-bs-toggle="modal" data-bs-target="#orderDetailModal">주문 상세보기 ></div>
@@ -114,14 +114,17 @@
                                                     <div class="d-flex position-relative">
                                                         <img src="https://via.placeholder.com/100x100" class="d-block flex-shrink-0 me-3" alt="store img 1" style="height: 100px;">
                                                         <div>
-                                                            <h5 class="mt-0">BBQ 간석중앙점</h5>
-                                                            <p>핫 항금올리브 핫크리스피 외 1개 41,000원</p>
+                                                            <h5 class="mt-0" th:text="${order.store.storeName}">BBQ 간석중앙점</h5>
+                                                            <p th:if="${order.menuOrders.size() == 1}"
+                                                               th:text="|${order.menuOrders.get(0).menuOption.menu.mainTitle} ${order.menuOrders.get(0).count}개 ${#numbers.formatInteger(order.payment.totalAmount, 0, 'COMMA')}원|">핫 항금올리브 핫크리스피 1개 41,000원</p>
+                                                            <p th:if="${order.menuOrders.size() > 1}"
+                                                               th:text="|${order.menuOrders.get(0).menuOption.menu.mainTitle} 외 ${order.menuOrders.get(0).count}개 ${#numbers.formatInteger(order.payment.totalAmount, 0, 'COMMA')}원|">핫 항금올리브 핫크리스피 외 1개 41,000원</p>
                                                         </div>
                                                     </div>
                                                 </div>
                                                 <div class="col-sm-3 border-start">
                                                     <div class="text-center ms-3 me-3">
-                                                        <button type="button" class="btn btn-outline-secondary w-100">가게보기</button>
+                                                        <button type="button" class="btn btn-outline-secondary w-100" th:onclick="|location.href='@{/stores/{storeId}/detail(storeId=${order.store.id})}'|">가게보기</button>
                                                     </div>
                                                     <div class="text-center mt-3 ms-3 me-3">
                                                         <button type="button" class="btn btn-outline-danger w-100">주문내역 삭제</button>

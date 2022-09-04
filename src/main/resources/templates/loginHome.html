@@ -5,7 +5,7 @@
 </head>
 <body>
 <header th:replace="fragments/loginHeader::loginHeader"></header>
-<div th:replace="fragments/notifications::notifications(${notifications})"></div>
+<section th:replace="fragments/notifications::notifications(${notifications})"></section>
 <section th:replace="stores/fragments/basket::basket(${basket}, ${basketMenus})"></section>
 
 <article class="container px-4 py-5">

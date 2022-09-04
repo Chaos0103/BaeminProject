@@ -14,6 +14,7 @@ import project.delivery.controller.form.CouponSaveForm;
 import project.delivery.domain.Coupon;
 import project.delivery.domain.Member;
 import project.delivery.domain.Notification;
+import project.delivery.dto.NotificationDto;
 import project.delivery.exception.DuplicateException;
 import project.delivery.exception.NoSuchException;
 import project.delivery.login.Login;
@@ -32,8 +33,8 @@ public class CouponController {
     private final NotificationService notificationService;
 
     @ModelAttribute("notifications")
-    public List<Notification> notifications(@Login Member loginMember) {
-        return notificationService.findByMemberId(loginMember.getId());
+    public List<NotificationDto> notifications(@Login Member loginMember) {
+        return notificationService.findNotificationByMemberId(loginMember.getId());
     }
 
     @ModelAttribute("loginMember")

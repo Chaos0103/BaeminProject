@@ -23,7 +23,7 @@ public class PointHistory extends TimeBaseEntity {
 
     private int pointValue;
     private String content;
-    @Enumerated(EnumType.STRING)
+//    @Enumerated(EnumType.STRING)
     private PointType type;
 
     public PointHistory(Point point, int pointValue, String content, PointType type) {

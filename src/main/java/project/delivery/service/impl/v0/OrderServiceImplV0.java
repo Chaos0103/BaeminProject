@@ -26,8 +26,7 @@ public class OrderServiceImplV0 implements OrderService {
     private final BasketRepository basketRepository;
     private final PointRepository pointRepository;
     private final CouponRepository couponRepository;
-
-    private final NotificationService notificationService;
+    private final NotificationRepository notificationRepository;
 
     @Override
     public Long order(Long memberId, OrderDto orderDto, PaymentDto paymentDto) {
@@ -65,8 +64,7 @@ public class OrderServiceImplV0 implements OrderService {
         Order savedOrder = orderRepository.save(order);
         basketRepository.delete(basket);
 
-        Notification notification = new Notification(basket.getStore().getStoreName(), "", NotificationType.DELIVERY);
-        Long notificationId = notificationService.createNotification(memberId, notification);
+        notificationRepository.save(new Notification(member, basket.getStore().getStoreName(), NotificationType.DELIVERY));
 
         return savedOrder.getId();
     }
@@ -83,7 +81,7 @@ public class OrderServiceImplV0 implements OrderService {
 
     @Override
     public List<Order> findOrderList(Long memberId) {
-        return null;
+        return orderRepository.findOrderList(memberId);
     }
 
     private Integer getOrderPrice(MenuOption menuOption, List<MenuSubOption> menuSubOptions) {

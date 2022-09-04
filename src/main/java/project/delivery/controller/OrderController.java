@@ -15,9 +15,9 @@ import project.delivery.domain.Notification;
 import project.delivery.domain.basket.Basket;
 import project.delivery.domain.basket.BasketMenu;
 import project.delivery.domain.order.Delivery;
-import project.delivery.domain.order.Payment;
 import project.delivery.domain.order.PaymentMethod;
 import project.delivery.domain.order.ReceiptType;
+import project.delivery.dto.NotificationDto;
 import project.delivery.dto.OrderDto;
 import project.delivery.dto.PaymentDto;
 import project.delivery.login.Login;
@@ -41,8 +41,8 @@ public class OrderController {
     private final CouponService couponService;
 
     @ModelAttribute("notifications")
-    public List<Notification> notifications(@Login Member loginMember) {
-        return notificationService.findByMemberId(loginMember.getId());
+    public List<NotificationDto> notifications(@Login Member loginMember) {
+        return notificationService.findNotificationByMemberId(loginMember.getId());
     }
 
     @ModelAttribute("loginMember")

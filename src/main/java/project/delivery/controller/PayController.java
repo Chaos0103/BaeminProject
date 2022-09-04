@@ -9,6 +9,7 @@ import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
 import project.delivery.controller.form.*;
 import project.delivery.domain.*;
+import project.delivery.dto.NotificationDto;
 import project.delivery.login.Login;
 import project.delivery.service.NotificationService;
 import project.delivery.service.PayService;
@@ -25,8 +26,8 @@ public class PayController {
     private final NotificationService notificationService;
 
     @ModelAttribute("notifications")
-    public List<Notification> notifications(@Login Member loginMember) {
-        return notificationService.findByMemberId(loginMember.getId());
+    public List<NotificationDto> notifications(@Login Member loginMember) {
+        return notificationService.findNotificationByMemberId(loginMember.getId());
     }
 
     @ModelAttribute("loginMember")

@@ -68,6 +68,11 @@ public class CouponServiceImplV0 implements CouponService {
         return coupon;
     }
 
+    @Override
+    public Integer countCoupon(Long memberId) {
+        return couponRepository.countCoupon(memberId);
+    }
+
     private static Coupon createCoupon(Member member, CouponData couponData) {
         return new Coupon(member, couponData.getCouponCode(), couponData.getCouponName(), couponData.getMinOrderPrice(), couponData.getDiscountPrice(), couponData.getExpirationDate());
     }

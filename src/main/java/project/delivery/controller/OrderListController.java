@@ -10,7 +10,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import project.delivery.domain.Member;
 import project.delivery.domain.Notification;
 import project.delivery.domain.order.Order;
-import project.delivery.domain.order.PaymentMethod;
+import project.delivery.dto.NotificationDto;
 import project.delivery.login.Login;
 import project.delivery.service.NotificationService;
 import project.delivery.service.OrderService;
@@ -33,7 +33,7 @@ public class OrderListController {
 
     @GetMapping
     public String orderHome(@Login Member loginMember, Model model) {
-        List<Notification> notifications = notificationService.findByMemberId(loginMember.getId());
+        List<NotificationDto> notifications = notificationService.findNotificationByMemberId(loginMember.getId());
         List<Order> orders = orderService.findOrderList(loginMember.getId());
         model.addAttribute("notifications", notifications);
         model.addAttribute("orders", orders);
