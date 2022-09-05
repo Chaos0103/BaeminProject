@@ -12,8 +12,8 @@ public interface PayRepository extends JpaRepository<Pay, Long> {
     @Query("select p from Pay p where p.member.id = :memberId")
     Optional<Pay> findByMemberId(@Param("memberId") Long memberId);
 
-    @Query("select p from Pay p left join fetch p.payHistories where p.member.id = :memberId")
-    Optional<Pay> findDataByMemberId(@Param("memberId") Long memberId);
+    @Query("select distinct p from Pay p left join fetch p.payHistories where p.member.id = :memberId")
+    Optional<Pay> findPayByMemberId(@Param("memberId") Long memberId);
 
     @Query("select p.money from Pay p where p.member.id = :memberId")
     Integer findMoney(@Param("memberId") Long memberId);

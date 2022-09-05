@@ -3,6 +3,9 @@ package project.delivery.service.impl.v0;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import project.delivery.domain.*;
+import project.delivery.dto.PayAccountDto;
+import project.delivery.dto.PayCardDto;
+import project.delivery.dto.PayDto;
 import project.delivery.exception.NoSuchException;
 import project.delivery.repository.*;
 import project.delivery.service.PayService;
@@ -118,10 +121,12 @@ public class PayServiceImplV0 implements PayService {
     }
 
     @Override
-    public Pay findPay(Long memberId) {
-        return payRepository.findDataByMemberId(memberId).orElseThrow(() -> {
+    public PayDto findPayByMemberId(Long memberId) {
+        Pay pay = payRepository.findPayByMemberId(memberId).orElse(null);
+        if (pay == null) {
             throw new NoSuchException("배민페이 미가입자입니다");
-        });
+        }
+        return new PayDto(pay);
     }
 
     @Override
@@ -132,13 +137,13 @@ public class PayServiceImplV0 implements PayService {
     }
 
     @Override
-    public List<PayCard> findPayCard(Long payId) {
-        return payCardRepository.findByPayId(payId);
+    public List<PayCardDto> findPayCardByPayId(Long payId) {
+        return payCardRepository.findPayCardPayId(payId);
     }
 
     @Override
-    public List<PayAccount> findPayAccount(Long payId) {
-        return payAccountRepository.findByPayId(payId);
+    public List<PayAccountDto> findPayAccountByPayId(Long payId) {
+        return payAccountRepository.findPayAccountByPayId(payId);
     }
 
     @Override

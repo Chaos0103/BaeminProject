@@ -2,6 +2,9 @@ package project.delivery.service;
 
 import org.springframework.transaction.annotation.Transactional;
 import project.delivery.domain.*;
+import project.delivery.dto.PayAccountDto;
+import project.delivery.dto.PayCardDto;
+import project.delivery.dto.PayDto;
 
 import java.util.List;
 
@@ -72,7 +75,7 @@ public interface PayService {
     @Transactional
     void deletePayAccount(Long payAccountId);
 
-    Pay findPay(Long memberId);
+    PayDto findPayByMemberId(Long memberId);
 
     /**
      * 페이내역조회
@@ -84,16 +87,17 @@ public interface PayService {
 
     /**
      * 페이카드조회
+     *
      * @return PayCardDto
      */
-    List<PayCard> findPayCard(Long payId);
+    List<PayCardDto> findPayCardByPayId(Long payId);
 
     /**
      * 페이계좌조회
      *
      * @return PayAccountDto
      */
-    List<PayAccount> findPayAccount(Long payId);
+    List<PayAccountDto> findPayAccountByPayId(Long payId);
 
     Integer findMoney(Long memberId);
 }
