@@ -5,43 +5,8 @@
 </head>
 <body>
 <header th:replace="fragments/loginHeader::loginHeader"></header>
-<div th:replace="fragments/notifications::notifications(${notifications})"></div>
-
-<!-- 알림 모달 -->
-<div class="modal fade" id="notification" tabindex="-1" aria-labelledby="notificationLabel" aria-hidden="true">
-    <div class="modal-dialog">
-        <div class="modal-content">
-            <div class="modal-header">
-                <h5 class="modal-title" id="notificationLabel">알림센터</h5>
-                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
-            </div>
-            <div class="modal-body">
-                <div class="card mt-3">
-                    <div class="card-body">
-                        <h5 class="card-title">리뷰를 남겨보세요.</h5>
-                        <p class="card-text">
-                            <strong>BBQ XX점</strong>의 음식이 맛있으셨다면 다른 분들을 위해 리뷰를 남겨주세요. (리뷰 쓰기는 주문 이후 3일 동안만 가능합니다.)
-                        </p>
-                        <p class="card-text text-muted">
-                            08월 09일 20:00
-                        </p>
-                    </div>
-                </div>
-                <div class="card mt-3">
-                    <div class="card-body">
-                        <h5 class="card-title">조리가 완료되었습니다.</h5>
-                        <p class="card-text">
-                            <strong>BBQ XX점</strong>을(를) 이용해주셔서 감사합니다. 맛있게 드세요.
-                        </p>
-                        <p class="card-text text-muted">
-                            08월 09일 19:30
-                        </p>
-                    </div>
-                </div>
-            </div>
-        </div>
-    </div>
-</div>
+<section th:replace="fragments/notifications::notifications(${notifications})"></section>
+<section th:replace="stores/fragments/basket::basket(${basket}, ${basketMenus})"></section>
 
 <article>
     <div class="container px-4 py-5">
@@ -50,11 +15,11 @@
                 <nav class="nav flex-column p-3">
                     <a class="nav-link" href="#">족발·보쌈</a>
                     <a class="nav-link" href="#">돈까스·회·일식</a>
-                    <a class="nav-link" href="#">피자</a>
+                    <a class="nav-link" href="/stores?category=PIZZA">피자</a>
                     <a class="nav-link" href="#">찜·탕·찌개</a>
                     <a class="nav-link" href="#">중식</a>
                     <a class="nav-link" href="/stores?category=CHICKEN">치킨</a>
-                    <a class="nav-link" href="#">버거</a>
+                    <a class="nav-link" href="/stores?category=BURGER">버거</a>
                     <a class="nav-link" href="#">분식</a>
                     <a class="nav-link" href="/stores?category=CAFE">카페·디저트</a>
                     <a class="nav-link" href="#">백반·죽·국수</a>
@@ -77,21 +42,27 @@
                                             </div>
                                         </div>
                                         <div class="row">
-                                            <div class="col" th:text="|${store.rating}(${store.reviewCount})|">
-                                                4.9(100+)
+                                            <div class="col">
+                                                <span><i class="bi bi-star-fill text-warning"></i></span>
+                                                <span th:text="|${store.rating}(${store.reviewCount})|">4.9(100+)</span>
                                             </div>
                                         </div>
                                         <div class="row">
-                                            <div class="col" th:text="|최소주문 ${store.deliveryInfo.minOrderPrice}원|">
-                                            <div>
-                                                최소주문 0원
-                                            </div>
-                                            <div class="col" th:text="|배달팁 ${store.deliveryInfo.deliveryTip}|">
-                                            <div>
-                                                배달팁 0원
+                                            <div class="col">
+                                                <span th:text="|최소주문 ${#numbers.formatInteger(store.deliveryInfo.minOrderPrice, 0, 'COMMA')}원|"></span>
+                                                <span th:text="|, 배달팁 ${#numbers.formatInteger(store.deliveryInfo.minOrderPrice, 0, 'COMMA')}원|"></span>
                                             </div>
                                         </div>
-                                    </div>
+                                        <div class="row">
+                                            <div class="col">
+                                                <span class="badge text-bg-secondary">
+                                                    <span><i class="bi bi-clock"></i></span>
+                                                    <span th:text="${store.deliveryInfo.deliveryTime}"></span>
+                                                </span>
+                                                <span class="badge text-bg-secondary" th:if="${store.packingInfo != null}">포장가능</span>
+                                            </div>
+                                        </div>
+                                     </div>
                                 </div>
                             </div>
                         </div>

@@ -1,14 +1,8 @@
 package project.delivery.repository;
 
 import org.springframework.data.jpa.repository.JpaRepository;
-import org.springframework.data.jpa.repository.Query;
-import org.springframework.data.repository.query.Param;
 import project.delivery.domain.order.Order;
+import project.delivery.repository.custom.OrderRepositoryCustom;
 
-import java.util.List;
-
-public interface OrderRepository extends JpaRepository<Order, Long> {
-
-    @Query("select o from Order o where o.member.id = :memberId")
-    List<Order> findOrderList(@Param("memberId") Long memberId);
+public interface OrderRepository extends JpaRepository<Order, Long>, OrderRepositoryCustom {
 }

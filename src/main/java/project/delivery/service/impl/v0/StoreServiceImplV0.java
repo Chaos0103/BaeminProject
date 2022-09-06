@@ -4,7 +4,6 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import project.delivery.domain.*;
 import project.delivery.exception.DuplicateException;
-import project.delivery.exception.NoSuchException;
 import project.delivery.repository.*;
 import project.delivery.service.StoreService;
 
@@ -40,8 +39,8 @@ public class StoreServiceImplV0 implements StoreService {
     }
 
     @Override
-    public List<MenuCategory> findCategory(Long storeId) {
-        return menuCategoryRepository.findAllByStoreId(storeId);
+    public List<MenuCategory> findMenuCategoryByStoreId(Long storeId) {
+        return menuCategoryRepository.findMenuCategoryByStoreId(storeId);
     }
 
     @Override

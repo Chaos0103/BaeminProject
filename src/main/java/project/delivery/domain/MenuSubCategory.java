@@ -5,6 +5,8 @@ import lombok.Getter;
 import lombok.NoArgsConstructor;
 
 import javax.persistence.*;
+import java.util.ArrayList;
+import java.util.List;
 
 @Entity
 @Getter
@@ -24,9 +26,17 @@ public class MenuSubCategory {
     @Column(nullable = false)
     private String categoryName;
 
+    @OneToMany(mappedBy = "category", orphanRemoval = true, cascade = CascadeType.ALL)
+    private List<MenuSubOption> menuSubOptions = new ArrayList<>();
+
     public MenuSubCategory(Menu menu, int priority, String categoryName) {
         this.menu = menu;
         this.priority = priority;
         this.categoryName = categoryName;
+    }
+
+    //==연관관계 메서드==//
+    public void addMenuSubOption(MenuSubOption menuSubOption) {
+        this.menuSubOptions.add(menuSubOption);
     }
 }

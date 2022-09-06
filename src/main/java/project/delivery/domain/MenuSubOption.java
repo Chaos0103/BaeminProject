@@ -28,5 +28,6 @@ public class MenuSubOption {
         this.category = category;
         this.name = name;
         this.price = price;
+        category.addMenuSubOption(this);
     }
 }

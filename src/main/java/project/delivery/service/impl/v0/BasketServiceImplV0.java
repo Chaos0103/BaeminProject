@@ -69,7 +69,7 @@ public class BasketServiceImplV0 implements BasketService {
 
     @Override
     public List<BasketMenuDto> findAllByMemberId(Long memberId) {
-        return basketRepository.findBasketMenuDtos(memberId);
+        return basketRepository.findBasketMenuByMemberId(memberId);
     }
 
     @Override

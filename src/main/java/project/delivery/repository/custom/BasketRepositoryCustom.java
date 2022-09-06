@@ -8,7 +8,7 @@ import java.util.List;
 
 public interface BasketRepositoryCustom {
 
-    List<BasketMenuDto> findBasketMenuDtos(Long memberId);
+    List<BasketMenuDto> findBasketMenuByMemberId(Long memberId);
 
     List<BasketMenu> findBasketMenus(Long basketId);
 

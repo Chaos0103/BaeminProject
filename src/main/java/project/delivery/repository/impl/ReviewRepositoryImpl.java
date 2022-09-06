@@ -3,6 +3,7 @@ package project.delivery.repository.impl;
 import com.querydsl.core.types.OrderSpecifier;
 import com.querydsl.core.types.dsl.BooleanExpression;
 import com.querydsl.jpa.impl.JPAQueryFactory;
+import project.delivery.domain.QMember;
 import project.delivery.domain.Review;
 import project.delivery.dto.ReviewSearch;
 import project.delivery.repository.custom.ReviewRepositoryCustom;
@@ -10,6 +11,7 @@ import project.delivery.repository.custom.ReviewRepositoryCustom;
 import javax.persistence.EntityManager;
 import java.util.List;
 
+import static project.delivery.domain.QMember.*;
 import static project.delivery.domain.QReview.*;
 
 public class ReviewRepositoryImpl implements ReviewRepositoryCustom {
@@ -24,6 +26,7 @@ public class ReviewRepositoryImpl implements ReviewRepositoryCustom {
     public List<Review> findAllByStoreId(ReviewSearch search) {
         return queryFactory
                 .selectFrom(review)
+                .join(review.member, member).fetchJoin()
                 .where(
                         review.store.id.eq(search.getStoreId()),
                         isImage(search.getPhoto())

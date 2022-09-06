@@ -45,5 +45,6 @@ public class Menu extends TimeBaseEntity {
         this.bestMenu = bestMenu;
         this.alcohol = alcohol;
         this.uploadFile = uploadFile;
+        category.addMenu(this);
     }
 }

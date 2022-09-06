@@ -31,7 +31,7 @@ public class BasketRepositoryImpl implements BasketRepositoryCustom {
 
 
     @Override
-    public List<BasketMenuDto> findBasketMenuDtos(Long memberId) {
+    public List<BasketMenuDto> findBasketMenuByMemberId(Long memberId) {
 
         List<Long> ids = queryFactory
                 .select(basketMenu.id)

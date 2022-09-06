@@ -11,11 +11,11 @@ import project.delivery.dto.OrderDto;
 import project.delivery.dto.PaymentDto;
 import project.delivery.exception.NoSuchException;
 import project.delivery.repository.*;
-import project.delivery.service.NotificationService;
 import project.delivery.service.OrderService;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.UUID;
 
 @Service
 @RequiredArgsConstructor
@@ -59,7 +59,7 @@ public class OrderServiceImplV0 implements OrderService {
         }
 
         //주문 생성
-        Order order = Order.createOrder(member, basket.getStore(), orderDto.getDelivery(), payment, orderDto.getReceiptType(), orderDto.getDisposable(), orderDto.getSideDish(), orderDto.getRequirement(), menuOrders);
+        Order order = Order.createOrder(member, basket.getStore(), orderDto.getDelivery(), payment, getOrderNumber(), orderDto.getReceiptType(), orderDto.getDisposable(), orderDto.getSideDish(), orderDto.getRequirement(), menuOrders);
 
         Order savedOrder = orderRepository.save(order);
         basketRepository.delete(basket);
@@ -80,8 +80,8 @@ public class OrderServiceImplV0 implements OrderService {
     }
 
     @Override
-    public List<Order> findOrderList(Long memberId) {
-        return orderRepository.findOrderList(memberId);
+    public List<Order> findOrdersByMemberId(Long memberId) {
+        return orderRepository.findOrdersByMemberId(memberId);
     }
 
     private Integer getOrderPrice(MenuOption menuOption, List<MenuSubOption> menuSubOptions) {
@@ -124,5 +124,10 @@ public class OrderServiceImplV0 implements OrderService {
             menuOrders.add(menuOrder);
         }
         return menuOrders;
+    }
+
+    private String getOrderNumber() {
+        String uuid = UUID.randomUUID().toString();
+        return uuid.substring(uuid.length() - 10).toUpperCase();
     }
 }

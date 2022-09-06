@@ -5,7 +5,8 @@
 </head>
 <body>
 <header th:replace="fragments/loginHeader::loginHeader"></header>
-<div th:replace="fragments/notifications::notifications(${notifications})"></div>
+<section th:replace="fragments/notifications::notifications(${notifications})"></section>
+<!--<section th:replace="stores/fragments/basket::basket(${basket}, ${basketMenus})"></section>-->
 
 <article>
     <div class="container px-4 py-5">
@@ -29,7 +30,7 @@
                                 </div>
                             </div>
                             <div class="row align-self-center fs-1 ps-3">
-                                <div class="col text-end">
+                                <div class="col text-end" th:text="${loginMember.grade.description}">
                                     VIP
                                 </div>
                             </div>
@@ -41,7 +42,7 @@
                                 </div>
                             </div>
                             <div class="row align-self-center fs-1 ps-3">
-                                <div class="col text-end">
+                                <div class="col text-end" th:text="|${#numbers.formatInteger(countCoupon, 0, 'COMMA')} 장|">
                                     0장
                                 </div>
                             </div>
@@ -63,7 +64,7 @@
                                 <div class="col-sm-4 align-self-center text-start fs-5">
                                     포인트
                                 </div>
-                                <div class="col align-self-center text-end">
+                                <div class="col align-self-center text-end" th:text="|${#numbers.formatInteger(totalPoint, 0, 'COMMA')} 원|">
                                     500,000 원
                                 </div>
                             </div>
@@ -71,7 +72,7 @@
                                 <div class="col-sm-4 align-self-center text-start fs-5">
                                     페이
                                 </div>
-                                <div class="col align-self-center text-end">
+                                <div class="col align-self-center text-end" th:text="|${#numbers.formatInteger(money, 0, 'COMMA')} 원|">
                                     500,000 원
                                 </div>
                             </div>
@@ -95,16 +96,20 @@
                                     </button>
                                 </div>
                             </div>
+                            <div class="card m-4" th:if="${orders.size() == 0}">
+                                <div class="card-body">
+                                    <h4 class="text-center">주문내역이 없습니다!</h4>
+                                </div>
+                            </div>
                             <!-- 주문내역시작 -->
                             <div class="card m-4" th:each="order : ${orders}">
-<!--                            <div class="card m-4">-->
                                 <div class="card-body">
                                     <div class="row">
                                         <div class="col">
-                                            <h5 th:text="|${#temporals.format(order.createdDate, 'MM/dd')} (${#temporals.dayOfWeekNameShort(order.createdDate)})|">08/10 (수) 배달완료</h5>
+                                            <h5 th:text="|${#temporals.format(order.createdDate, 'MM/dd')} (${#temporals.dayOfWeekNameShort(order.createdDate)}) ${order.status == 'COMP'? order.delivery.status.description : order.status.description}|">08/10 (수) 배달완료</h5>
                                         </div>
                                         <div class="col text-end">
-                                            <div class="nav-link link-primary" data-bs-toggle="modal" data-bs-target="#orderDetailModal">주문 상세보기 ></div>
+                                            <div class="nav-link link-primary" data-bs-toggle="modal" th:data-bs-target="'#orderDetailModal' + ${orderStat.index}">주문 상세보기 ></div>
                                         </div>
                                     </div>
                                     <div class="card mt-1">
@@ -130,6 +135,113 @@
                                                         <button type="button" class="btn btn-outline-danger w-100">주문내역 삭제</button>
                                                     </div>
                                                 </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                                <!-- 주문 상세보기 -->
+                                <div class="modal fade" th:id="'orderDetailModal' + ${orderStat.index}" tabindex="-1" aria-labelledby="orderDetailModalLabel" aria-hidden="true">
+                                    <div class="modal-dialog">
+                                        <div class="modal-content">
+                                            <div class="modal-header">
+                                                <h5 class="modal-title" id="orderDetailModalLabel">주문내역</h5>
+                                                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                                            </div>
+                                            <div class="modal-body" style="background-color: rgb(240, 243, 245);">
+                                                <div class="card">
+                                                    <div class="card-body">
+                                                        <h6>픽업을 완료했어요</h6>
+                                                        <h5 th:text="${order.store.storeName}">BBQ 간석중앙점</h5>
+                                                        <h6>핫 황금올리브 핫크리스피 1개</h6>
+                                                        <div class="mt-3">
+                                                            <div>
+                                                                <span>주문일시 : </span>
+                                                                <span th:text="${#temporals.format(order.createdDate, 'yyyy년 MM월 dd일 hh:mm')}">2022년 08월 31일 오후 06:21</span>
+                                                            </div>
+                                                            <div>
+                                                                <span>주문번호 : </span>
+                                                                <span th:text="${order.orderNumber}">B1BB014GBK</span>
+                                                            </div>
+<!--                                                            <div>-->
+<!--                                                                <span>접수번호 : </span>-->
+<!--                                                                <span>190</span>-->
+<!--                                                            </div>-->
+                                                            <div>
+                                                                <span>픽업방법 : </span>
+                                                                <span>포장</span>
+                                                            </div>
+                                                        </div>
+                                                        <div class="text-center">
+                                                            <button type="button" class="btn btn-primary w-25"><i class="bi bi-telephone"></i> 전화</button>
+                                                            <button type="button" class="btn btn-primary w-25" th:onclick="|location.href='@{/stores/{storeId}/detail(storeId=${order.store.id})}'|"><i class="bi bi-shop-window"></i> 가게보기</button>
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                                <div class="card mt-3">
+                                                    <div class="card-body" th:each="menuOrder : ${order.menuOrders}" th:classappend="${orderStat.index > 0 ? 'border-top' : _}">
+                                                        <h6 th:text="|${menuOrder.menuOption.menu.mainTitle} ${menuOrder.count}개|">핫 황금올리브 핫크리스피 1개</h6>
+                                                        <ul>
+                                                            <li>
+                                                                <span>기본 : </span>
+                                                                <span>한마리 (21,000원)</span>
+                                                            </li>
+                                                            <li>
+                                                                <span>O원의 행복 ㄹ1뷰 & 찜하기 : </span>
+                                                                <span>(참여) 코카콜라 1.25L 사이즈업</span>
+                                                            </li>
+                                                        </ul>
+                                                        <h6 th:text="|${#numbers.formatInteger(menuOrder.orderPrice, 0, 'COMMA')}원|">21,000원</h6>
+                                                    </div>
+                                                </div>
+                                                <div class="card mt-3">
+                                                    <div class="card-body" th:object="${order.payment}">
+                                                        <div>
+                                                            <h6>결제금액</h6>
+                                                            <div class="d-flex justify-content-between">
+                                                                <span>주문금액</span>
+                                                                <span th:text="|*{#numbers.formatInteger(orderAmount, 0, 'COMMA')}원|">43,000원</span>
+                                                            </div>
+                                                            <div class="d-flex justify-content-between">
+                                                                <span th:text="*{couponName}">할인쿠폰 BBQ 간석중앙점 쿠폰</span>
+                                                                <span th:text="|-*{#numbers.formatInteger(discountAmount, 0, 'COMMA')}원|">-2,000원</span>
+                                                            </div>
+                                                            <div class="d-flex justify-content-between" th:if="*{point != null}">
+                                                                <span>배민포인트</span>
+                                                                <span th:text="|-*{#numbers.formatInteger(point, 0, 'COMMA')}원|">-2,000원</span>
+                                                            </div>
+                                                            <div class="d-flex justify-content-between" th:if="*{deliveryTip != null}">
+                                                                <span>배달팁</span>
+                                                                <span th:text="|*{#numbers.formatInteger(deliveryTip, 0, 'COMMA')}원|">3,000원</span>
+                                                            </div>
+                                                        </div>
+                                                        <div class="border-top">
+                                                            <div class="d-flex justify-content-between">
+                                                                <span>총 결제금액</span>
+                                                                <span th:text="|*{#numbers.formatInteger(totalAmount, 0, 'COMMA')}원|">41,000원</span>
+                                                            </div>
+                                                            <div class="d-flex justify-content-between">
+                                                                <span>결제방법</span>
+                                                                <span th:text="*{paymentMethod.description}">네이버페이</span>
+                                                            </div>
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                                <div class="card mt-3">
+                                                    <div class="card-body">
+                                                        <div>
+                                                            <h6>전화번호</h6>
+                                                            <p th:text="|${order.delivery.safeNumber} (안심번호)|">050-****-**** (안심번호)</p>
+                                                            <p th:text="${order.delivery.phone}">010-1234-5678</p>
+                                                        </div>
+                                                        <div class="border-top">
+                                                            <h6>가게 사장님께</h6>
+                                                            <p th:text="|(수저, 포크 ${order.disposable ? 'O' : 'X'})(김치, 단무지 ${order.sideDish ? 'O' : 'X'})|">(수저, 포크 X)(김치, 단무지 O)</p>
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                            <div class="modal-footer">
+                                                <button type="button" class="btn btn-outline-danger w-100">주문내역 삭제</button>
                                             </div>
                                         </div>
                                     </div>
@@ -198,120 +310,6 @@
         </div>
     </div>
 </div>
-<!-- 주문 상세보기 -->
-<div class="modal fade" id="orderDetailModal" tabindex="-1" aria-labelledby="orderDetailModalLabel" aria-hidden="true">
-    <div class="modal-dialog">
-        <div class="modal-content">
-            <div class="modal-header">
-                <h5 class="modal-title" id="orderDetailModalLabel">주문내역</h5>
-                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
-            </div>
-            <div class="modal-body" style="background-color: rgb(240, 243, 245);">
-                <div class="card">
-                    <div class="card-body">
-                        <h6>픽업을 완료했어요</h6>
-                        <h5>BBQ 간석중앙점</h5>
-                        <h6>핫 황금올리브 핫크리스피 1개</h6>
-                        <div class="mt-3">
-                            <div>
-                                <span>주문일시 : </span>
-                                <span>2022년 08월 31일 오후 06:21</span>
-                            </div>
-                            <div>
-                                <span>주문번호 : </span>
-                                <span>B1BB014GBK</span>
-                            </div>
-                            <div>
-                                <span>접수번호 : </span>
-                                <span>190</span>
-                            </div>
-                            <div>
-                                <span>픽업방법 : </span>
-                                <span>포장</span>
-                            </div>
-                        </div>
-                        <div class="text-center">
-                            <button type="button" class="btn btn-primary w-25"><i class="bi bi-telephone"></i> 전화</button>
-                            <button type="button" class="btn btn-primary w-25"><i class="bi bi-shop-window"></i> 가게보기</button>
-                        </div>
-                    </div>
-                </div>
-                <div class="card mt-3">
-                    <div class="card-body">
-                        <h6>핫 황금올리브 핫크리스피 1개</h6>
-                        <ul>
-                            <li>
-                                <span>기본 : </span>
-                                <span>한마리 (21,000원)</span>
-                            </li>
-                            <li>
-                                <span>O원의 행복 ㄹ1뷰 & 찜하기 : </span>
-                                <span>(참여) 코카콜라 1.25L 사이즈업</span>
-                            </li>
-                        </ul>
-                        <h6>21,000원</h6>
-                    </div>
-                    <div class="card-body border-top">
-                        <h6>핫 황금올리브 핫크리스피 1개</h6>
-                        <ul>
-                            <li>
-                                <span>기본 : </span>
-                                <span>윙.봉 (22,000원)</span>
-                            </li>
-                            <li>
-                                <span>O원의 행복 ㄹ1뷰 & 찜하기 : </span>
-                                <span>(참여) 코카콜라 1.25L 사이즈업</span>
-                            </li>
-                        </ul>
-                        <h6>22,000원</h6>
-                    </div>
-                </div>
-                <div class="card mt-3">
-                    <div class="card-body">
-                        <div>
-                            <h6>결제금액</h6>
-                            <div class="d-flex justify-content-between">
-                                <span>주문금액</span>
-                                <span>43,000원</span>
-                            </div>
-                            <div class="d-flex justify-content-between">
-                                <span>할인쿠폰 BBQ 간석중앙점 쿠폰</span>
-                                <span>-2,000원</span>
-                            </div>
-                        </div>
-                        <div class="border-top">
-                            <div class="d-flex justify-content-between">
-                                <span>총 결제금액</span>
-                                <span>41,000원</span>
-                            </div>
-                            <div class="d-flex justify-content-between">
-                                <span>결제방법</span>
-                                <span>네이버페이</span>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-                <div class="card mt-3">
-                    <div class="card-body">
-                        <div>
-                            <h6>전화번호</h6>
-                            <p>050-****-**** (안심번호)</p>
-                            <p>010-1234-5678</p>
-                        </div>
-                        <div class="border-top">
-                            <h6>가게 사장님께</h6>
-                            <p>(수저, 포크 X)(김치, 단무지 O)</p>
-                        </div>
-                    </div>
-                </div>
-            </div>
-            <div class="modal-footer">
-                <button type="button" class="btn btn-outline-danger w-100">주문내역 삭제</button>
-            </div>
-        </div>
-    </div>
-</div>
-
 <footer th:replace="fragments/footer::footer"></footer>
 </body>
 

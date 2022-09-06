@@ -57,7 +57,7 @@
                                 <div class="col-sm-4 align-self-center text-start fs-5">
                                     포인트
                                 </div>
-                                <div class="col align-self-center text-end" th:text="|${#numbers.formatInteger(loginMember.point.totalPoint, 0, 'COMMA')}원|">
+                                <div class="col align-self-center text-end">
                                     500,000 원
                                 </div>
                             </div>
@@ -65,7 +65,7 @@
                                 <div class="col-sm-4 align-self-center text-start fs-5">
                                     페이
                                 </div>
-                                <div class="col align-self-center text-end" th:text="|${#numbers.formatInteger(loginMember.pay.money, 0, 'COMMA')}원|">
+                                <div class="col align-self-center text-end">
                                     500,000 원
                                 </div>
                             </div>
@@ -96,7 +96,7 @@
                                         <div class="card" th:onclick="|location.href='@{/stores/{storeId}/detail(storeId=${bookmark.store.id})}'|" style="cursor: pointer">
                                             <div class="card-body">
                                                 <div class="d-flex position-relative">
-                                                    <img src="https://via.placeholder.com/125x125" th:src="${bookmark.store.uploadFile.storeFileName}" class="flex-shrink-0 me-3" alt="store img" style="height: 125px;">
+                                                    <img src="https://via.placeholder.com/125x125" class="flex-shrink-0 me-3" alt="store img" style="height: 125px;">
                                                     <ul style="list-style: none; padding-left: 0;">
                                                         <li th:text="${bookmark.store.storeName}">store name</li>
                                                         <li th:text="|별 ${bookmark.store.rating} (${bookmark.store.reviewCount})|">rating (review count)</li>

@@ -16,7 +16,7 @@ public interface StoreService {
     Store findStoreById(Long storeId);
 
     //카테고리 조회
-    List<MenuCategory> findCategory(Long storeId);
+    List<MenuCategory> findMenuCategoryByStoreId(Long storeId);
 
     //가게배너사진 조회
     List<StoreImage> findStoreBannerImages(Long storeId);

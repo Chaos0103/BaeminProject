@@ -289,7 +289,7 @@
                                                 <div class="card mt-3"  th:each="menuSubOptionCategory : ${menuSubOptionCategorise}" th:if="${menuSubOptionCategory.menu.id} == ${menu.id}">
                                                     <div class="card-body">
                                                         <h4 th:text="${menuSubOptionCategory.categoryName}">사이드메뉴 추가선택</h4>
-                                                        <div class="form-check mt-3" th:each="menuSubOption : ${menuSubOptions}" th:if="${menuSubOption.category.id} == ${menuSubOptionCategory.id}">
+                                                        <div class="form-check mt-3" th:each="menuSubOption : ${menuSubOptionCategory.menuSubOptions}">
                                                             <input class="form-check-input" type="checkbox" name="flexRadioDefault" id="sideMenu" th:id="|menuSubOption${menuSubOptionStat.index}|"
                                                                    th:field="*{menuSubOptionIds}" th:value="${menuSubOption.id}">
                                                             <label class="form-check-label w-100" for="sideMenu" th:for="|menuSubOption${menuSubOptionStat.index}|">
@@ -316,7 +316,7 @@
                                                 </div>
                                             </div>
                                             <div class="modal-footer">
-                                                <button type="button" class="btn baemin-btn w-25">담기</button>
+                                                <button type="submit" class="btn baemin-btn w-25">담기</button>
                                             </div>
                                         </form>
                                     </div>
@@ -340,7 +340,7 @@
                             <div class="accordion-body">
                                 <div class="row row-cols-1 row-cols-md-2 g-4">
                                     <!-- menu start -->
-                                    <th:block th:each="menu : ${menus}" th:if="${menu.category.id} == ${category.id}">
+                                    <th:block th:each="menu : ${category.menus}">
                                     <div class="col">
                                         <div class="card" style="cursor: pointer" data-bs-toggle="modal" th:data-bs-target="'#menuDetail' + ${menu.id}">
                                             <div class="card-body">
@@ -415,7 +415,7 @@
                                                     <div class="card mt-3"  th:each="menuSubOptionCategory : ${menuSubOptionCategorise}" th:if="${menuSubOptionCategory.menu.id} == ${menu.id}">
                                                         <div class="card-body">
                                                             <h4 th:text="${menuSubOptionCategory.categoryName}">사이드메뉴 추가선택</h4>
-                                                            <div class="form-check mt-3" th:each="menuSubOption : ${menuSubOptions}" th:if="${menuSubOption.category.id} == ${menuSubOptionCategory.id}">
+                                                            <div class="form-check mt-3" th:each="menuSubOption : ${menuSubOptionCategory.menuSubOptions}" th:if="${menuSubOption.category.id} == ${menuSubOptionCategory.id}">
                                                                 <input class="form-check-input" type="checkbox" name="flexRadioDefault" id="sideMenu2" th:id="|menuSubOption${menuSubOptionStat.index}|"
                                                                        th:field="*{menuSubOptionIds}" th:value="${menuSubOption.id}">
                                                                 <label class="form-check-label w-100" for="sideMenu2" th:for="|menuSubOption${menuSubOptionStat.index}|">

@@ -16,5 +16,5 @@ public interface OrderService {
     @Transactional
     Long cancel(Long orderId);
 
-    List<Order> findOrderList(Long memberId);
+    List<Order> findOrdersByMemberId(Long memberId);
 }
