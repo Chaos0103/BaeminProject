@@ -5,6 +5,7 @@ import org.springframework.stereotype.Service;
 import project.delivery.domain.Bookmark;
 import project.delivery.domain.Member;
 import project.delivery.domain.Store;
+import project.delivery.dto.BookmarkDto;
 import project.delivery.exception.NoSuchException;
 import project.delivery.repository.BookmarkRepository;
 import project.delivery.repository.StoreRepository;
@@ -36,7 +37,7 @@ public class BookmarkServiceImplV0 implements BookmarkService {
     }
 
     @Override
-    public List<Bookmark> findByMember(Long memberId) {
-        return bookmarkRepository.findByMemberId(memberId);
+    public List<BookmarkDto> findBookmarksByMemberId(Long memberId) {
+        return bookmarkRepository.findBookmarksByMemberId(memberId);
     }
 }

@@ -7,7 +7,7 @@ import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
 import project.delivery.domain.Bookmark;
 import project.delivery.domain.Member;
-import project.delivery.domain.Notification;
+import project.delivery.dto.BookmarkDto;
 import project.delivery.dto.NotificationDto;
 import project.delivery.login.Login;
 import project.delivery.service.BookmarkService;
@@ -24,11 +24,6 @@ public class BookmarkController {
     private final BookmarkService bookmarkService;
     private final NotificationService notificationService;
 
-    @ModelAttribute("notifications")
-    public List<NotificationDto> notifications(@Login Member loginMember) {
-        return notificationService.findNotificationByMemberId(loginMember.getId());
-    }
-
     @ModelAttribute("loginMember")
     public Member loginMember(@Login Member loginMember) {
         return loginMember;
@@ -36,7 +31,10 @@ public class BookmarkController {
 
     @GetMapping
     public String bookmarkHome(@Login Member loginMember, Model model) {
-        List<Bookmark> bookmarks = bookmarkService.findByMember(loginMember.getId());
+        List<NotificationDto> notifications = notificationService.findNotificationByMemberId(loginMember.getId());
+        List<BookmarkDto> bookmarks = bookmarkService.findBookmarksByMemberId(loginMember.getId());
+
+        model.addAttribute("notifications", notifications);
         model.addAttribute("bookmarks", bookmarks);
         return "member/bookmark";
     }

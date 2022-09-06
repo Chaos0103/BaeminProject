@@ -93,18 +93,30 @@
                                         찜 리스트가 없습니다
                                     </div>
                                     <div class="col" th:each="bookmark : ${bookmarks}">
-                                        <div class="card" th:onclick="|location.href='@{/stores/{storeId}/detail(storeId=${bookmark.store.id})}'|" style="cursor: pointer">
+                                        <div class="card" th:onclick="|location.href='@{/stores/{storeId}/detail(storeId=${bookmark.storeId})}'|" style="cursor: pointer">
                                             <div class="card-body">
                                                 <div class="d-flex position-relative">
-                                                    <img src="https://via.placeholder.com/125x125" class="flex-shrink-0 me-3" alt="store img" style="height: 125px;">
+                                                    <img src="https://via.placeholder.com/125x125" th:src="${bookmark.storeFileName}" class="flex-shrink-0 me-3" alt="store img" style="height: 125px;">
                                                     <ul style="list-style: none; padding-left: 0;">
-                                                        <li th:text="${bookmark.store.storeName}">store name</li>
-                                                        <li th:text="|별 ${bookmark.store.rating} (${bookmark.store.reviewCount})|">rating (review count)</li>
-                                                        <li th:text="|최소주문 ${#numbers.formatInteger(bookmark.store.deliveryInfo.minOrderPrice, 0, 'COMMA')}원|">minOrderPrice, deliveryTip</li>
-                                                        <li th:text="${bookmark.store.id}">status</li>
+                                                        <li th:text="${bookmark.storeName}">store name</li>
+                                                        <li>
+                                                            <span><i class="bi bi-star-fill text-warning"></i></span>
+                                                            <span th:text="|${bookmark.storeRating} (${bookmark.storeReviewCount})|">rating (review count)</span>
+                                                        </li>
+                                                        <li>
+                                                            <span th:text="|최소주문 ${#numbers.formatInteger(bookmark.minOrderPrice, 0, 'COMMA')}원|"></span>
+                                                            <span th:text="|, 배달팁 ${#numbers.formatInteger(bookmark.minOrderPrice, 0, 'COMMA')}원|"></span>
+                                                        </li>
+                                                        <li>
+                                                            <span class="badge text-bg-secondary">
+                                                                <span><i class="bi bi-clock"></i></span>
+                                                                <span th:text="${bookmark.deliveryTime}"></span>
+                                                            </span>
+                                                            <span class="badge text-bg-secondary" th:if="${bookmark.packingInfo}">포장가능</span>
+                                                        </li>
                                                     </ul>
                                                     <div class="position-absolute top-0 end-0">
-                                                        <button type="button" class="btn-close" aria-label="Close" th:onclick="'javascript:remove('+${bookmark.id}+')'"></button>
+                                                        <button type="button" class="btn-close" aria-label="Close" th:onclick="'javascript:remove('+${bookmark.bookmarkId}+')'"></button>
                                                     </div>
                                                 </div>
                                             </div>

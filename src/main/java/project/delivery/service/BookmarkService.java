@@ -3,6 +3,7 @@ package project.delivery.service;
 import org.springframework.transaction.annotation.Transactional;
 import project.delivery.domain.Bookmark;
 import project.delivery.domain.Member;
+import project.delivery.dto.BookmarkDto;
 
 import java.util.List;
 
@@ -15,5 +16,5 @@ public interface BookmarkService {
     @Transactional
     void removeBookmark(Long bookmarkId);
 
-    List<Bookmark> findByMember(Long memberId);
+    List<BookmarkDto> findBookmarksByMemberId(Long memberId);
 }
