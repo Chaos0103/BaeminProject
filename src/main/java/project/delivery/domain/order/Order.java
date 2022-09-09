@@ -52,6 +52,8 @@ public class Order extends TimeBaseEntity {
     private Boolean sideDish;
     @Column(updatable = false)
     private String requirement;
+    @Column(nullable = false)
+    private Boolean reviewCreationStatus;
 
     @OneToMany(mappedBy = "order", cascade = CascadeType.ALL)
     private List<MenuOrder> menuOrders = new ArrayList<>();
@@ -67,6 +69,7 @@ public class Order extends TimeBaseEntity {
         this.sideDish = sideDish;
         this.requirement = requirement;
         this.status = OrderStatus.ORDER;
+        this.reviewCreationStatus = false;
     }
 
     //==생성 메서드==//
@@ -82,5 +85,10 @@ public class Order extends TimeBaseEntity {
     public void addMenuOrder(MenuOrder menuOrder) {
         this.menuOrders.add(menuOrder);
         menuOrder.addOrder(this);
+    }
+
+    //==비즈니스 메서드==//
+    public void changeReviewCreationStatus() {
+        this.reviewCreationStatus = true;
     }
 }

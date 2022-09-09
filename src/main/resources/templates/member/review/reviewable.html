@@ -1,41 +1,12 @@
 <!DOCTYPE html>
 <html lang="ko" xmlns:th="http://www.thymeleaf.org">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1">
-    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.2.0/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-gH2yIJqKdNHPEq0n4Mqa/HGKIhSkIHeL5AyhkYV8i59U5AR6csBvApHHNl/vI1Bx" crossorigin="anonymous">
-    <link rel="stylesheet" href="../../../static/css/style.css">
-    <link href="../../../static/icon/favicon.ico" rel="shortcut icon" type="image/x-icon">
-    <title>배달의 민족</title>
+<head th:replace="fragments/head::head(~{::title})">
+    <title>배달의 민족 | 리뷰관리</title>
 </head>
 <body>
-<!-- header -->
-<header class="p-3">
-    <div class="container">
-        <div class="d-flex flex-wrap align-items-center justify-content-center justify-content-lg-start">
-            <a href="#" class="d-flex align-items-center mb-2 mb-lg-0 ms-3 text-white text-decoration-none">
-                <img src="../../../static/img/logo.png" alt="main_icon" height="20"/>
-            </a>
-
-            <ul class="nav col-12 col-lg-auto me-lg-auto mb-2 ms-2 justify-content-center mb-md-0">
-                <li><a href="#" class="nav-link px-2 text-white">Home</a></li>
-                <li><a href="#" class="nav-link px-2 text-white">찜</a></li>
-                <li><a href="#" class="nav-link px-2 text-white">주문내역</a></li>
-                <li><a href="#" class="nav-link px-2 text-white">마이페이지</a></li>
-                <li><a href="#" class="nav-link px-2 text-white">About</a></li>
-            </ul>
-
-            <form class="col-12 col-lg-auto mb-3 mb-lg-0 me-lg-3" role="search">
-                <input type="search" class="form-control form-control-dark text-bg-light" placeholder="Search..." aria-label="Search">
-            </form>
-
-            <ul class="nav pe-2">
-                <li class="nav-item"><a href="#" class="nav-link link-light px-2">Login</a></li>
-                <li class="nav-item"><a href="#" class="nav-link link-light px-2">Sign up</a></li>
-            </ul>
-        </div>
-    </div>
-</header>
+<header th:replace="fragments/loginHeader::loginHeader"></header>
+<section th:replace="fragments/notifications::notifications(${notifications})"></section>
+<section th:replace="stores/fragments/basket::basket(${basket}, ${basketMenus})"></section>
 
 <article>
     <div class="container px-4 py-5">
@@ -43,41 +14,61 @@
             <!-- top info -->
             <section>
                 <div class="container text-center">
-                    <div class="row bg-main text-white" style="height: 100px;">
-                        <div class="align-self-center fs-1 bg-main" style="width: 200px;">
+                    <div class="row bg-main text-white" style="">
+                        <div class="col-sm-2 align-self-center fs-1 bg-main">
                             MY배민
                         </div>
                         <div class="col border-start">
                             <div class="row align-self-center text-start p-2">
-                                할인쿠폰
+                                <div class="col fs-5">
+                                    회원등급
+                                </div>
                             </div>
-                            <div class="row align-self-center text-start fs-1 ps-3">
-                                0장
+                            <div class="row align-self-center fs-1 ps-3">
+                                <div class="col text-end" th:text="${loginMember.grade.description}">
+                                    VIP
+                                </div>
                             </div>
                         </div>
                         <div class="col border-start">
                             <div class="row align-self-center text-start p-2">
-                                리뷰작성
+                                <div class="col fs-5">
+                                    할인쿠폰
+                                </div>
                             </div>
-                            <div class="row align-self-center text-start fs-1 ps-3">
-                                0개
+                            <div class="row align-self-center fs-1 ps-3">
+                                <div class="col text-end" th:text="|${#numbers.formatInteger(countCoupon, 0, 'COMMA')} 장|">
+                                    0장
+                                </div>
+                            </div>
+                        </div>
+                        <div class="col border-start">
+                            <div class="row align-self-center text-start p-2">
+                                <div class="col fs-5">
+                                    리뷰작성
+                                </div>
+                            </div>
+                            <div class="row align-self-center fs-1 ps-3">
+                                <div class="col text-end">
+                                    0개
+                                </div>
                             </div>
                         </div>
                         <div class="col border-start">
                             <div class="row border-bottom h-50">
-                                <div class="col align-self-center text-start">
+                                <div class="col-sm-4 align-self-center text-start fs-5">
                                     포인트
                                 </div>
-                                <div class="col align-self-center text-end">
-                                    0 원
+                                <div class="col align-self-center text-end" th:text="|${#numbers.formatInteger(totalPoint, 0, 'COMMA')} 원|">
+                                    500,000 원
                                 </div>
                             </div>
                             <div class="row h-50">
-                                <div class="col align-self-center text-start">
+                                <div class="col-sm-4 align-self-center text-start fs-5">
                                     페이
                                 </div>
-                                <div class="col align-self-center text-end">
-                                    0 원
+                                <div class="col align-self-center text-end" th:text="|${#numbers.formatInteger(money, 0, 'COMMA')} 원|">
+                                    500,000 원
                                 </div>
                             </div>
                         </div>
@@ -87,32 +78,8 @@
 
             <section>
                 <div class="container text-center">
-                    <!-- sidebar start -->
                     <div class="row">
-                        <div class="border text-start bg-secondary bg-opacity-10" style="width: 200px; height: 500px;">
-                            <nav class="nav flex-column mt-4">
-                                <div class="border-bottom">
-                                    <label class="nav-link text-dark">MY 배달</label>
-                                    <a class="nav-link" aria-current="page" href="#">주문내역</a>
-                                </div>
-                                <div class="border-bottom">
-                                    <label class="nav-link text-dark">MY 혜택</label>
-                                    <a class="nav-link" aria-current="page" href="#">포인트</a>
-                                    <a class="nav-link" aria-current="page" href="#">쿠폰함</a>
-                                </div>
-                                <div class="border-bottom">
-                                    <label class="nav-link text-dark">MY 활동</label>
-                                    <a class="nav-link" aria-current="page" href="#">리뷰관리</a>
-                                    <a class="nav-link" aria-current="page" href="#">찜 리스트</a>
-                                </div>
-                                <div>
-                                    <label class="nav-link text-dark">MY 정보</label>
-                                    <a class="nav-link" aria-current="page" href="#">개인정보확인/수정</a>
-                                    <a class="nav-link" aria-current="page" href="#">페이</a>
-                                </div>
-                            </nav>
-                        </div>
-                        <!-- sidebar end -->
+                        <div th:replace="fragments/mypageSidebar::mypageSidebar"></div>
                         <div class="col text-start">
                             <div class="m-4">
                                 <div class="row mb-1">
@@ -123,47 +90,97 @@
                             </div>
                             <div class="m-4">
                                 <div class="mb-3">
-                                    <ul class="nav nav-tabs">
-                                        <li class="nav-item">
-                                            <a class="nav-link active" aria-current="page" href="#">리뷰 작성</a>
+                                    <ul class="nav nav-tabs text-center">
+                                        <li class="nav-item w-50">
+                                            <a class="nav-link active" aria-current="page" href="#" th:href="@{/reviews/reviewable}">리뷰 작성</a>
                                         </li>
-                                        <li class="nav-item">
-                                            <a class="nav-link" href="#">작성한 리뷰</a>
+                                        <li class="nav-item w-50">
+                                            <a class="nav-link" href="#" th:href="@{/reviews/wroteReviews}">작성한 리뷰</a>
                                         </li>
                                     </ul>
                                 </div>
-
-                                <div class="border rounded-3">
-                                    <div class="row m-3">
-                                        <div class="col-sm-2 text-center align-self-center">
-                                            <img src="../../../static/img/dummy.png" class="align-middle" style="width: 100px; height: 100px;" alt="매장이미지"/>
-                                        </div>
-                                        <div class="col">
-                                            <div class="row">
-                                                <div class="col">
-                                                    BBQ XX점
-                                                </div>
-                                            </div>
-                                            <div class="row">
-                                                <div class="col">
-                                                    별 4.9 (100+)
-                                                </div>
-                                            </div>
-                                            <div class="row">
-                                                <div class="col">
-                                                    최소주문 15,000원, 배달팁 0원~2,900원
-                                                </div>
-                                            </div>
-                                            <div class="row">
-                                                <div class="col">
-                                                    포장가능
-                                                </div>
+                                <div class="card" th:each="order:${orders}">
+                                    <div class="card-body">
+                                        <div class="d-flex position-relative">
+                                            <img src="https://via.placeholder.com/125x125" th:src="${order.store.storeIcon.storeFileName}" class="flex-shrink-0 me-3" alt="store img" style="height: 125px;">
+                                            <ul style="list-style: none; padding-left: 0;">
+                                                <li th:text="${order.store.storeName}">store name</li>
+                                                <li>
+                                                    <span><i class="bi bi-star-fill text-warning"></i></span>
+                                                    <span th:text="|${order.store.rating} (${order.store.reviewCount})|">rating (review count)</span>
+                                                </li>
+                                                <li>
+                                                    <span th:text="|최소주문 ${#numbers.formatInteger(order.store.deliveryInfo.minOrderPrice, 0, 'COMMA')}원|">최소주문</span>
+                                                    <span>, 배달팁</span>
+                                                </li>
+                                                <li>
+                                                    <span class="badge text-bg-secondary">
+                                                        <span><i class="bi bi-clock"></i></span>
+                                                        <span th:text="${order.store.deliveryInfo.deliveryTime}"></span>
+                                                    </span>
+                                                    <span class="badge text-bg-secondary" th:if="${order.store.packingInfo != null}">포장가능</span>
+                                                </li>
+                                            </ul>
+                                            <div class="position-absolute top-0 end-0">
+                                                <button type="button" class="btn btn-outline-secondary" style="width: 200px;" data-bs-toggle="modal" th:data-bs-target="'#writeReviewModal' + ${orderStat.index}" >리뷰 작성하기</button>
                                             </div>
                                         </div>
-                                        <div class="col-sm-3 text-center">
-                                            <div class="row h-100">
-                                                <div class="col align-self-center">
-                                                    <button type="button" class="btn btn-outline-secondary" style="width: 200px;">리뷰 작성하기</button>
+                                    </div>
+                                    <!-- Modal -->
+                                    <form method="post" th:action="@{/reviews/reviewable/{orderId}(orderId=${order.id})}" th:object="${reviewAddForm}">
+                                        <div class="modal fade" th:id="'writeReviewModal' + ${orderStat.index}" data-bs-backdrop="static" data-bs-keyboard="false" tabindex="-1" aria-labelledby="writeReviewModalLabel" aria-hidden="true">
+                                            <div class="modal-dialog">
+                                                <div class="modal-content">
+                                                    <div class="modal-header">
+                                                        <h5 class="modal-title" id="writeReviewModalLabel">리뷰쓰기</h5>
+                                                        <button type="button" class="btn-close" data-bs-target="#closeWriteReviewModal" data-bs-toggle="modal"></button>
+                                                    </div>
+                                                    <div class="modal-body">
+                                                        <h4 class="text-center">음식은 어떠셨어요?</h4>
+                                                        <h5 class="text-center" th:text="${order.store.storeName}"></h5>
+                                                        <h6 class="text-center text-muted">핫 황금올리브 핫 크리스피</h6>
+                                                        <div>
+                                                            <i class="bi bi-star-fill"></i>
+                                                            <i class="bi bi-star-fill"></i>
+                                                            <i class="bi bi-star-fill"></i>
+                                                            <i class="bi bi-star-fill"></i>
+                                                            <i class="bi bi-star-fill"></i>
+                                                        </div>
+                                                        <div class="mb-3">
+                                                            <label for="formFileMultiple" class="form-label"></label>
+                                                            <input th:field="*{uploadFileName}" class="form-control" type="file" id="formFileMultiple" multiple>
+                                                        </div>
+                                                        <div class="mb-3">
+                                                            <label for="exampleFormControlTextarea1" class="form-label"></label>
+                                                            <textarea th:field="*{content}" class="form-control" id="exampleFormControlTextarea1" rows="5" placeholder="음식의 맛, 양, 포장 상태 등 음식에 대한 솔직한 리뷰를 남겨주세요. (선택)"></textarea>
+                                                        </div>
+                                                        <div class="border-top text-muted fs-custom">
+                                                            <ul class="mt-3" style="padding-left: 10px">
+                                                                <li>솔직하게 작성하신 리뷰는 주문을 고민하는 분들께 큰 도움이 됩니다. 하지만 허위리뷰나 명예훼손, 욕설, 타인비방글 등 선량한 업주나 제 3자의 권리를 침해하는 게시물은 서비스 이용약관이나 관련 법률에 따라 제재를 받을 수 있습니다.</li>
+                                                                <li>우아한형제들은 위와 같은 게시물 작성자에게 경고, 주의 등의 조치를 취할 수 있고, 해당 게시물을 삭제하거나 보이지 않게 할 수 있습니다. 게시에 따른 책임은 작성자에게 있으며, 우아한형제들은 이에 대한 법적 책임을 지지 않습니다.</li>
+                                                            </ul>
+                                                        </div>
+                                                    </div>
+                                                    <div class="modal-footer">
+                                                        <button type="submit" class="btn baemin-btn w-100">완료</button>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </form>
+                                    <div class="modal fade" id="closeWriteReviewModal" aria-hidden="true" aria-labelledby="closeWriteReviewModalLabel" tabindex="-1">
+                                        <div class="modal-dialog modal-dialog-centered">
+                                            <div class="modal-content">
+                                                <div class="modal-header">
+                                                    <h5 class="modal-title" id="closeWriteReviewModalLabel">리뷰쓰기</h5>
+                                                </div>
+                                                <div class="modal-body text-center">
+                                                    <h4>정말 리뷰 작성을 그만하시겠어요?</h4>
+                                                    <h6 class="text-muted">고객님의 리뷰가 다른 고객들에게 도움이 될 수 있어요.</h6>
+                                                </div>
+                                                <div class="modal-footer">
+                                                    <button type="button" class="btn btn-outline-dark w-50" data-bs-dismiss="modal">그만하기</button>
+                                                    <button type="button" class="btn btn-outline-dark w-50" data-bs-toggle="modal" data-bs-target="#writeReviewModal">계속하기</button>
                                                 </div>
                                             </div>
                                         </div>
@@ -178,19 +195,7 @@
     </div>
 </article>
 
-<!-- footer -->
-<div class="container">
-    <footer class="py-3 my-4">
-        <ul class="nav justify-content-center border-bottom pb-3 mb-3">
-            <li class="nav-item"><a href="#" class="nav-link px-2 text-muted">Home</a></li>
-            <li class="nav-item"><a href="#" class="nav-link px-2 text-muted">찜</a></li>
-            <li class="nav-item"><a href="#" class="nav-link px-2 text-muted">주문내역</a></li>
-            <li class="nav-item"><a href="#" class="nav-link px-2 text-muted">마이페이지</a></li>
-            <li class="nav-item"><a href="#" class="nav-link px-2 text-muted">About</a></li>
-        </ul>
-        <p class="text-center text-muted">&copy; 2022 Company, Inc</p>
-    </footer>
-</div>
+<footer th:replace="fragments/footer::footer"></footer>
 </body>
 
 </html>

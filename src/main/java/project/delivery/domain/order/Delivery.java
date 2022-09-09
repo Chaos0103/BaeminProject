@@ -34,6 +34,6 @@ public class Delivery extends TimeBaseEntity {
         this.safeNumber = safeNumber;
         this.requirement = requirement;
 
-        this.status = DeliveryStatus.COMP;
+        this.status = DeliveryStatus.DELIVERY;
     }
 }

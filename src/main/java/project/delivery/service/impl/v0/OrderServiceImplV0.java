@@ -80,16 +80,13 @@ public class OrderServiceImplV0 implements OrderService {
     }
 
     @Override
-    public List<Order> findOrdersByMemberId(Long memberId) {
-        return orderRepository.findOrdersByMemberId(memberId);
+    public void removeOrder(Long orderId) {
+        orderRepository.deleteById(orderId);
     }
 
-    private Integer getOrderPrice(MenuOption menuOption, List<MenuSubOption> menuSubOptions) {
-        int orderPrice = menuOption.getPrice();
-        for (MenuSubOption menuSubOption : menuSubOptions) {
-            orderPrice += menuSubOption.getPrice();
-        }
-        return orderPrice;
+    @Override
+    public List<Order> findOrdersByMemberId(Long memberId) {
+        return orderRepository.findOrdersByMemberId(memberId);
     }
 
     private Order findOrder(Long orderId) {
@@ -119,11 +116,19 @@ public class OrderServiceImplV0 implements OrderService {
             List<MenuSubOption> menuSubOptions = basketSubOptionInfos.stream()
                     .map(BasketSubOptionInfo::getMenuSubOption)
                     .toList();
-            Integer orderPrice = getOrderPrice(basketMenu.getMenuOption(), menuSubOptions);
+            int orderPrice = getOrderPrice(basketMenu.getMenuOption(), menuSubOptions) * basketMenu.getCount();
             MenuOrder menuOrder = MenuOrder.createMenuOrder(basketMenu.getMenuOption(), basketMenu.getCount(), orderPrice, menuSubOptions);
             menuOrders.add(menuOrder);
         }
         return menuOrders;
+    }
+
+    private Integer getOrderPrice(MenuOption menuOption, List<MenuSubOption> menuSubOptions) {
+        int orderPrice = menuOption.getPrice();
+        for (MenuSubOption menuSubOption : menuSubOptions) {
+            orderPrice += menuSubOption.getPrice();
+        }
+        return orderPrice;
     }
 
     private String getOrderNumber() {

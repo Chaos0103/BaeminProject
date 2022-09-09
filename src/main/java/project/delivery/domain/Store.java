@@ -49,6 +49,8 @@ public class Store extends TimeBaseEntity {
     @Lob
     @Column(nullable = false)
     private String countryOfPlace;
+    @Embedded
+    private UploadFile storeIcon;
 
     @Column(nullable = false)
     private float rating;
@@ -70,7 +72,7 @@ public class Store extends TimeBaseEntity {
     @OneToMany(mappedBy = "store", orphanRemoval = true, cascade = CascadeType.ALL)
     private List<StoreImage> storeImages = new ArrayList<>();
 
-    public Store(String storeName, Category category, String tel, String introduction, String tradeName, String openTime, String holiday, String deliveryArea, String representativeName, Address businessAddress, String businessNumber, Announcement announcement, String countryOfPlace) {
+    public Store(String storeName, Category category, String tel, String introduction, String tradeName, String openTime, String holiday, String deliveryArea, String representativeName, Address businessAddress, String businessNumber, Announcement announcement, String countryOfPlace, UploadFile storeIcon) {
         this.storeName = storeName;
         this.category = category;
         this.tel = tel;
@@ -84,6 +86,7 @@ public class Store extends TimeBaseEntity {
         this.businessNumber = businessNumber;
         this.announcement = announcement;
         this.countryOfPlace = countryOfPlace;
+        this.storeIcon = storeIcon;
 
         this.rating = 0.0f;
         this.reviewCount = 0;

@@ -78,10 +78,8 @@ public class BasketRepositoryImpl implements BasketRepositoryCustom {
                         store.storeName))
                 .from(basket)
                 .join(basket.store, store)
-                .join(store.storeImages, storeImage)
                 .where(
-                        basket.member.id.eq(memberId),
-                        storeImage.banner.isFalse()
+                        basket.member.id.eq(memberId)
                 )
                 .fetchOne();
     }

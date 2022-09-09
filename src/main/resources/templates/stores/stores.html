@@ -32,9 +32,7 @@
                         <div class="card" th:onclick="|location.href='@{/stores/{storeId}/detail (storeId=${store.id})}'|" style="cursor: pointer">
                             <div class="card-body">
                                 <div class="d-flex">
-                                    <div class="flex-shrink-0" th:each="storeImage : ${store.storeImages}" th:unless="${storeImage.banner}">
-                                        <img th:src="${storeImage.uploadFile.storeFileName}" alt="img" style="height: 100px;">
-                                    </div>
+                                    <img th:src="${store.storeIcon.storeFileName}" alt="img" style="height: 100px;">
                                     <div class="flex-grow-1 ms-3">
                                         <div class="row">
                                             <div class="col" th:text="${store.storeName}">

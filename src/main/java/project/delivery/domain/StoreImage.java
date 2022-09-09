@@ -19,14 +19,11 @@ public class StoreImage {
     @JoinColumn(name = "store_id")
     private Store store;
 
-    @Column(nullable = false)
-    private boolean banner;
     @Embedded
     private UploadFile uploadFile;
 
-    public StoreImage(Store store, boolean banner, UploadFile uploadFile) {
+    public StoreImage(Store store, UploadFile uploadFile) {
         this.store = store;
-        this.banner = banner;
         this.uploadFile = uploadFile;
         store.addStoreImage(this);
     }

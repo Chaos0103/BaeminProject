@@ -1,14 +1,18 @@
 package project.delivery.repository.impl;
 
 import com.querydsl.jpa.impl.JPAQueryFactory;
+import project.delivery.domain.QDeliveryInfo;
+import project.delivery.domain.QPackingInfo;
 import project.delivery.domain.order.Order;
 import project.delivery.repository.custom.OrderRepositoryCustom;
 
 import javax.persistence.EntityManager;
 import java.util.List;
 
+import static project.delivery.domain.QDeliveryInfo.*;
 import static project.delivery.domain.QMenu.*;
 import static project.delivery.domain.QMenuOption.*;
+import static project.delivery.domain.QPackingInfo.*;
 import static project.delivery.domain.QStore.*;
 import static project.delivery.domain.order.QDelivery.*;
 import static project.delivery.domain.order.QMenuOrder.*;
@@ -34,6 +38,8 @@ public class OrderRepositoryImpl implements OrderRepositoryCustom {
                 .join(order.menuOrders, menuOrder).fetchJoin()
                 .join(menuOrder.menuOption, menuOption).fetchJoin()
                 .join(menuOption.menu, menu).fetchJoin()
+                .join(store.deliveryInfo, deliveryInfo).fetchJoin()
+                .leftJoin(store.packingInfo, packingInfo).fetchJoin()
                 .where(order.member.id.eq(memberId))
                 .fetch();
     }

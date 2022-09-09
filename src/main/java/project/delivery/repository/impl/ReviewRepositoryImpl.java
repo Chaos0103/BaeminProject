@@ -3,16 +3,22 @@ package project.delivery.repository.impl;
 import com.querydsl.core.types.OrderSpecifier;
 import com.querydsl.core.types.dsl.BooleanExpression;
 import com.querydsl.jpa.impl.JPAQueryFactory;
-import project.delivery.domain.QMember;
-import project.delivery.domain.Review;
+import project.delivery.domain.*;
+import project.delivery.domain.order.*;
 import project.delivery.dto.ReviewSearch;
 import project.delivery.repository.custom.ReviewRepositoryCustom;
 
 import javax.persistence.EntityManager;
+import java.time.LocalDateTime;
 import java.util.List;
 
+import static project.delivery.domain.QDeliveryInfo.*;
 import static project.delivery.domain.QMember.*;
+import static project.delivery.domain.QPackingInfo.*;
 import static project.delivery.domain.QReview.*;
+import static project.delivery.domain.QStore.*;
+import static project.delivery.domain.order.QDelivery.*;
+import static project.delivery.domain.order.QOrder.*;
 
 public class ReviewRepositoryImpl implements ReviewRepositoryCustom {
 
@@ -27,13 +33,43 @@ public class ReviewRepositoryImpl implements ReviewRepositoryCustom {
         return queryFactory
                 .selectFrom(review)
                 .join(review.member, member).fetchJoin()
+                .join(review.order, order).fetchJoin()
                 .where(
-                        review.store.id.eq(search.getStoreId()),
+                        order.store.id.eq(search.getStoreId()),
                         isImage(search.getPhoto())
                 )
                 .orderBy(
                         isType(search.getType())
                 )
+                .fetch();
+    }
+
+    @Override
+    public List<Order> findReviewableByMemberId(Long memberId) {
+        LocalDateTime period = LocalDateTime.now().minusDays(3);
+        return queryFactory
+                .selectFrom(order)
+                .join(order.store, store).fetchJoin()
+                .join(order.delivery, delivery).fetchJoin()
+                .join(store.deliveryInfo, deliveryInfo).fetchJoin()
+                .join(store.packingInfo, packingInfo).fetchJoin()
+                .where(
+                        order.member.id.eq(memberId),
+                        order.lastModifiedDate.goe(period),
+                        order.reviewCreationStatus.isFalse(),
+                        order.status.eq(OrderStatus.COMP),
+                        delivery.status.eq(DeliveryStatus.COMP)
+                )
+                .fetch();
+    }
+
+    @Override
+    public List<Review> findWroteReviewsByMemberId(Long memberId) {
+        return queryFactory
+                .selectFrom(review)
+                .join(review.order, order).fetchJoin()
+                .join(order.store, store).fetchJoin()
+                .where(review.member.id.eq(memberId))
                 .fetch();
     }
 

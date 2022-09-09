@@ -21,9 +21,7 @@ public class BookmarkDto {
     public BookmarkDto(Bookmark bookmark) {
         this.bookmarkId = bookmark.getId();
         this.storeId = bookmark.getStore().getId();
-        this.storeFileName = bookmark.getStore().getStoreImages().stream()
-                .filter(storeImage -> (!storeImage.isBanner())).findFirst().orElse(null)
-                .getUploadFile().getStoreFileName();
+        this.storeFileName = bookmark.getStore().getStoreIcon().getStoreFileName();
         this.storeName = bookmark.getStore().getStoreName();
         this.storeRating = bookmark.getStore().getRating();
         this.storeReviewCount = bookmark.getStore().getReviewCount();
