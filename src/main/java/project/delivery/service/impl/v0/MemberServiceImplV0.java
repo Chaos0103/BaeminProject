@@ -41,31 +41,31 @@ public class MemberServiceImplV0 implements MemberService {
     }
 
     @Override
-    public void changeNickname(Long memberId, String nickname) {
+    public void changeNickname(Long memberId, String newNickname) {
         Member findMember = getMember(memberId);
 
-        findMember.changeNickname(nickname);
+        findMember.changeNickname(newNickname);
     }
 
     @Override
-    public void changePassword(Long memberId, String password) {
+    public void changePassword(Long memberId, String newPassword) {
         Member findMember = getMember(memberId);
 
-        findMember.changePassword(password);
+        findMember.changePassword(newPassword);
     }
 
     @Override
-    public void changePhone(Long memberId, String phone) {
+    public void changePhone(Long memberId, String newPhone) {
         Member findMember = getMember(memberId);
 
-        findMember.changePhone(phone);
+        findMember.changePhone(newPhone);
     }
 
     @Override
-    public void changeAddress(Long memberId, Address address) {
+    public void changeAddress(Long memberId, Address newAddress) {
         Member findMember = getMember(memberId);
 
-        findMember.changeAddress(address);
+        findMember.changeAddress(newAddress);
     }
 
     @Override

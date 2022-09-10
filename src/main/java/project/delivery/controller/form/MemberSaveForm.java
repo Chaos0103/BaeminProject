@@ -22,13 +22,13 @@ public class MemberSaveForm {
     @Length(max = 20)
     @NotBlank
     private String username;
-    @Length(max = 11)
+    @Length(max = 13)
     @NotBlank
     private String phone;
     @Length(max = 8)
     @NotBlank
     private String birth;
-    @Length(max = 20)
+    @Length(max = 10)
     @NotBlank
     private String nickname;
     @Length(max = 5)
