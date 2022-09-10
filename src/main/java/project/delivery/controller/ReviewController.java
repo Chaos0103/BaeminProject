@@ -15,12 +15,14 @@ import project.delivery.dto.NotificationDto;
 import project.delivery.login.Login;
 import project.delivery.service.*;
 
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 @Slf4j
 @Controller
 @RequiredArgsConstructor
-@RequestMapping("/reviews")
+@RequestMapping("/members/reviews")
 public class ReviewController {
 
     private final NotificationService notificationService;
@@ -33,7 +35,8 @@ public class ReviewController {
 
     @GetMapping("/reviewable")
     public String reviewable(@Login Member loginMember, Model model) {
-        headDataInit(loginMember, model);
+        headerInfo(loginMember, model);
+        topInfo(loginMember, model);
         List<Order> orders = reviewService.findReviewableByMemberId(loginMember.getId());
         model.addAttribute("orders", orders);
         return "member/review/reviewable";
@@ -50,26 +53,11 @@ public class ReviewController {
 
     @GetMapping("/wroteReviews")
     public String wroteReviews(@Login Member loginMember, Model model) {
-        headDataInit(loginMember, model);
+        headerInfo(loginMember, model);
+        topInfo(loginMember, model);
         List<Review> reviews = reviewService.findWroteReviewsByMemberId(loginMember.getId());
         model.addAttribute("reviews", reviews);
         return "member/review/wroteReviews";
-    }
-
-    private void headDataInit(Member loginMember, Model model) {
-        List<NotificationDto> notifications = notificationService.findNotificationByMemberId(loginMember.getId());
-        List<BasketMenuDto> basketMenus = basketService.findAllByMemberId(loginMember.getId());
-        BasketDto basket = basketService.findBasketDto(loginMember.getId());
-        Integer countCoupon = couponService.countCouponByMemberId(loginMember.getId());
-        Integer totalPoint = pointService.findTotalPoint(loginMember.getId());
-        Integer money = payService.findMoney(loginMember.getId());
-
-        model.addAttribute("notifications", notifications);
-        model.addAttribute("basketMenus", basketMenus);
-        model.addAttribute("basket", basket);
-        model.addAttribute("countCoupon", countCoupon);
-        model.addAttribute("totalPoint", totalPoint);
-        model.addAttribute("money", money);
     }
 
     @ModelAttribute("loginMember")
@@ -80,5 +68,34 @@ public class ReviewController {
     @ModelAttribute("reviewAddForm")
     public ReviewAddForm reviewAddForm() {
         return new ReviewAddForm();
+    }
+
+    private void headerInfo(Member loginMember, Model model) {
+        //알림 조회
+        List<NotificationDto> notifications = notificationService.findNotificationByMemberId(loginMember.getId());
+        //장바구니 조회
+        List<BasketMenuDto> basketMenus = basketService.findAllByMemberId(loginMember.getId());
+        BasketDto basket = basketService.findBasketDto(loginMember.getId());
+
+        model.addAttribute("notifications", notifications);
+        model.addAttribute("basketMenus", basketMenus);
+        model.addAttribute("basket", basket);
+    }
+
+    private void topInfo(Member loginMember, Model model) {
+        Map<String, Object> topInfoMap = new HashMap<>();
+        //페이머니 잔액 조회
+        Integer payMoney = payService.findMoney(loginMember.getId());
+        //사용 가능한 쿠폰 갯수 조회
+        Integer countCoupon = couponService.countCouponByMemberId(loginMember.getId());
+        //포인트 잔액 조회
+        Integer totalPoint = pointService.findTotalPoint(loginMember.getId());
+
+        topInfoMap.put("grade", loginMember.getGrade().getDescription());
+        topInfoMap.put("payMoney", payMoney);
+        topInfoMap.put("countCoupon", countCoupon);
+        topInfoMap.put("totalPoint", totalPoint);
+
+        model.addAttribute("topInfoMap", topInfoMap);
     }
 }

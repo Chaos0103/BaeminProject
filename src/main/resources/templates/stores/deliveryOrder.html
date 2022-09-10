@@ -5,8 +5,8 @@
 </head>
 <body>
 <header th:replace="fragments/loginHeader::loginHeader"></header>
-<!--<section th:replace="fragments/notifications::notifications(${notifications})"></section>-->
-<!--<section th:replace="stores/fragments/basket::basket(${baskets})"></section>-->
+<section th:replace="fragments/notifications::notifications(${notifications})"></section>
+<section th:replace="stores/fragments/basket::basket(${baskets})"></section>
 
 <article>
     <form class="container px-4 py-3 w-50 border rounded mt-3" style="background-color: rgb(244, 244, 244)"
@@ -238,6 +238,7 @@
                 </div>
             </div>
         </section>
+        <section th:replace="stores/fragments/termsAndConditionsOfOrder::termsAndConditionsOfOrder"></section>
         <section>
             <button type="submit" class="btn baemin-btn btn-lg w-100 mt-3">결제하기</button>
         </section>

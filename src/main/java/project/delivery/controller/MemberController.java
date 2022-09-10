@@ -11,9 +11,12 @@ import project.delivery.controller.form.NicknameUpdateForm;
 import project.delivery.controller.form.PasswordUpdateForm;
 import project.delivery.domain.Member;
 import project.delivery.domain.Notification;
+import project.delivery.dto.BasketDto;
+import project.delivery.dto.BasketMenuDto;
 import project.delivery.dto.NotificationDto;
 import project.delivery.exception.NoSuchException;
 import project.delivery.login.Login;
+import project.delivery.service.BasketService;
 import project.delivery.service.MemberService;
 import project.delivery.service.NotificationService;
 
@@ -29,33 +32,14 @@ public class MemberController {
 
     private final MemberService memberService;
     private final NotificationService notificationService;
-
-    @ModelAttribute("loginMember")
-    public Member loginMember(@Login Member loginMember){
-        return loginMember;
-    }
-
-    @ModelAttribute("nicknameUpdateForm")
-    public NicknameUpdateForm changeNicknameForm() {
-        return new NicknameUpdateForm();
-    }
-
-    @ModelAttribute("passwordUpdateForm")
-    public PasswordUpdateForm changePasswordForm() {
-        return new PasswordUpdateForm();
-    }
-
-    @ModelAttribute("notifications")
-    public List<NotificationDto> notifications(@Login Member loginMember) {
-        return notificationService.findNotificationByMemberId(loginMember.getId());
-    }
+    private final BasketService basketService;
 
     @GetMapping
     public String memberInfo(
             @ModelAttribute("nicknameUpdateForm") NicknameUpdateForm changeNicknameForm,
             @ModelAttribute("passwordUpdateForm") PasswordUpdateForm changePasswordForm,
-            @Login Member loginMember) {
-
+            @Login Member loginMember, Model model) {
+        headerInfo(loginMember, model);
         changeNicknameForm.setNewNickname(loginMember.getNickname());
         return "member/updateMemberForm";
     }
@@ -141,6 +125,33 @@ public class MemberController {
             log.error("잘못된 접근이 발생하였습니다: {}", e.getMessage());
         }
         return "redirect:/";
+    }
+
+    @ModelAttribute("loginMember")
+    public Member loginMember(@Login Member loginMember){
+        return loginMember;
+    }
+
+    @ModelAttribute("nicknameUpdateForm")
+    public NicknameUpdateForm changeNicknameForm() {
+        return new NicknameUpdateForm();
+    }
+
+    @ModelAttribute("passwordUpdateForm")
+    public PasswordUpdateForm changePasswordForm() {
+        return new PasswordUpdateForm();
+    }
+
+    private void headerInfo(Member loginMember, Model model) {
+        //알림 조회
+        List<NotificationDto> notifications = notificationService.findNotificationByMemberId(loginMember.getId());
+        //장바구니 조회
+        List<BasketMenuDto> basketMenus = basketService.findAllByMemberId(loginMember.getId());
+        BasketDto basket = basketService.findBasketDto(loginMember.getId());
+
+        model.addAttribute("notifications", notifications);
+        model.addAttribute("basketMenus", basketMenus);
+        model.addAttribute("basket", basket);
     }
 
     private static void expiredSession(HttpServletRequest request) {

@@ -14,6 +14,9 @@ header {
 .bg-main {
     background-color: #5FBEBB;
 }
+.bg-sub {
+    background-color: rgb(244, 244, 244);
+}
 
 .form-join {
     max-width: 400px;

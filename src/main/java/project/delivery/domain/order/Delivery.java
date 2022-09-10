@@ -25,7 +25,6 @@ public class Delivery extends TimeBaseEntity {
     private String safeNumber;
     @Enumerated(EnumType.STRING)
     private DeliveryStatus status;
-    @Column(nullable = false)
     private String requirement;
 
     public Delivery(Address address, String phone, String safeNumber, String requirement) {

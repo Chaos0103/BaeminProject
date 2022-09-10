@@ -32,8 +32,7 @@ public class BookmarkRepositoryImpl implements BookmarkRepositoryCustom {
                 .join(store.deliveryInfo, deliveryInfo).fetchJoin()
                 .join(store.storeImages, storeImage).fetchJoin()
                 .where(
-                        bookmark.member.id.eq(memberId),
-                        storeImage.banner.isFalse()
+                        bookmark.member.id.eq(memberId)
                 )
                 .fetch();
 

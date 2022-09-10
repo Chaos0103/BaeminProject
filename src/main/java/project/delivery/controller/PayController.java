@@ -9,37 +9,41 @@ import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
 import project.delivery.controller.form.*;
 import project.delivery.domain.*;
-import project.delivery.dto.NotificationDto;
-import project.delivery.dto.PayAccountDto;
-import project.delivery.dto.PayCardDto;
-import project.delivery.dto.PayDto;
+import project.delivery.dto.*;
 import project.delivery.login.Login;
-import project.delivery.service.NotificationService;
-import project.delivery.service.PayService;
+import project.delivery.service.*;
 
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 @Slf4j
 @Controller
 @RequiredArgsConstructor
-@RequestMapping("/pays")
+@RequestMapping("/members/pays")
 public class PayController {
 
     private final NotificationService notificationService;
     private final PayService payService;
+    private final BasketService basketService;
+    private final CouponService couponService;
+    private final PointService pointService;
 
     /**
-     * @URL: localhost:8080/pays
+     * @URL: localhost:8080/members/pays
      */
     @GetMapping
     public String payHome(@Login Member loginMember, Model model) {
+        headerInfo(loginMember, model);
+        topInfo(loginMember, model);
+
         modalInit(model);
         inputModel(loginMember, model);
         return "member/pay";
     }
 
     /**
-     * @URL: localhost:8080/pays/charge
+     * @URL: localhost:8080/members/pays/charge
      */
     @PostMapping("/charge")
     public String chargePayMoney(
@@ -61,7 +65,7 @@ public class PayController {
     }
 
     /**
-     * @URL: localhost:8080/pays/refund
+     * @URL: localhost:8080/members/pays/refund
      */
     @PostMapping("/refund")
     public String refundPayMoney(@ModelAttribute PayMoneyRefundForm form, @Login Member loginMember) {
@@ -72,7 +76,7 @@ public class PayController {
     }
 
     /**
-     * @URL: localhost:8080/pays/changePassword
+     * @URL: localhost:8080/members/pays/changePassword
      */
     @PostMapping("/changePassword")
     public String editPayPassword(
@@ -109,7 +113,7 @@ public class PayController {
     }
 
     /**
-     * @URL: localhost:8080/pays/account/{accountId}/nickname
+     * @URL: localhost:8080/members/pays/account/{accountId}/nickname
      */
     @PostMapping("/account/{accountId}/nickname")
     public String editAccountNickname(
@@ -129,7 +133,7 @@ public class PayController {
     }
 
     /**
-     * @URL: localhost:8080/pays/account/{accountId}/delete
+     * @URL: localhost:8080/members/pays/account/{accountId}/delete
      */
     @GetMapping("/account/{accountId}/delete")
     public String deletePayAccount(@PathVariable Long accountId) {
@@ -138,7 +142,7 @@ public class PayController {
     }
 
     /**
-     * @URL: localhost:8080/pays/account/add
+     * @URL: localhost:8080/members/pays/account/add
      */
     @PostMapping("/account/add")
     public String addPayAccount(
@@ -204,11 +208,9 @@ public class PayController {
     }
 
     private void inputModel(Member loginMember, Model model) {
-        List<NotificationDto> notifications = notificationService.findNotificationByMemberId(loginMember.getId());
         PayDto pay = payService.findPayByMemberId(loginMember.getId());
         List<PayAccountDto> payAccounts = payService.findPayAccountByPayId(pay.getId());
         List<PayCardDto> payCards = payService.findPayCardByPayId(pay.getId());
-        model.addAttribute("notifications", notifications);
         model.addAttribute("pay", pay);
         model.addAttribute("payHistories", pay.getPayHistories());
         model.addAttribute("payAccounts", payAccounts);
@@ -265,5 +267,34 @@ public class PayController {
     @ModelAttribute("cards")
     public Card[] cards() {
         return Card.values();
+    }
+
+    private void headerInfo(Member loginMember, Model model) {
+        //알림 조회
+        List<NotificationDto> notifications = notificationService.findNotificationByMemberId(loginMember.getId());
+        //장바구니 조회
+        List<BasketMenuDto> basketMenus = basketService.findAllByMemberId(loginMember.getId());
+        BasketDto basket = basketService.findBasketDto(loginMember.getId());
+
+        model.addAttribute("notifications", notifications);
+        model.addAttribute("basketMenus", basketMenus);
+        model.addAttribute("basket", basket);
+    }
+
+    private void topInfo(Member loginMember, Model model) {
+        Map<String, Object> topInfoMap = new HashMap<>();
+        //페이머니 잔액 조회
+        Integer payMoney = payService.findMoney(loginMember.getId());
+        //사용 가능한 쿠폰 갯수 조회
+        Integer countCoupon = couponService.countCouponByMemberId(loginMember.getId());
+        //포인트 잔액 조회
+        Integer totalPoint = pointService.findTotalPoint(loginMember.getId());
+
+        topInfoMap.put("grade", loginMember.getGrade().getDescription());
+        topInfoMap.put("payMoney", payMoney);
+        topInfoMap.put("countCoupon", countCoupon);
+        topInfoMap.put("totalPoint", totalPoint);
+
+        model.addAttribute("topInfoMap", topInfoMap);
     }
 }

@@ -17,9 +17,7 @@ import project.delivery.domain.basket.BasketMenu;
 import project.delivery.domain.order.Delivery;
 import project.delivery.domain.order.PaymentMethod;
 import project.delivery.domain.order.ReceiptType;
-import project.delivery.dto.NotificationDto;
-import project.delivery.dto.OrderDto;
-import project.delivery.dto.PaymentDto;
+import project.delivery.dto.*;
 import project.delivery.login.Login;
 import project.delivery.service.*;
 
@@ -40,42 +38,29 @@ public class OrderController {
     private final PointService pointService;
     private final CouponService couponService;
 
-    @ModelAttribute("notifications")
-    public List<NotificationDto> notifications(@Login Member loginMember) {
-        return notificationService.findNotificationByMemberId(loginMember.getId());
-    }
-
-    @ModelAttribute("loginMember")
-    public Member loginMember(@Login Member loginMember) {
-        return loginMember;
-    }
-
-    @ModelAttribute("paymentMethods")
-    public PaymentMethod[] paymentMethods() {
-        return PaymentMethod.values();
-    }
-
+    /**
+     * @URL: localhost:8080/orders/{basketId}/delivery
+     */
     @GetMapping("/{basketId}/delivery")
     public String deliveryOrder(
             @ModelAttribute("deliveryAddForm") DeliveryAddForm deliveryAddForm,
             @ModelAttribute("orderAddForm") OrderAddForm orderAddForm,
             @ModelAttribute("paymentAddForm") PaymentAddForm paymentAddForm,
             @Login Member loginMember, @PathVariable Long basketId, Model model) {
+        headerInfo(loginMember, model);
 
         Basket basket = basketService.findBasketById(basketId);
 
         Integer totalAmount = getTotalAmount(basket);
         Integer deliveryTip = storeService.findDeliveryTip(basket.getStore().getId(), totalAmount);
 
-        Integer totalPoint = pointService.findTotalPoint(loginMember.getId());
-
-        List<Coupon> coupons = couponService.findCouponUse(loginMember.getId());
-
         paymentAddForm.setOrderAmount(totalAmount);
         paymentAddForm.setDeliveryTip(deliveryTip);
         deliveryAddForm.setMainAddress(loginMember.getAddress().getMainAddress());
         deliveryAddForm.setPhone(loginMember.getPhone());
 
+        Integer totalPoint = pointService.findTotalPoint(loginMember.getId());
+        List<Coupon> coupons = couponService.findCouponUse(loginMember.getId());
         model.addAttribute("totalPoint", totalPoint);
         model.addAttribute("coupons", coupons);
         return "stores/deliveryOrder";
@@ -103,19 +88,38 @@ public class OrderController {
     public String packingOrder(
             @ModelAttribute("deliveryAddForm") DeliveryAddForm deliveryAddForm,
             @ModelAttribute("orderAddForm") OrderAddForm orderAddForm,
-            @Login Member loginMember) {
+            @ModelAttribute("paymentAddForm") PaymentAddForm paymentAddForm,
+            @Login Member loginMember, Model model, @PathVariable Long basketId) {
+        headerInfo(loginMember, model);
         deliveryAddForm.setPhone(loginMember.getPhone());
+        Basket basket = basketService.findBasketById(basketId);
+        deliveryAddForm.setZipcode(basket.getStore().getBusinessAddress().getZipcode());
+        deliveryAddForm.setMainAddress(basket.getStore().getBusinessAddress().getMainAddress());
+        Integer totalAmount = getTotalAmount(basket);
+        deliveryAddForm.setDetailAddress(basket.getStore().getBusinessAddress().getDetailAddress());
+        paymentAddForm.setOrderAmount(totalAmount);
+        Integer totalPoint = pointService.findTotalPoint(loginMember.getId());
+        List<Coupon> coupons = couponService.findCouponUse(loginMember.getId());
+        model.addAttribute("store", basket.getStore());
+        model.addAttribute("totalPoint", totalPoint);
+        model.addAttribute("coupons", coupons);
         return "stores/packingOrder";
     }
 
     @PostMapping("/{basketId}/packing")
-    public String packing(DeliveryAddForm deliveryAddForm, OrderAddForm orderAddForm, @Login Member loginMember) {
-
+    public String packing(DeliveryAddForm deliveryAddForm, OrderAddForm orderAddForm, PaymentAddForm paymentAddForm, @Login Member loginMember, @PathVariable Long basketId) {
         String safeNumber = deliveryAddForm.getPhone();
         if (deliveryAddForm.getSafeNumber()) {
             safeNumber = "010-9999-9999";
         }
-//        orderService.order(loginMember.getId(), );
+
+        PaymentDto paymentDto = new PaymentDto(paymentAddForm.getPaymentMethod(), paymentAddForm.getOrderAmount(), paymentAddForm.getCouponId(), paymentAddForm.getPoint(), 0, paymentAddForm.getTotalAmount());
+        Address address = new Address(deliveryAddForm.getZipcode(), deliveryAddForm.getMainAddress(), deliveryAddForm.getDetailAddress());
+        Delivery delivery = new Delivery(address, deliveryAddForm.getPhone(), safeNumber, "");
+        OrderDto orderDto = new OrderDto(delivery, ReceiptType.PACKING, orderAddForm.getDisposable(), orderAddForm.getSideDish(), orderAddForm.getRequirement());
+        Long orderId = orderService.order(loginMember.getId(), orderDto, paymentDto);
+
+        log.debug("orderId = {}", orderId);
         return "redirect:/";
     }
 
@@ -129,11 +133,33 @@ public class OrderController {
         return couponData;
     }
 
+    @ModelAttribute("loginMember")
+    public Member loginMember(@Login Member loginMember) {
+        return loginMember;
+    }
+
+    @ModelAttribute("paymentMethods")
+    public PaymentMethod[] paymentMethods() {
+        return PaymentMethod.values();
+    }
+
     private Integer getTotalAmount(Basket basket) {
         List<Integer> orderPrices = basket.getBasketMenus().stream()
                 .map(BasketMenu::getOrderPrice)
                 .toList();
         return orderPrices.stream()
                 .mapToInt(orderPrice -> orderPrice).sum();
+    }
+
+    private void headerInfo(Member loginMember, Model model) {
+        //알림 조회
+        List<NotificationDto> notifications = notificationService.findNotificationByMemberId(loginMember.getId());
+        //장바구니 조회
+        List<BasketMenuDto> basketMenus = basketService.findAllByMemberId(loginMember.getId());
+        BasketDto basket = basketService.findBasketDto(loginMember.getId());
+
+        model.addAttribute("notifications", notifications);
+        model.addAttribute("basketMenus", basketMenus);
+        model.addAttribute("basket", basket);
     }
 }
