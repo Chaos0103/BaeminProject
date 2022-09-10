@@ -16,7 +16,7 @@ public interface LoginService {
     Member login(String email, String password);
 
     /**
-     * 아이디찾기
+     * 이메일(아이디)찾기
      * @param phone
      * @return 회원 PK, email, createdDate
      */

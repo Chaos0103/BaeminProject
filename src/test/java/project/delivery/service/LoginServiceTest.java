@@ -7,11 +7,10 @@ import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.transaction.annotation.Transactional;
 import project.delivery.domain.Address;
 import project.delivery.domain.member.Member;
-import project.delivery.exception.NoSuchException;
+import project.delivery.dto.FindEmailDto;
 import project.delivery.repository.MemberRepository;
 
 import static org.assertj.core.api.Assertions.*;
-import static org.junit.jupiter.api.Assertions.*;
 
 @SpringBootTest
 @Transactional
@@ -21,88 +20,92 @@ class LoginServiceTest {
     @Autowired MemberRepository memberRepository;
 
     @Test
-    @DisplayName("로그인")
-    void login() {
+    @DisplayName("회원로그인")
+    void memberLogin() {
+        //given
         Member member = createMember();
+        String email = member.getEmail();
+        String password = member.getPassword();
 
-        Member loginMember = loginService.login(member.getEmail(), member.getPassword());
+        //when
+        Member loginMember = loginService.login(email, password);
 
+        //then
         assertThat(loginMember).isEqualTo(member);
     }
 
     @Test
-    @DisplayName("로그인-이메일 오류")
-    void login_email() {
-        Member member = createMember();
+    @DisplayName("비회원로그인")
+    void nonMemberLogin() {
+        //given
+        String email = "test@test.com";
+        String password = "pw1234!@";
 
-        assertThrows(NoSuchException.class, () -> {
-            loginService.login("abc@test.com", member.getPassword());
-        });
+        //when
+        Member loginMember = loginService.login(email, password);
+
+        //then
+        assertThat(loginMember).isNull();
     }
 
     @Test
-    @DisplayName("로그인-비밀번호 오류")
-    void login_password() {
+    @DisplayName("회원 이메일(아이디)찾기")
+    void memberFindEmail() {
+        //given
         Member member = createMember();
+        String phone = member.getPhone();
 
-        assertThrows(NoSuchException.class, () -> {
-            loginService.login(member.getEmail(), "none");
-        });
+        //when
+        FindEmailDto findEmailDto = loginService.findEmailByPhone(phone);
+
+        //then
+        assertThat(findEmailDto.getId()).isEqualTo(member.getId());
     }
 
     @Test
-    @DisplayName("이메일 찾기")
-    void findLoginEmail() {
-        Member member = createMember();
+    @DisplayName("비회원 이메일(아이디)찾기")
+    void nonMemberFindEmail() {
+        //given
+        String phone = "010-1234-5678";
 
-        Member loginMember = loginService.findEmailByPhone(member.getPhone());
+        //when
+        FindEmailDto findEmailDto = loginService.findEmailByPhone(phone);
 
-        assertThat(loginMember.getEmail()).isEqualTo(member.getEmail());
+        //then
+        assertThat(findEmailDto).isNull();
     }
 
     @Test
-    @DisplayName("이메일 찾기-연락처 오류")
-    void findLoginEmail_phone() {
+    @DisplayName("회원 비밀번호 찾기")
+    void memberFindPassword() {
+        //given
         Member member = createMember();
+        String email = member.getEmail();
+        String phone = member.getPhone();
 
-        assertThrows(NoSuchException.class, () -> {
-            loginService.findEmailByPhone("01012345678");
-        });
+        //when
+        Long findMemberId = loginService.findMemberIdByEmailAndPhone(email, phone);
+
+        //then
+        assertThat(findMemberId).isEqualTo(member.getId());
     }
 
     @Test
-    @DisplayName("비밀번호 찾기")
-    void findLoginPassword() {
-        Member member = createMember();
+    @DisplayName("비회원 비밀번호 찾기")
+    void nonMemberFindPassword() {
+        //given
+        String email = "test@test.com";
+        String phone = "010-1234-5678";
 
-        Long memberId = loginService.findMemberIdByEmailAndPhone(member.getEmail(), member.getPhone());
+        //when
+        Long findMemberId = loginService.findMemberIdByEmailAndPhone(email, phone);
 
-        assertThat(memberId).isEqualTo(member.getId());
-    }
-
-    @Test
-    @DisplayName("비밀번호 찾기-이메일 오류")
-    void findLoginPassword_email() {
-        Member member = createMember();
-
-        assertThrows(NoSuchException.class, () -> {
-            loginService.findMemberIdByEmailAndPhone("none@test.com", member.getPhone());
-        });
-    }
-
-    @Test
-    @DisplayName("비밀번호 찾기-연락처 오류")
-    void findLoginPassword_username() {
-        Member member = createMember();
-
-        assertThrows(NoSuchException.class, () -> {
-            loginService.findMemberIdByEmailAndPhone(member.getEmail(), "01012345678");
-        });
+        //then
+        assertThat(findMemberId).isNull();
     }
 
     private Member createMember() {
-        Address address = new Address("12345", "mainAddress", "detailAddress");
-        Member member = new Member("test123@test.com", "test1!", "user", "20010101", "01087654321", "tester", address);
+        Member member = new Member("test@test.com", "pw1234!@", "username", "20010101", "010-1234-5678", "nickname", new Address("12345", "mainAddress", "subAddress"));
         return memberRepository.save(member);
     }
 }
