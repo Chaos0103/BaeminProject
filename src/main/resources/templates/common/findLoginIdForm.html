@@ -7,21 +7,69 @@
 <header th:replace="fragments/basicHeader::basicHeader"></header>
 
 <article class="form-signin w-100 m-auto mt-4">
-    <form action="/login/loginId" th:action="@{/login/loginId}" th:object="${emailFindForm}" method="post">
+    <form class="row" th:action="@{/login/loginId}" th:object="${emailFindForm}" method="post">
         <h3 class="text-center mb-5" th:text="#{h3.find.email}">아이디 찾기</h3>
         <!-- 글로벌 오류 메세지 -->
         <div th:if="${#fields.hasGlobalErrors()}" class="text-center">
             <p class="field-error" th:each="err : ${#fields.globalErrors()}" th:text="${err}">전체 오류 메시지</p>
         </div>
-        <div class="mb-5 pb-5">
-            <label for="phone" class="form-label fs-5 mb-3 fw-bold" th:utext="#{label.find.email}"><strong>아이디를 찾기 위해선<br>휴대폰번호 인증이 필요합니다</strong></label>
-            <input th:field="*{phone}" type="text" class="form-control" id="phone" placeholder="휴대폰번호를 입력해주세요" maxlength="11" th:errorclass="field-error">
+
+        <label for="phone" class="form-label fs-5 mb-3 fw-bold" th:utext="#{label.find.email}"><strong>아이디를 찾기 위해선<br>휴대폰번호 인증이 필요합니다</strong></label>
+        <div class="col-auto">
+            <input th:field="*{phone}" type="text" class="form-control" id="phone" placeholder="휴대폰번호를 입력해주세요" maxlength="13" th:errorclass="field-error">
             <div class="field-error text-start" th:errors="*{phone}"></div>
         </div>
-        <button class="w-100 btn btn-lg baemin-btn" id="btn_login" type="submit" th:text="#{button.complete}">완료</button>
+        <div class="col-auto">
+            <button type="button" id="authenticationNumberBtn" class="btn btn-primary mb-3" onclick="sendAuthenticationNumber()" disabled>인증번호 받기</button>
+        </div>
+        <div id="authenticationNumberForm" class="row">
+            <div class="col-auto">
+                <input th:field="*{authenticationNumber}" type="text" class="form-control" id="authenticationNumber" placeholder="인증번호를 입력해주세요" maxlength="4" th:errorclass="field-error">
+                <div class="field-error text-start" th:errors="*{authenticationNumber}"></div>
+            </div>
+            <div class="col-auto">
+                <button type="submit" id="complete" class="btn btn-primary mb-3" disabled>완료</button>
+            </div>
+        </div>
     </form>
 </article>
 
 <footer th:replace="fragments/footer::footer"></footer>
+<script th:inline="javascript">
+    $(document).ready(function () {
+        $("#authenticationNumberForm").hide();
+    });
+
+    $("#phone").keyup(function (e) {
+        const content = $(this).val();
+        if (content.length === 13) {
+            $('#authenticationNumberBtn').prop('disabled', false);
+        } else {
+            $('#authenticationNumberBtn').prop('disabled', true);
+        }
+    });
+
+    $("#authenticationNumber").keyup(function (e) {
+        const content = $(this).val();
+        if (content.length === 4) {
+            $('#complete').prop('disabled', false);
+        } else {
+            $('#complete').prop('disabled', true);
+        }
+    });
+
+    function sendAuthenticationNumber() {
+        $.ajax({
+            url: "/login/authentication",
+            type: "GET",
+            cache: false,
+            success: function (data) {
+                $("#authenticationNumberForm").show();
+                alert("[배달의민족] 인증번호 " + data.authenticationNumber + " 를 입력하세요.");
+            }
+        });
+    }
+
+</script>
 </body>
 </html>

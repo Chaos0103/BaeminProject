@@ -3,6 +3,7 @@ package project.delivery.service.impl.v0;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import project.delivery.domain.member.Member;
+import project.delivery.dto.FindEmailDto;
 import project.delivery.repository.MemberRepository;
 import project.delivery.service.LoginService;
 
@@ -19,14 +20,18 @@ public class LoginServiceImplV0 implements LoginService {
     }
 
     @Override
-    public Member findLoginEmail(String phone) {
-        return memberRepository.findByPhone(phone)
+    public FindEmailDto findEmailByPhone(String phone) {
+        Member findMember = memberRepository.findEmailByPhone(phone)
                 .orElse(null);
+        if (findMember == null) {
+            return null;
+        }
+        return new FindEmailDto(findMember.getId(), findMember.getEmail(), findMember.getCreatedDate());
     }
 
     @Override
-    public Long findLoginPassword(String email, String phone) {
-        Member findMember = memberRepository.findByEmailAndPhone(email, phone)
+    public Long findMemberIdByEmailAndPhone(String email, String phone) {
+        Member findMember = memberRepository.findMemberIdByEmailAndPhone(email, phone)
                 .orElse(null);
         if (findMember == null) {
             return null;

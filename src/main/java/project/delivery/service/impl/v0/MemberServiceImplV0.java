@@ -89,7 +89,7 @@ public class MemberServiceImplV0 implements MemberService {
      * 연락처 중복검사
      */
     private void duplicatedPhone(String phone) {
-        Optional<Member> findMember = memberRepository.findByPhone(phone);
+        Optional<Member> findMember = memberRepository.findEmailByPhone(phone);
         if (findMember.isPresent()) {
             throw new DuplicateException("이미 사용중인 연락처입니다.");
         }

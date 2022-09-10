@@ -55,7 +55,7 @@ class LoginServiceTest {
     void findLoginEmail() {
         Member member = createMember();
 
-        Member loginMember = loginService.findLoginEmail(member.getPhone());
+        Member loginMember = loginService.findEmailByPhone(member.getPhone());
 
         assertThat(loginMember.getEmail()).isEqualTo(member.getEmail());
     }
@@ -66,7 +66,7 @@ class LoginServiceTest {
         Member member = createMember();
 
         assertThrows(NoSuchException.class, () -> {
-            loginService.findLoginEmail("01012345678");
+            loginService.findEmailByPhone("01012345678");
         });
     }
 
@@ -75,7 +75,7 @@ class LoginServiceTest {
     void findLoginPassword() {
         Member member = createMember();
 
-        Long memberId = loginService.findLoginPassword(member.getEmail(), member.getPhone());
+        Long memberId = loginService.findMemberIdByEmailAndPhone(member.getEmail(), member.getPhone());
 
         assertThat(memberId).isEqualTo(member.getId());
     }
@@ -86,7 +86,7 @@ class LoginServiceTest {
         Member member = createMember();
 
         assertThrows(NoSuchException.class, () -> {
-            loginService.findLoginPassword("none@test.com", member.getPhone());
+            loginService.findMemberIdByEmailAndPhone("none@test.com", member.getPhone());
         });
     }
 
@@ -96,7 +96,7 @@ class LoginServiceTest {
         Member member = createMember();
 
         assertThrows(NoSuchException.class, () -> {
-            loginService.findLoginPassword(member.getEmail(), "01012345678");
+            loginService.findMemberIdByEmailAndPhone(member.getEmail(), "01012345678");
         });
     }
 

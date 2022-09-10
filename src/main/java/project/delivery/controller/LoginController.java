@@ -13,6 +13,7 @@ import project.delivery.controller.form.EmailFindForm;
 import project.delivery.controller.form.PasswordFindForm;
 import project.delivery.controller.form.LoginForm;
 import project.delivery.domain.member.Member;
+import project.delivery.dto.FindEmailDto;
 import project.delivery.exception.NoSuchException;
 import project.delivery.service.LoginService;
 import project.delivery.service.MemberService;
@@ -20,6 +21,9 @@ import project.delivery.service.MemberService;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpSession;
 import java.time.LocalDateTime;
+import java.util.HashMap;
+import java.util.Map;
+import java.util.Random;
 
 @Slf4j
 @Controller
@@ -31,12 +35,12 @@ public class LoginController {
     private final MemberService memberService;
 
     /**
-     * 로그인
+     * 로그인 화면 호출
      * @Method GET
      * @URL localhost:8080/login
      */
     @GetMapping
-    public String login(@ModelAttribute("loginForm") LoginForm form) {
+    public String loginPage(@ModelAttribute("loginForm") LoginForm form) {
         return "common/login";
     }
 
@@ -47,7 +51,7 @@ public class LoginController {
      * @URL localhost:8080/login
      */
     @PostMapping
-    public String loginCheck(
+    public String login(
             @Validated @ModelAttribute LoginForm form,
             BindingResult bindingResult,
             @RequestParam(defaultValue = "/") String redirectURL,
@@ -69,7 +73,6 @@ public class LoginController {
         HttpSession session = request.getSession();
         session.setAttribute("loginMember", loginMember);
         log.info("회원 번호 {} 로그인", loginMember.getId());
-        log.debug("redirectURL={}", redirectURL);
         return "redirect:" + redirectURL;
     }
 
@@ -104,24 +107,32 @@ public class LoginController {
     public String findEmailPost(
             @Validated @ModelAttribute EmailFindForm form,
             BindingResult bindingResult,
-            RedirectAttributes redirectAttributes) {
-
+            RedirectAttributes redirectAttributes,
+            HttpServletRequest request) {
+        log.debug("EmailFindForm={}", form);
         if (bindingResult.hasErrors()) {
             log.debug("폼 데이터 검증시 예외 발생: {}개", bindingResult.getErrorCount());
             return "common/findLoginIdForm";
         }
 
-        Member member = loginService.findLoginEmail(form.getPhone());
+        String authenticationNumber = getAuthenticationNumberBySession(request);
+        if (!authenticationNumber.equals(form.getAuthenticationNumber())) {
+            log.debug("인증번호 불일치");
+            return "common/findLoginIdForm";
+        }
 
-        if (member == null) {
+        FindEmailDto findMemberInfo = loginService.findEmailByPhone(form.getPhone());
+
+        if (findMemberInfo == null) {
             bindingResult.reject("nonMember", "등록되지 않은 회원입니다.");
             log.debug("이메일 찾기 예외 발생: {}", bindingResult.getTarget());
             return "common/findLoginIdForm";
         }
 
-        redirectAttributes.addFlashAttribute("email", member.getEmail());
-        redirectAttributes.addFlashAttribute("createdDate", member.getCreatedDate());
-        log.info("회원번호 {} 아이디 찾기", member.getId());
+        redirectAttributes.addFlashAttribute("email", findMemberInfo.getEmail());
+        redirectAttributes.addFlashAttribute("createdDate", findMemberInfo.getCreatedDate());
+        log.info("회원번호 {} 아이디 찾기", findMemberInfo.getId());
+        expiredSession(request); //인증번호 session 만료
         return "redirect:/login/loginId/success";
     }
 
@@ -166,7 +177,7 @@ public class LoginController {
             return "common/findPasswordForm";
         }
 
-        Long memberId = loginService.findLoginPassword(form.getEmail(), form.getPhone());
+        Long memberId = loginService.findMemberIdByEmailAndPhone(form.getEmail(), form.getPhone());
 
         if (memberId == null) {
             bindingResult.reject("nonMember", "등록되지 않은 회원입니다.");
@@ -224,6 +235,22 @@ public class LoginController {
         }
     }
 
+    @ResponseBody
+    @GetMapping("/authentication")
+    public Map<String, String> authentication(HttpServletRequest request) {
+        Map<String, String> data = new HashMap<>();
+
+        String authenticationNumber = createAuthenticationNumber();
+        log.debug("createAuthenticationNumber={}", authenticationNumber);
+        data.put("authenticationNumber", authenticationNumber);
+
+        HttpSession session = request.getSession();
+        session.setAttribute("authenticationNumber", authenticationNumber);
+        session.setMaxInactiveInterval(180); //3 minute
+
+        return data;
+    }
+
     /**
      * 이메일 블라인드 처리 메서드
      * @param email
@@ -262,5 +289,28 @@ public class LoginController {
         if (session != null) {
             session.invalidate();
         }
+    }
+
+    /**
+     * 인증번호 생성
+     * @return 4자리 인증번호
+     */
+    private static String createAuthenticationNumber() {
+        StringBuilder authenticationNumber = new StringBuilder();
+        Random random = new Random();
+        for (int i = 0; i < 4; i++) {
+            authenticationNumber.append(String.valueOf(random.nextInt(10)));
+        }
+        return authenticationNumber.toString();
+    }
+
+    /**
+     * 세션에 저장된 인증번호 가져오기
+     * @param request
+     * @return 4자리 인증번호
+     */
+    private static String getAuthenticationNumberBySession(HttpServletRequest request) {
+        HttpSession session = request.getSession();
+        return (String) session.getAttribute("authenticationNumber");
     }
 }
