@@ -3,6 +3,7 @@ package project.delivery.domain;
 import lombok.AccessLevel;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
+import project.delivery.domain.member.Member;
 import project.delivery.exception.MaxException;
 import project.delivery.exception.NotEnoughBalanceException;
 

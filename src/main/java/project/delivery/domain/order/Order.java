@@ -3,7 +3,7 @@ package project.delivery.domain.order;
 import lombok.AccessLevel;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
-import project.delivery.domain.Member;
+import project.delivery.domain.member.Member;
 import project.delivery.domain.Store;
 import project.delivery.domain.TimeBaseEntity;
 

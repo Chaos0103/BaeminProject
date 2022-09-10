@@ -1,7 +1,7 @@
 package project.delivery.service;
 
 import org.springframework.transaction.annotation.Transactional;
-import project.delivery.domain.Member;
+import project.delivery.domain.member.Member;
 
 @Transactional(readOnly = true)
 public interface LoginService {

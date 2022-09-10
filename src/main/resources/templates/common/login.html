@@ -7,7 +7,7 @@
 <header th:replace="fragments/basicHeader::basicHeader"></header>
 
 <article class="form-signin w-100 m-auto mt-4 text-center">
-    <form action="/login" method="post" th:object="${loginForm}" th:action="@{/login}">
+    <form action="/login" method="post" th:object="${loginForm}" th:action>
         <img class="mb-4 w-100" src="/img/icon_logo.png" th:src="@{/img/icon_logo.png}" alt="main_logo">
         <!-- 글로벌 오류 메세지 -->
         <div th:if="${#fields.hasGlobalErrors()}" class="text-center">
@@ -32,13 +32,14 @@
         <a href="/login/loginId" th:href="@{/login/loginId}" th:text="#{a.find.email}" class="text-muted text-decoration-none me-3">아이디 찾기</a> | <a href="/login/password" th:href="@{/login/password}" th:text="#{a.find.password}" class="text-muted text-decoration-none ms-3">비밀번호 찾기</a>
     </div>
     <div class="mt-5">
-        <button class="w-100 btn btn-sm btn-light border border-dark" id="facebook" type="button" onclick="beforeService()" th:text="#{button.facebook.login}">페이스북으로 로그인</button>
+        <button class="w-100 btn btn-sm btn-light border border-dark" id="facebookLogin" type="button" onclick="beforeService()" th:text="#{button.facebook.login}">페이스북으로 로그인</button>
     </div>
     <div class="mt-3">
-        <button class="w-100 btn btn-sm btn-light border border-dark" id="naver" type="button" onclick="beforeService()" th:text="#{button.naver.login}">네이버로 로그인</button>
+        <button class="w-100 btn btn-sm btn-light border border-dark" id="naverLogin" type="button" onclick="beforeService()" th:text="#{button.naver.login}">네이버로 로그인</button>
     </div>
     <div class="mt-3">
-        <p th:text="#{p.login.signup}">혹시, 배달의민족이 처음이신가요? <a href="/sign-up" th:href="@{/sign-up}" th:text="#{a.signup}" class="text-decoration-none text-baemin">회원가입</a></p>
+        <span th:text="#{span.login.signup}">혹시, 배달의민족이 처음이신가요? </span>
+        <span><a href="/sign-up" th:href="@{/sign-up}" th:text="#{a.signup}" class="text-decoration-none text-baemin">회원가입</a></span>
     </div>
 </article>
 

@@ -6,7 +6,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.transaction.annotation.Transactional;
 import project.delivery.domain.Address;
-import project.delivery.domain.Member;
+import project.delivery.domain.member.Member;
 import project.delivery.exception.NoSuchException;
 import project.delivery.repository.MemberRepository;
 

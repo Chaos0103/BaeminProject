@@ -2,8 +2,7 @@ package project.delivery.service.impl.v0;
 
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
-import project.delivery.domain.Member;
-import project.delivery.domain.Notification;
+import project.delivery.domain.member.Member;
 import project.delivery.dto.NotificationDto;
 import project.delivery.exception.NoSuchException;
 import project.delivery.repository.MemberRepository;

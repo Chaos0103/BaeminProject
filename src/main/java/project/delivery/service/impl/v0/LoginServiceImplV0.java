@@ -2,7 +2,7 @@ package project.delivery.service.impl.v0;
 
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
-import project.delivery.domain.Member;
+import project.delivery.domain.member.Member;
 import project.delivery.repository.MemberRepository;
 import project.delivery.service.LoginService;
 

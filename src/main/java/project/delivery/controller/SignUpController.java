@@ -11,7 +11,7 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import project.delivery.controller.form.MemberSaveForm;
 import project.delivery.domain.Address;
-import project.delivery.domain.Member;
+import project.delivery.domain.member.Member;
 import project.delivery.exception.DuplicateException;
 import project.delivery.service.MemberService;
 

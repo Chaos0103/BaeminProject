@@ -12,7 +12,7 @@ import project.delivery.controller.form.PasswordChangeForm;
 import project.delivery.controller.form.EmailFindForm;
 import project.delivery.controller.form.PasswordFindForm;
 import project.delivery.controller.form.LoginForm;
-import project.delivery.domain.Member;
+import project.delivery.domain.member.Member;
 import project.delivery.exception.NoSuchException;
 import project.delivery.service.LoginService;
 import project.delivery.service.MemberService;
@@ -33,6 +33,7 @@ public class LoginController {
     /**
      * 로그인
      * @Method GET
+     * @URL localhost:8080/login
      */
     @GetMapping
     public String login(@ModelAttribute("loginForm") LoginForm form) {
@@ -42,7 +43,8 @@ public class LoginController {
     /**
      * 로그인
      * @Method POST
-     * @Valid email, password
+     * @Valid LoginForm
+     * @URL localhost:8080/login
      */
     @PostMapping
     public String loginCheck(
@@ -67,13 +69,14 @@ public class LoginController {
         HttpSession session = request.getSession();
         session.setAttribute("loginMember", loginMember);
         log.info("회원 번호 {} 로그인", loginMember.getId());
+        log.debug("redirectURL={}", redirectURL);
         return "redirect:" + redirectURL;
     }
 
     /**
      * 로그아웃
-     *
      * @Method GET
+     * @URL localhost:8080/login/logout
      */
     @GetMapping("/logout")
     public String logout(HttpServletRequest request) {
@@ -83,8 +86,8 @@ public class LoginController {
 
     /**
      * 이메일 찾기
-     *
      * @Method GET
+     * @URL localhost:8080/login/loginId
      */
     @GetMapping("/loginId")
     public String findEmail(@ModelAttribute("emailFindForm") EmailFindForm form) {
@@ -93,8 +96,9 @@ public class LoginController {
 
     /**
      * 이메일 찾기
-     *
      * @Method POST
+     * @URL localhost:8080/login/loginId
+     * @Valid EmailFindForm
      */
     @PostMapping("/loginId")
     public String findEmailPost(
@@ -124,6 +128,7 @@ public class LoginController {
     /**
      * 이메일 찾기 성공
      * @Method GET
+     * @URL localhost:8080/login/loginId/success
      */
     @GetMapping("/loginId/success")
     public String successFindEmail(Model model) {
@@ -137,6 +142,7 @@ public class LoginController {
     /**
      * 비밀번호 찾기
      * @Method GET
+     * @URL localhost:8080/login/password
      */
     @GetMapping("/password")
     public String findPassword(@ModelAttribute("passwordFindForm") PasswordFindForm form) {
@@ -146,6 +152,8 @@ public class LoginController {
     /**
      * 비밀번호 찾기
      * @Method POST
+     * @URL localhost:8080/login/password
+     * @Valid PasswordFindForm
      */
     @PostMapping("/password")
     public String findPasswordPost(
@@ -173,8 +181,8 @@ public class LoginController {
 
     /**
      * 비밀번호 변경
-     *
      * @Method GET
+     * @URL localhost:8080/login/password/{memberId}/change
      */
     @GetMapping("/password/{memberId}/change")
     public String changePassword(@ModelAttribute("passwordChangeForm") PasswordChangeForm form, @PathVariable Long memberId) {
@@ -182,6 +190,12 @@ public class LoginController {
         return "common/changePasswordForm";
     }
 
+    /**
+     * 비밀번호 변경
+     * @Method POST
+     * @URL localhost:8080/login/password/{memberId}/change
+     * @Valid PasswordChangeForm
+     */
     @PostMapping("/password/{memberId}/change")
     public String changePasswordPost(
             @Validated @ModelAttribute PasswordChangeForm form,
@@ -210,6 +224,11 @@ public class LoginController {
         }
     }
 
+    /**
+     * 이메일 블라인드 처리 메서드
+     * @param email
+     * @return 일부 블라인드 된 이메일
+     */
     private static String blindEmail(String email) {
         String secret = "";
         int count = 0;
@@ -234,6 +253,10 @@ public class LoginController {
         return secret;
     }
 
+    /**
+     * 세션 종료
+     * @param request
+     */
     private static void expiredSession(HttpServletRequest request) {
         HttpSession session = request.getSession(false);
         if (session != null) {

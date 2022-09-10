@@ -1,7 +1,7 @@
 package project.delivery.repository;
 
 import org.springframework.data.jpa.repository.JpaRepository;
-import project.delivery.domain.Member;
+import project.delivery.domain.member.Member;
 
 import java.util.Optional;
 

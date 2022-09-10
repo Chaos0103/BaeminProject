@@ -5,7 +5,7 @@ import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
-import project.delivery.domain.Member;
+import project.delivery.domain.member.Member;
 import project.delivery.domain.order.Order;
 import project.delivery.dto.BasketDto;
 import project.delivery.dto.BasketMenuDto;

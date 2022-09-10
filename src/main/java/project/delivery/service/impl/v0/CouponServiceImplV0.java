@@ -6,7 +6,7 @@ import project.delivery.admin.coupon.CouponData;
 import project.delivery.admin.coupon.CouponDataRepository;
 import project.delivery.admin.coupon.CouponDateStatus;
 import project.delivery.domain.Coupon;
-import project.delivery.domain.Member;
+import project.delivery.domain.member.Member;
 import project.delivery.dto.CouponDto;
 import project.delivery.exception.DuplicateException;
 import project.delivery.exception.NoSuchException;

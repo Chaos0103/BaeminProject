@@ -2,7 +2,7 @@ package project.delivery.service;
 
 import org.springframework.transaction.annotation.Transactional;
 import project.delivery.domain.Coupon;
-import project.delivery.domain.Member;
+import project.delivery.domain.member.Member;
 import project.delivery.dto.CouponDto;
 
 import java.util.List;

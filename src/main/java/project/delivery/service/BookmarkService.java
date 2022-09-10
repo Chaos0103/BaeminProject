@@ -1,8 +1,7 @@
 package project.delivery.service;
 
 import org.springframework.transaction.annotation.Transactional;
-import project.delivery.domain.Bookmark;
-import project.delivery.domain.Member;
+import project.delivery.domain.member.Member;
 import project.delivery.dto.BookmarkDto;
 
 import java.util.List;

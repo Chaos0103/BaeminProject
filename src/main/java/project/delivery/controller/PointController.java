@@ -12,6 +12,7 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import project.delivery.controller.form.VoucherSaveForm;
 import project.delivery.domain.*;
+import project.delivery.domain.member.Member;
 import project.delivery.dto.*;
 import project.delivery.exception.DuplicateException;
 import project.delivery.exception.NoSuchException;

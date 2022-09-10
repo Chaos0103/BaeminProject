@@ -1,12 +1,13 @@
-package project.delivery.domain;
+package project.delivery.domain.member;
 
 import lombok.AccessLevel;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
+import project.delivery.domain.Address;
+import project.delivery.domain.MemberGrade;
+import project.delivery.domain.TimeBaseEntity;
 
 import javax.persistence.*;
-
-import static javax.persistence.FetchType.*;
 
 @Entity
 @Getter

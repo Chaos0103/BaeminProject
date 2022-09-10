@@ -3,7 +3,7 @@ package project.delivery.service.impl.v0;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import project.delivery.domain.Bookmark;
-import project.delivery.domain.Member;
+import project.delivery.domain.member.Member;
 import project.delivery.domain.Store;
 import project.delivery.dto.BookmarkDto;
 import project.delivery.exception.NoSuchException;

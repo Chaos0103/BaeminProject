@@ -7,6 +7,7 @@ import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
 import project.delivery.controller.form.BasketAddForm;
 import project.delivery.domain.*;
+import project.delivery.domain.member.Member;
 import project.delivery.dto.BasketDto;
 import project.delivery.dto.BasketMenuDto;
 import project.delivery.dto.NotificationDto;

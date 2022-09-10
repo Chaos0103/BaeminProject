@@ -6,7 +6,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.transaction.annotation.Transactional;
 import project.delivery.domain.Address;
-import project.delivery.domain.Member;
+import project.delivery.domain.member.Member;
 import project.delivery.domain.MenuOption;
 import project.delivery.domain.order.Delivery;
 import project.delivery.domain.order.DeliveryStatus;
@@ -17,7 +17,6 @@ import project.delivery.dto.OrderInfoDto;
 import project.delivery.repository.MemberRepository;
 import project.delivery.repository.MenuOptionRepository;
 import project.delivery.repository.OrderRepository;
-import project.delivery.service.OrderService;
 
 import java.util.ArrayList;
 import java.util.List;
