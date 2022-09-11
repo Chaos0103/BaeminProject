@@ -1,7 +1,7 @@
 package project.delivery.dto;
 
 import lombok.Data;
-import project.delivery.domain.Card;
+import project.delivery.domain.pay.Card;
 
 @Data
 public class PayCardDto {

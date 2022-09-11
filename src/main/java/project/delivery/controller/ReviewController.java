@@ -7,7 +7,7 @@ import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
 import project.delivery.controller.form.ReviewAddForm;
 import project.delivery.domain.member.Member;
-import project.delivery.domain.Review;
+import project.delivery.domain.member.Review;
 import project.delivery.domain.order.Order;
 import project.delivery.dto.BasketDto;
 import project.delivery.dto.BasketMenuDto;

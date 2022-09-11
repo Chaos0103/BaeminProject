@@ -1,6 +1,5 @@
 package project.delivery.service;
 
-import org.assertj.core.api.Assertions;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -10,7 +9,7 @@ import project.delivery.admin.coupon.CouponData;
 import project.delivery.admin.coupon.CouponDataRepository;
 import project.delivery.admin.coupon.CouponDateStatus;
 import project.delivery.domain.Address;
-import project.delivery.domain.member.Coupon;
+import project.delivery.domain.coupon.Coupon;
 import project.delivery.domain.member.Member;
 import project.delivery.dto.CouponDto;
 import project.delivery.exception.DuplicateException;

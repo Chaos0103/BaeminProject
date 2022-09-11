@@ -5,6 +5,7 @@ import lombok.Getter;
 import lombok.NoArgsConstructor;
 import project.delivery.domain.*;
 import project.delivery.domain.member.Member;
+import project.delivery.domain.store.Store;
 
 import javax.persistence.*;
 

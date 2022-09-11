@@ -1,7 +1,7 @@
 package project.delivery.repository.custom;
 
-import project.delivery.domain.Category;
-import project.delivery.domain.Store;
+import project.delivery.domain.store.Category;
+import project.delivery.domain.store.Store;
 
 import java.util.List;
 

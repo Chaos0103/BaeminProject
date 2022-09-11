@@ -1,7 +1,7 @@
 package project.delivery.dto;
 
 import lombok.Data;
-import project.delivery.domain.Bookmark;
+import project.delivery.domain.member.Bookmark;
 
 @Data
 public class BookmarkDto {

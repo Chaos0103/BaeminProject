@@ -1,7 +1,7 @@
 package project.delivery.dto;
 
 import lombok.Data;
-import project.delivery.domain.PointType;
+import project.delivery.domain.point.PointType;
 
 @Data
 public class PointHistorySearch {

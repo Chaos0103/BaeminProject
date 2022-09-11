@@ -1,7 +1,7 @@
 package project.delivery.repository.impl;
 
 import com.querydsl.jpa.impl.JPAQueryFactory;
-import project.delivery.domain.*;
+import project.delivery.domain.member.Bookmark;
 import project.delivery.dto.BookmarkDto;
 import project.delivery.repository.custom.BookmarkRepositoryCustom;
 

@@ -3,8 +3,8 @@ package project.delivery.repository;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.query.Param;
-import project.delivery.domain.Category;
-import project.delivery.domain.Store;
+import project.delivery.domain.store.Category;
+import project.delivery.domain.store.Store;
 import project.delivery.repository.custom.StoreRepositoryCustom;
 
 import java.util.List;

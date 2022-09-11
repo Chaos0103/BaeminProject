@@ -9,7 +9,7 @@ import project.delivery.controller.form.DeliveryAddForm;
 import project.delivery.controller.form.OrderAddForm;
 import project.delivery.controller.form.PaymentAddForm;
 import project.delivery.domain.Address;
-import project.delivery.domain.member.Coupon;
+import project.delivery.domain.coupon.Coupon;
 import project.delivery.domain.member.Member;
 import project.delivery.domain.basket.Basket;
 import project.delivery.domain.basket.BasketMenu;

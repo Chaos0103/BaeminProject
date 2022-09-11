@@ -2,7 +2,7 @@ package project.delivery.controller.form;
 
 import lombok.Data;
 import org.hibernate.validator.constraints.Length;
-import project.delivery.domain.Card;
+import project.delivery.domain.pay.Card;
 
 @Data
 public class PayCardSaveForm {

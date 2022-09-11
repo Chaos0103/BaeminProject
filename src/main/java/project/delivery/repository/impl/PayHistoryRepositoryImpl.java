@@ -1,8 +1,8 @@
 package project.delivery.repository.impl;
 
 import com.querydsl.jpa.impl.JPAQueryFactory;
-import project.delivery.domain.PayHistory;
-import project.delivery.domain.TransactionType;
+import project.delivery.domain.pay.PayHistory;
+import project.delivery.domain.pay.TransactionType;
 import project.delivery.repository.custom.PayHistoryRepositoryCustom;
 
 import javax.persistence.EntityManager;

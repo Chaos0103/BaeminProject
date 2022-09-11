@@ -3,7 +3,7 @@ package project.delivery.repository.impl;
 import com.querydsl.core.types.OrderSpecifier;
 import com.querydsl.core.types.dsl.BooleanExpression;
 import com.querydsl.jpa.impl.JPAQueryFactory;
-import project.delivery.domain.*;
+import project.delivery.domain.member.Review;
 import project.delivery.domain.order.*;
 import project.delivery.dto.ReviewSearch;
 import project.delivery.repository.custom.ReviewRepositoryCustom;

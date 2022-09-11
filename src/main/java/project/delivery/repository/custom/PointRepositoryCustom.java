@@ -1,6 +1,6 @@
 package project.delivery.repository.custom;
 
-import project.delivery.domain.PointType;
+import project.delivery.domain.point.PointType;
 import project.delivery.dto.PointHistoryDto;
 
 import java.time.LocalDateTime;

@@ -3,7 +3,7 @@ package project.delivery.repository;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.query.Param;
-import project.delivery.domain.member.Coupon;
+import project.delivery.domain.coupon.Coupon;
 
 import java.time.LocalDateTime;
 import java.util.List;

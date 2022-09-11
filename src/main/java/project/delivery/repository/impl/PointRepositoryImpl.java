@@ -2,7 +2,7 @@ package project.delivery.repository.impl;
 
 import com.querydsl.core.types.dsl.BooleanExpression;
 import com.querydsl.jpa.impl.JPAQueryFactory;
-import project.delivery.domain.*;
+import project.delivery.domain.point.PointType;
 import project.delivery.dto.PointHistoryDto;
 import project.delivery.repository.custom.PointRepositoryCustom;
 

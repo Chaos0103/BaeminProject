@@ -1,7 +1,7 @@
 package project.delivery.controller.form;
 
 import lombok.Data;
-import project.delivery.domain.Bank;
+import project.delivery.domain.pay.Bank;
 
 import javax.validation.constraints.NotBlank;
 

@@ -1,12 +1,8 @@
 package project.delivery.repository;
 
 import org.springframework.data.jpa.repository.JpaRepository;
-import org.springframework.data.jpa.repository.Query;
-import org.springframework.data.repository.query.Param;
-import project.delivery.domain.Bookmark;
+import project.delivery.domain.member.Bookmark;
 import project.delivery.repository.custom.BookmarkRepositoryCustom;
-
-import java.util.List;
 
 public interface BookmarkRepository extends JpaRepository<Bookmark, Long>, BookmarkRepositoryCustom {
 

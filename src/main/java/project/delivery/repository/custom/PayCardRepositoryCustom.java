@@ -1,6 +1,5 @@
 package project.delivery.repository.custom;
 
-import project.delivery.domain.Card;
 import project.delivery.dto.PayCardDto;
 
 import java.util.List;

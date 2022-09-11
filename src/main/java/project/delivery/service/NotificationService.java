@@ -1,7 +1,6 @@
 package project.delivery.service;
 
 import org.springframework.transaction.annotation.Transactional;
-import project.delivery.domain.Notification;
 import project.delivery.dto.NotificationDto;
 
 import java.util.List;

@@ -1,6 +1,6 @@
 package project.delivery.repository.custom;
 
-import project.delivery.domain.Review;
+import project.delivery.domain.member.Review;
 import project.delivery.domain.order.Order;
 import project.delivery.dto.ReviewSearch;
 

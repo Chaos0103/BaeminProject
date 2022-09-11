@@ -2,8 +2,8 @@ package project.delivery.dto;
 
 import lombok.AllArgsConstructor;
 import lombok.Data;
-import project.delivery.domain.member.Coupon;
-import project.delivery.domain.member.CouponStatus;
+import project.delivery.domain.coupon.Coupon;
+import project.delivery.domain.coupon.CouponStatus;
 
 import java.time.LocalDateTime;
 

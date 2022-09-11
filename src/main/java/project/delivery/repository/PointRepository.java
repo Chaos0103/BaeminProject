@@ -3,7 +3,7 @@ package project.delivery.repository;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.query.Param;
-import project.delivery.domain.Point;
+import project.delivery.domain.point.Point;
 import project.delivery.repository.custom.PointRepositoryCustom;
 
 import java.util.Optional;

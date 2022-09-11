@@ -1,7 +1,7 @@
 package project.delivery.dto;
 
 import lombok.Data;
-import project.delivery.domain.NotificationType;
+import project.delivery.domain.notification.NotificationType;
 
 import java.time.LocalDateTime;
 

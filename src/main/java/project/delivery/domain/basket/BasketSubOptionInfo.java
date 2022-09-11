@@ -3,7 +3,7 @@ package project.delivery.domain.basket;
 import lombok.AccessLevel;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
-import project.delivery.domain.MenuSubOption;
+import project.delivery.domain.store.MenuSubOption;
 import project.delivery.domain.TimeBaseEntity;
 
 import javax.persistence.*;

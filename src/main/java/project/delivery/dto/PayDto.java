@@ -1,7 +1,7 @@
 package project.delivery.dto;
 
 import lombok.Data;
-import project.delivery.domain.Pay;
+import project.delivery.domain.pay.Pay;
 
 import java.util.ArrayList;
 import java.util.List;

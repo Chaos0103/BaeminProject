@@ -1,7 +1,7 @@
 package project.delivery.service;
 
 import org.springframework.transaction.annotation.Transactional;
-import project.delivery.domain.Review;
+import project.delivery.domain.member.Review;
 import project.delivery.domain.order.Order;
 import project.delivery.dto.ReviewSearch;
 

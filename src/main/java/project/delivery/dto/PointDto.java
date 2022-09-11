@@ -1,7 +1,7 @@
 package project.delivery.dto;
 
 import lombok.Data;
-import project.delivery.domain.Point;
+import project.delivery.domain.point.Point;
 
 @Data
 public class PointDto {

@@ -2,7 +2,7 @@ package project.delivery.controller.form;
 
 import lombok.Data;
 import org.hibernate.validator.constraints.Range;
-import project.delivery.domain.Bank;
+import project.delivery.domain.pay.Bank;
 
 @Data
 public class PayMoneyUpdateForm {

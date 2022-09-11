@@ -1,7 +1,7 @@
 package project.delivery.service;
 
 import org.springframework.transaction.annotation.Transactional;
-import project.delivery.domain.*;
+import project.delivery.domain.store.*;
 
 import java.util.List;
 

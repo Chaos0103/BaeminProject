@@ -2,7 +2,7 @@ package project.delivery.service.impl.v0;
 
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
-import project.delivery.domain.*;
+import project.delivery.domain.store.*;
 import project.delivery.exception.DuplicateException;
 import project.delivery.repository.*;
 import project.delivery.service.StoreService;

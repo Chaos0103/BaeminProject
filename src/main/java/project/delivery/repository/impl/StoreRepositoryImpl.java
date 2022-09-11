@@ -1,7 +1,8 @@
 package project.delivery.repository.impl;
 
 import com.querydsl.jpa.impl.JPAQueryFactory;
-import project.delivery.domain.*;
+import project.delivery.domain.store.Category;
+import project.delivery.domain.store.Store;
 import project.delivery.repository.custom.StoreRepositoryCustom;
 
 import javax.persistence.EntityManager;

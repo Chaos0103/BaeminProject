@@ -1,6 +1,5 @@
 package project.delivery.service;
 
-import org.assertj.core.api.Assertions;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -9,7 +8,7 @@ import org.springframework.transaction.annotation.Transactional;
 import project.delivery.admin.voucher.VoucherData;
 import project.delivery.admin.voucher.VoucherDataRepository;
 import project.delivery.domain.Address;
-import project.delivery.domain.Point;
+import project.delivery.domain.point.Point;
 import project.delivery.domain.member.Member;
 import project.delivery.exception.DuplicateException;
 import project.delivery.exception.NoSuchException;

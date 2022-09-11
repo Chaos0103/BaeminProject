@@ -1,8 +1,8 @@
 package project.delivery.dto;
 
 import lombok.Data;
-import project.delivery.domain.PayHistory;
-import project.delivery.domain.TransactionType;
+import project.delivery.domain.pay.PayHistory;
+import project.delivery.domain.pay.TransactionType;
 
 import java.time.LocalDateTime;
 

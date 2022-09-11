@@ -1,7 +1,7 @@
 package project.delivery.repository.custom;
 
-import project.delivery.domain.PayHistory;
-import project.delivery.domain.TransactionType;
+import project.delivery.domain.pay.PayHistory;
+import project.delivery.domain.pay.TransactionType;
 
 import java.util.List;
 

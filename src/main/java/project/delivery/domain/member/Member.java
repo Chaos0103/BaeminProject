@@ -4,7 +4,6 @@ import lombok.AccessLevel;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import project.delivery.domain.Address;
-import project.delivery.domain.MemberGrade;
 import project.delivery.domain.TimeBaseEntity;
 
 import javax.persistence.*;
