@@ -27,18 +27,10 @@ public class PointServiceImplV0 implements PointService {
 
     @Override
     public Integer voucherRegistration(Long memberId, String voucherCode) {
-        VoucherData findVoucher = voucherDataRepository.findByVoucherCode(voucherCode).orElse(null);
-        if (findVoucher == null) {
-            throw new NoSuchException("상품권 번호를 다시 확인해주세요.");
-        }
-        if (findVoucher.isUsed()) {
-            throw new DuplicateException("이미 등록된 상품권 번호입니다.");
-        }
-        findVoucher.changeUsed();
+        VoucherData findVoucher = getVoucherData(voucherCode);
         Point findPoint = getPoint(memberId);
-        if (findPoint == null) {
-            throw new NoSuchException("포인트 내역을 찾을 수 없습니다");
-        }
+
+        findVoucher.changeUsed();
         PointHistory.createPointHistory(findPoint, findVoucher.getPointValue(), findVoucher.getVoucherName(), PointType.SAVE);
         return findVoucher.getPointValue();
     }
@@ -46,16 +38,12 @@ public class PointServiceImplV0 implements PointService {
     @Override
     public PointDto findPointByMemberId(Long memberId) {
         Point findPoint = getPoint(memberId);
-        if (findPoint == null) {
-            throw new NoSuchException("포인트 내역을 찾을 수 없습니다");
-        }
         return new PointDto(findPoint);
     }
 
     @Override
     public List<PointHistoryDto> findPointHistoryByPointId(Long pointId, PointHistorySearch search) {
-        LocalDateTime period = LocalDateTime.now().minusMonths(search.getMonth());
-        return pointRepository.findPointHistoryByPointId(pointId, search.getType(), period);
+        return getPointHistoryDtos(pointId, search);
     }
 
     @Override
@@ -63,7 +51,27 @@ public class PointServiceImplV0 implements PointService {
         return pointRepository.findTotalPoint(memberId);
     }
 
+    private VoucherData getVoucherData(String voucherCode) {
+        VoucherData findVoucher = voucherDataRepository.findByVoucherCode(voucherCode).orElse(null);
+        if (findVoucher == null) {
+            throw new NoSuchException("상품권 번호를 다시 확인해주세요.");
+        }
+        if (findVoucher.isUsed()) {
+            throw new DuplicateException("이미 등록된 상품권 번호입니다.");
+        }
+        return findVoucher;
+    }
+
     private Point getPoint(Long memberId) {
-        return pointRepository.findByMemberId(memberId).orElse(null);
+        Point findPoint = pointRepository.findByMemberId(memberId).orElse(null);
+        if (findPoint == null) {
+            throw new NoSuchException("포인트 내역을 찾을 수 없습니다");
+        }
+        return findPoint;
+    }
+
+    private List<PointHistoryDto> getPointHistoryDtos(Long pointId, PointHistorySearch search) {
+        LocalDateTime period = LocalDateTime.now().minusMonths(search.getMonth());
+        return pointRepository.findPointHistoryByPointId(pointId, search.getType(), period);
     }
 }
