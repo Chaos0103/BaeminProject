@@ -1,9 +1,9 @@
-package project.delivery.domain;
+package project.delivery.domain.member;
 
 import lombok.AccessLevel;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
-import project.delivery.domain.member.Member;
+import project.delivery.domain.TimeBaseEntity;
 
 import javax.persistence.*;
 import java.time.LocalDateTime;

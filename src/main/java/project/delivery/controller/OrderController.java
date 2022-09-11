@@ -9,7 +9,7 @@ import project.delivery.controller.form.DeliveryAddForm;
 import project.delivery.controller.form.OrderAddForm;
 import project.delivery.controller.form.PaymentAddForm;
 import project.delivery.domain.Address;
-import project.delivery.domain.Coupon;
+import project.delivery.domain.member.Coupon;
 import project.delivery.domain.member.Member;
 import project.delivery.domain.basket.Basket;
 import project.delivery.domain.basket.BasketMenu;
@@ -59,7 +59,7 @@ public class OrderController {
         deliveryAddForm.setPhone(loginMember.getPhone());
 
         Integer totalPoint = pointService.findTotalPoint(loginMember.getId());
-        List<Coupon> coupons = couponService.findCouponUse(loginMember.getId());
+        List<Coupon> coupons = couponService.findAvailableCouponsByMemberId(loginMember.getId());
         model.addAttribute("totalPoint", totalPoint);
         model.addAttribute("coupons", coupons);
         return "stores/deliveryOrder";
@@ -98,7 +98,7 @@ public class OrderController {
         deliveryAddForm.setDetailAddress(basket.getStore().getBusinessAddress().getDetailAddress());
         paymentAddForm.setOrderAmount(totalAmount);
         Integer totalPoint = pointService.findTotalPoint(loginMember.getId());
-        List<Coupon> coupons = couponService.findCouponUse(loginMember.getId());
+        List<Coupon> coupons = couponService.findAvailableCouponsByMemberId(loginMember.getId());
         model.addAttribute("store", basket.getStore());
         model.addAttribute("totalPoint", totalPoint);
         model.addAttribute("coupons", coupons);

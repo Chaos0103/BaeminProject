@@ -6,6 +6,8 @@ import project.delivery.domain.*;
 import project.delivery.domain.basket.Basket;
 import project.delivery.domain.basket.BasketMenu;
 import project.delivery.domain.basket.BasketSubOptionInfo;
+import project.delivery.domain.member.Coupon;
+import project.delivery.domain.member.CouponStatus;
 import project.delivery.domain.member.Member;
 import project.delivery.domain.order.*;
 import project.delivery.dto.OrderDto;

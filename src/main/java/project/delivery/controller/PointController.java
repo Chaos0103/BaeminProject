@@ -115,7 +115,7 @@ public class PointController {
         //페이머니 잔액 조회
         Integer payMoney = payService.findMoney(loginMember.getId());
         //사용 가능한 쿠폰 갯수 조회
-        Integer countCoupon = couponService.countCouponByMemberId(loginMember.getId());
+        Integer countCoupon = couponService.countAvailableCouponsByMemberId(loginMember.getId());
         //포인트 잔액 조회
         Integer totalPoint = pointService.findTotalPoint(loginMember.getId());
 

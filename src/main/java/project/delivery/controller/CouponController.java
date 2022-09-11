@@ -46,8 +46,8 @@ public class CouponController {
         topInfo(loginMember, model);
 
         List<CouponDto> coupons = couponService.findCouponByMemberId(loginMember.getId());
-        Integer possibleCoupon = couponService.countCouponByMemberId(loginMember.getId());
-        Long dayPossibleCoupon = couponService.countDayByMemberId(loginMember.getId());
+        Integer possibleCoupon = couponService.countAvailableCouponsByMemberId(loginMember.getId());
+        Integer dayPossibleCoupon = couponService.countDayByMemberId(loginMember.getId());
 
         model.addAttribute("coupons", coupons);
         model.addAttribute("possibleCoupon", possibleCoupon);
@@ -71,7 +71,7 @@ public class CouponController {
         log.debug("couponCode={}", couponCode);
 
         try {
-            Long couponId = couponService.addCoupon(loginMember, couponCode);
+            Long couponId = couponService.couponRegistration(loginMember.getId(), couponCode);
         } catch (NoSuchException | DuplicateException e) {
             log.debug(e.getMessage());
             model.addAttribute("addCouponError", e.getMessage());
@@ -108,7 +108,7 @@ public class CouponController {
         //페이머니 잔액 조회
         Integer payMoney = payService.findMoney(loginMember.getId());
         //사용 가능한 쿠폰 갯수 조회
-        Integer countCoupon = couponService.countCouponByMemberId(loginMember.getId());
+        Integer countCoupon = couponService.countAvailableCouponsByMemberId(loginMember.getId());
         //포인트 잔액 조회
         Integer totalPoint = pointService.findTotalPoint(loginMember.getId());
 

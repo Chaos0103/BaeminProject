@@ -1,4 +1,4 @@
-package project.delivery.domain;
+package project.delivery.domain.member;
 
 public enum CouponStatus {
     USE("사용완료"), UNUSE("미사용"), EXPIRE("기간만료");
