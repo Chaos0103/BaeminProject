@@ -15,4 +15,12 @@ public interface PointRepository extends JpaRepository<Point, Long>, PointReposi
 
     @Query("select p.totalPoint from Point p where p.member.id = :memberId")
     Integer findTotalPoint(@Param("memberId") Long memberId);
+
+    /**
+     *
+     * @param memberId 회원 PK
+     * @return id, totalPoint, removePoint, balance
+     */
+    @Query("select p from Point p where p.member.id = :memberId")
+    Optional<Point> findPointByMemberId(@Param("memberId") Long memberId);
 }

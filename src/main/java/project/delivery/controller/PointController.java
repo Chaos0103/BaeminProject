@@ -68,7 +68,7 @@ public class PointController {
             @Login Member loginMember, Model model) {
 
         try {
-            Integer pointValue = pointService.addVoucher(loginMember.getId(), form.getVoucherCode());
+            Integer pointValue = pointService.voucherRegistration(loginMember.getId(), form.getVoucherCode());
             log.info("회원번호 {} 상품권 등록: {} 충전", loginMember.getId(), pointValue);
             return "redirect:/points";
         } catch (NoSuchException | DuplicateException e) {

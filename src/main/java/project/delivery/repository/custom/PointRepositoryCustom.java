@@ -1,20 +1,12 @@
 package project.delivery.repository.custom;
 
 import project.delivery.domain.PointType;
-import project.delivery.dto.PointDto;
 import project.delivery.dto.PointHistoryDto;
 
 import java.time.LocalDateTime;
 import java.util.List;
 
 public interface PointRepositoryCustom {
-
-    /**
-     *
-     * @param memberId 회원 PK
-     * @return id, totalPoint, removePoint, balance
-     */
-    PointDto findPointByMemberId(Long memberId);
 
     /**
      *

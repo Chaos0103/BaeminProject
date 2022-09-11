@@ -3,7 +3,6 @@ package project.delivery.repository.impl;
 import com.querydsl.core.types.dsl.BooleanExpression;
 import com.querydsl.jpa.impl.JPAQueryFactory;
 import project.delivery.domain.*;
-import project.delivery.dto.PointDto;
 import project.delivery.dto.PointHistoryDto;
 import project.delivery.repository.custom.PointRepositoryCustom;
 
@@ -12,7 +11,6 @@ import java.time.LocalDateTime;
 import java.util.List;
 
 import static com.querydsl.core.types.Projections.*;
-import static project.delivery.domain.QPoint.*;
 import static project.delivery.domain.QPointHistory.*;
 
 public class PointRepositoryImpl implements PointRepositoryCustom {
@@ -21,19 +19,6 @@ public class PointRepositoryImpl implements PointRepositoryCustom {
 
     public PointRepositoryImpl(EntityManager em) {
         this.queryFactory = new JPAQueryFactory(em);
-    }
-
-    @Override
-    public PointDto findPointByMemberId(Long memberId) {
-        return queryFactory
-                .select(fields(PointDto.class,
-                        point.id,
-                        point.totalPoint,
-                        point.removePoint,
-                        point.balance))
-                .from(point)
-                .where(point.member.id.eq(memberId))
-                .fetchOne();
     }
 
     @Override

@@ -4,13 +4,14 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import project.delivery.admin.voucher.VoucherData;
 import project.delivery.admin.voucher.VoucherDataRepository;
-import project.delivery.domain.member.Member;
+import project.delivery.domain.Point;
+import project.delivery.domain.PointHistory;
+import project.delivery.domain.PointType;
 import project.delivery.dto.PointDto;
 import project.delivery.dto.PointHistoryDto;
 import project.delivery.dto.PointHistorySearch;
 import project.delivery.exception.DuplicateException;
 import project.delivery.exception.NoSuchException;
-import project.delivery.repository.MemberRepository;
 import project.delivery.repository.PointRepository;
 import project.delivery.service.PointService;
 
@@ -23,10 +24,9 @@ public class PointServiceImplV0 implements PointService {
 
     private final PointRepository pointRepository;
     private final VoucherDataRepository voucherDataRepository;
-    private final MemberRepository memberRepository;
 
     @Override
-    public Integer addVoucher(Long memberId, String voucherCode) {
+    public Integer voucherRegistration(Long memberId, String voucherCode) {
         VoucherData findVoucher = voucherDataRepository.findByVoucherCode(voucherCode).orElse(null);
         if (findVoucher == null) {
             throw new NoSuchException("상품권 번호를 다시 확인해주세요.");
@@ -35,14 +35,21 @@ public class PointServiceImplV0 implements PointService {
             throw new DuplicateException("이미 등록된 상품권 번호입니다.");
         }
         findVoucher.changeUsed();
-//        Point findPoint = findPointByMemberId(memberId);
-//        PointHistory pointHistory = new PointHistory(findPoint, findVoucher.getPointValue(), findVoucher.getVoucherName(), PointType.SAVE);
+        Point findPoint = getPoint(memberId);
+        if (findPoint == null) {
+            throw new NoSuchException("포인트 내역을 찾을 수 없습니다");
+        }
+        PointHistory.createPointHistory(findPoint, findVoucher.getPointValue(), findVoucher.getVoucherName(), PointType.SAVE);
         return findVoucher.getPointValue();
     }
 
     @Override
     public PointDto findPointByMemberId(Long memberId) {
-        return pointRepository.findPointByMemberId(memberId);
+        Point findPoint = getPoint(memberId);
+        if (findPoint == null) {
+            throw new NoSuchException("포인트 내역을 찾을 수 없습니다");
+        }
+        return new PointDto(findPoint);
     }
 
     @Override
@@ -56,11 +63,7 @@ public class PointServiceImplV0 implements PointService {
         return pointRepository.findTotalPoint(memberId);
     }
 
-    private Member getMember(Long memberId) {
-        return memberRepository.findById(memberId).orElseThrow(() -> {
-            throw new NoSuchException("등록되지 않은 회원입니다");
-        });
+    private Point getPoint(Long memberId) {
+        return pointRepository.findByMemberId(memberId).orElse(null);
     }
-
-
 }
