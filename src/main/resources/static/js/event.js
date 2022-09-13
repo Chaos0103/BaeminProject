@@ -72,3 +72,21 @@ function changeReceiptType(type) {
         $("input[name=totalPrice]").val(price + '원');
     }
 }
+
+/**
+ * 장바구니
+ */
+$(document).ready(function () {
+    $("#packingOrder").hide()
+    let price = 0;
+    $("input[name*='data']").each(function () {
+        if (!isNaN($(this).val())) {
+            price += parseInt($(this).val());
+        }
+    });
+    let totalPrice = price + 3000;
+    price = price.toLocaleString('ko-KR');
+    $("input[name=totalOrderPrice]").val(price + '원');
+    totalPrice = totalPrice.toLocaleString('ko-KR');
+    $("input[name=totalPrice]").val(totalPrice + '원');
+});

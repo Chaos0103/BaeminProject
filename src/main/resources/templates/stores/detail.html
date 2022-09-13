@@ -967,21 +967,6 @@
     const popoverTriggerList = document.querySelectorAll('[data-bs-toggle="popover"]')
     const popoverList = [...popoverTriggerList].map(popoverTriggerEl => new bootstrap.Popover(popoverTriggerEl))
 
-    $(document).ready(function () {
-        $("#packingOrder").hide()
-        let price = 0;
-        $("input[name*='data']").each(function () {
-            if (!isNaN($(this).val())) {
-                price += parseInt($(this).val());
-            }
-        });
-        let totalPrice = price + 3000;
-        price = price.toLocaleString('ko-KR');
-        $("input[name=totalOrderPrice]").val(price + '원');
-        totalPrice = totalPrice.toLocaleString('ko-KR');
-        $("input[name=totalPrice]").val(totalPrice + '원');
-    });
-
     function searchReview(type) {
         const storeId = [[${store.id}]];
         let photo = false;

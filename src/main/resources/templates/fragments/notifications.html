@@ -23,7 +23,7 @@
                                 <strong>BBQ XX점</strong>을(를) 이용해주셔서 감사합니다. 맛있게 드세요.
                             </p>
                             <p class="card-text" th:if="${notification.type.toString()} == 'DELIVERY'" th:utext="#{p.notification.delivery(${notification.storeName})}">
-                                <strong>BBQ XX점</strong>ㄴㄴ
+                                <strong>BBQ XX점</strong>
                             </p>
                             <p class="card-text text-muted" th:text="${#temporals.format(notification.createdDate, 'MM월 dd일 hh:mm')}">
                                 08월 09일 20:00
@@ -31,6 +31,7 @@
                         </div>
                     </div>
                 </div>
+                <div class="modal-footer"></div>
             </div>
         </div>
     </div>
