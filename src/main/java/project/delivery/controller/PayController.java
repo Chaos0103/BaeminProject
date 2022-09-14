@@ -60,9 +60,9 @@ public class PayController {
         }
 
         String content = "배민페이-" + form.getBank().getDescription();
-        payService.createPayHistory(loginMember.getId(), form.getMoney(), content, TransactionType.CHARGE);
-        log.info("회원번호 {}, 배민페이 {}원 충전", loginMember.getId(), form.getMoney());
-        return "redirect:/pays";
+        Long payHistoryId = payService.chargePayMoney(loginMember.getId(), form.getMoney(), content);
+        log.info("회원번호 {}, 사용내역 {}", loginMember.getId(), payHistoryId);
+        return "redirect:/members/pays";
     }
 
     /**
@@ -71,9 +71,9 @@ public class PayController {
     @PostMapping("/refund")
     public String refundPayMoney(@ModelAttribute PayMoneyRefundForm form, @Login Member loginMember) {
         String content = "배민페이-" + form.getBank().getDescription();
-        Integer refundMoney = payService.refundPayMoney(loginMember.getId(), content);
-        log.info("회원번호 {}, 배민페이 {}원 환불", loginMember.getId(), refundMoney);
-        return "redirect:/pays";
+        Long payHistoryId = payService.refundPayMoney(loginMember.getId(), content);
+        log.info("회원번호 {}, 사용내역 {}", loginMember.getId(), payHistoryId);
+        return "redirect:/members/pays";
     }
 
     /**
@@ -92,8 +92,8 @@ public class PayController {
             return "member/pay";
         }
 
-        PayDto pay = payService.findPayByMemberId(loginMember.getId());
-        if (!pay.getPassword().equals(form.getNowPassword())) {
+        String password = payService.findPayPassword(loginMember.getId());
+        if (!password.equals(form.getNowPassword())) {
             bindingResult.reject("notEqualPassword");
             inputModel(loginMember, model);
             model.addAttribute("changePayPasswordModal", true);
@@ -110,7 +110,7 @@ public class PayController {
         payService.changePayPassword(loginMember.getId(), form.getNewPassword());
         log.debug("회원번호 {} 배민페이 비밀번호 변경: {} -> {}", loginMember.getId(), form.getNowPassword(), form.getNewPassword());
         log.info("회원번호 {} 배민페이 비밀번호 변경", loginMember.getId());
-        return "redirect:/pays";
+        return "redirect:/members/pays";
     }
 
     /**
@@ -130,7 +130,7 @@ public class PayController {
         }
 
         payService.updatePayAccountNickname(accountId, form.getNewNickname());
-        return "redirect:/pays";
+        return "redirect:/members/pays";
     }
 
     /**
@@ -139,7 +139,7 @@ public class PayController {
     @GetMapping("/account/{accountId}/delete")
     public String deletePayAccount(@PathVariable Long accountId) {
         payService.deletePayAccount(accountId);
-        return "redirect:/pays";
+        return "redirect:/members/pays";
     }
 
     /**
@@ -162,7 +162,7 @@ public class PayController {
         Long payAccountId = payService.createPayAccount(loginMember.getId(), payAccount);
         log.debug("회원번호 {} 계좌 등록 {}", loginMember.getId(), payAccountId);
         log.info("회원번호 {} 계좌 등록", loginMember.getId());
-        return "redirect:/pays";
+        return "redirect:/members/pays";
     }
 
     @PostMapping("/card/{cardId}/nickname")
@@ -179,13 +179,13 @@ public class PayController {
         }
 
         payService.updatePayCardNickname(cardId, form.getNewNickname());
-        return "redirect:/pays";
+        return "redirect:/members/pays";
     }
 
     @GetMapping("/card/{cardId}/delete")
     public String deletePayCard(@PathVariable Long cardId) {
         payService.deletePayCard(cardId);
-        return "redirect:/pays";
+        return "redirect:/members/pays";
     }
 
     @PostMapping("/card/add")
@@ -201,17 +201,17 @@ public class PayController {
             return "member/pay";
         }
 
-        PayCard payCard = new PayCard(form.getCard(), form.getCardNumber(), form.getExpirationDate(), form.getCvc(), form.getPassword());
+        PayCard payCard = new PayCard(null, form.getCard(), form.getCardNumber(), form.getExpirationDate(), form.getCvc(), form.getPassword());
         Long payCardId = payService.createPayCard(loginMember.getId(), payCard);
         log.debug("회원번호 {} 카드 등록 {}", loginMember.getId(), payCardId);
         log.info("회원번호 {} 카드 등록", loginMember.getId());
-        return "redirect:/pays";
+        return "redirect:/members/pays";
     }
 
     private void inputModel(Member loginMember, Model model) {
-        PayDto pay = payService.findPayByMemberId(loginMember.getId());
-        List<PayAccountDto> payAccounts = payService.findPayAccountByPayId(pay.getId());
-        List<PayCardDto> payCards = payService.findPayCardByPayId(pay.getId());
+        PayDto pay = payService.findPay(loginMember.getId());
+        List<PayAccountDto> payAccounts = payService.findPayAccount(pay.getId());
+        List<PayCardDto> payCards = payService.findPayCard(pay.getId());
         model.addAttribute("pay", pay);
         model.addAttribute("payHistories", pay.getPayHistories());
         model.addAttribute("payAccounts", payAccounts);

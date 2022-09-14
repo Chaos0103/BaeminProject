@@ -36,11 +36,6 @@ public class PayAccount extends TimeBaseEntity {
         this.nickname = bank.getDescription();
     }
 
-    //==연관관계 메서드==//
-    public void addPay(Pay pay) {
-        this.pay = pay;
-    }
-
     //==비즈니스 메서드==//
     public void changeNickname(String nickname) {
         this.nickname = nickname;

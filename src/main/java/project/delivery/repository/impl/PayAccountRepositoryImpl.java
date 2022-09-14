@@ -18,16 +18,4 @@ public class PayAccountRepositoryImpl implements PayAccountRepositoryCustom {
         this.queryFactory = new JPAQueryFactory(em);
     }
 
-    @Override
-    public List<PayAccountDto> findPayAccountByPayId(Long payId) {
-        return queryFactory
-                .select(fields(PayAccountDto.class,
-                        payAccount.id,
-                        payAccount.accountNumber,
-                        payAccount.bank,
-                        payAccount.nickname))
-                .from(payAccount)
-                .where(payAccount.pay.id.eq(payId))
-                .fetch();
-    }
 }

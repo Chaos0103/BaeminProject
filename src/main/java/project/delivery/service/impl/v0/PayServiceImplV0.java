@@ -2,7 +2,6 @@ package project.delivery.service.impl.v0;
 
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
-import project.delivery.domain.member.Member;
 import project.delivery.domain.pay.*;
 import project.delivery.dto.PayAccountDto;
 import project.delivery.dto.PayCardDto;
@@ -18,33 +17,29 @@ import java.util.List;
 public class PayServiceImplV0 implements PayService {
 
     private final PayRepository payRepository;
-    private final PayHistoryRepository payHistoryRepository;
     private final PayCardRepository payCardRepository;
     private final PayAccountRepository payAccountRepository;
-    private final MemberRepository memberRepository;
 
     @Override
-    public Long joinPay(Long memberId, String password) {
-        Member findMember = getMember(memberId);
-
-        Pay pay = createPay(password, findMember);
-        Pay savedPay = payRepository.save(pay);
-
-        return savedPay.getId();
-    }
-
-    @Override
-    public void chargePayMoney(Long memberId, int money) {
+    public Long chargePayMoney(Long memberId, int price, String content) {
         Pay findPay = getPay(memberId);
-        findPay.addMoney(money);
+        PayHistory savedPayHistory = createPayHistory(findPay, price, content, TransactionType.CHARGE);
+        return savedPayHistory.getId();
     }
 
     @Override
-    public Integer refundPayMoney(Long memberId, String content) {
+    public Long refundPayMoney(Long memberId, String content) {
         Pay findPay = getPay(memberId);
         int refundMoney = findPay.getMoney();
-        createPayHistory(memberId, refundMoney, content, TransactionType.REFUND);
-        return refundMoney;
+        PayHistory savedPayHistory = createPayHistory(findPay, refundMoney, content, TransactionType.REFUND);
+        return savedPayHistory.getId();
+    }
+
+    @Override
+    public Long usePayMoney(Long memberId, int price, String content) {
+        Pay findPay = getPay(memberId);
+        PayHistory savedPayHistory = createPayHistory(findPay, price, content, TransactionType.USE);
+        return savedPayHistory.getId();
     }
 
     @Override
@@ -61,32 +56,18 @@ public class PayServiceImplV0 implements PayService {
     }
 
     @Override
-    public Long createPayHistory(Long memberId, int price, String content, TransactionType type) {
+    public Long createPayCard(Long memberId, PayCard savePayCard) {
         Pay findPay = getPay(memberId);
 
-        PayHistory payHistory = PayHistory.createPayHistory(findPay, price, content, type);
+        PayCard savedPayCard = createPayCard(savePayCard, findPay);
 
-        return payHistory.getId();
-    }
-
-    @Override
-    public Long createPayCard(Long memberId, PayCard payCard) {
-        Pay findPay = getPay(memberId);
-
-        //연관관계 주입
-        payCard.addPay(findPay);
-        PayCard savePayCard = payCardRepository.save(payCard);
-
-        return savePayCard.getId();
+        return savedPayCard.getId();
     }
 
     @Override
     public void updatePayCardNickname(Long payCardId, String nickname) {
-        PayCard payCard = payCardRepository.findById(payCardId).orElse(null);
-        if (payCard == null) {
-            throw new NoSuchException("비정상적인 접근입니다");
-        }
-        payCard.changeNickname(nickname);
+        PayCard findPayCard = getPayCard(payCardId);
+        findPayCard.changeNickname(nickname);
     }
 
     @Override
@@ -96,11 +77,10 @@ public class PayServiceImplV0 implements PayService {
     }
 
     @Override
-    public Long createPayAccount(Long memberId, PayAccount payAccount) {
+    public Long createPayAccount(Long memberId, PayAccount savePayAccount) {
         Pay findPay = getPay(memberId);
 
-        //연관관계 주입
-        payAccount.addPay(findPay);
+        PayAccount payAccount = new PayAccount(findPay, savePayAccount.getBank(), savePayAccount.getAccountNumber());
         PayAccount savedPayAccount = payAccountRepository.save(payAccount);
 
         return savedPayAccount.getId();
@@ -108,11 +88,8 @@ public class PayServiceImplV0 implements PayService {
 
     @Override
     public void updatePayAccountNickname(Long payAccountId, String nickname) {
-        PayAccount payAccount = payAccountRepository.findById(payAccountId).orElse(null);
-        if (payAccount == null) {
-            throw new NoSuchException("비정상적인 접근입니다");
-        }
-        payAccount.changeNickname(nickname);
+        PayAccount findPayAccount = getPayAccount(payAccountId);
+        findPayAccount.changeNickname(nickname);
     }
 
     @Override
@@ -122,7 +99,16 @@ public class PayServiceImplV0 implements PayService {
     }
 
     @Override
-    public PayDto findPayByMemberId(Long memberId) {
+    public String findPayPassword(Long memberId) {
+        String password = payRepository.findPayPasswordByMemberId(memberId).orElse(null);
+        if (password == null) {
+            throw new NoSuchException("배민페이 미가입자입니다");
+        }
+        return password;
+    }
+
+    @Override
+    public PayDto findPay(Long memberId) {
         Pay pay = payRepository.findPayByMemberId(memberId).orElse(null);
         if (pay == null) {
             throw new NoSuchException("배민페이 미가입자입니다");
@@ -131,20 +117,19 @@ public class PayServiceImplV0 implements PayService {
     }
 
     @Override
-    public List<PayHistory> findPayHistory(Long memberId, TransactionType type) {
-        Pay findPay = getPay(memberId);
-
-        return payHistoryRepository.findAllByTransactionType(findPay.getId(), type);
+    public List<PayCardDto> findPayCard(Long payId) {
+        List<PayCard> payCards = payCardRepository.findPayCardPayId(payId);
+        return payCards.stream()
+                .map(PayCardDto::new)
+                .toList();
     }
 
     @Override
-    public List<PayCardDto> findPayCardByPayId(Long payId) {
-        return payCardRepository.findPayCardPayId(payId);
-    }
-
-    @Override
-    public List<PayAccountDto> findPayAccountByPayId(Long payId) {
-        return payAccountRepository.findPayAccountByPayId(payId);
+    public List<PayAccountDto> findPayAccount(Long payId) {
+        List<PayAccount> payAccounts = payAccountRepository.findPayAccountByPayId(payId);
+        return payAccounts.stream()
+                .map(PayAccountDto::new)
+                .toList();
     }
 
     @Override
@@ -152,31 +137,36 @@ public class PayServiceImplV0 implements PayService {
         return payRepository.findMoney(memberId);
     }
 
-    private Pay createPay(String password, Member findMember) {
-        return new Pay(findMember, password);
-    }
-
-    private Member getMember(Long memberId) {
-        return memberRepository.findById(memberId).orElseThrow(() -> {
-            throw new NoSuchException("등록되지 않은 회원입니다.");
-        });
-    }
-
     private Pay getPay(Long memberId) {
-        return payRepository.findByMemberId(memberId).orElseThrow(() -> {
+        Pay findPay = payRepository.findByMemberId(memberId).orElse(null);
+        if (findPay == null) {
             throw new NoSuchException("배민페이 미가입자입니다");
-        });
+        }
+        return findPay;
     }
 
     private PayCard getPayCard(Long payCardId) {
-        return payCardRepository.findById(payCardId).orElseThrow(() -> {
+        PayCard findPayCard = payCardRepository.findById(payCardId).orElse(null);
+        if (findPayCard == null) {
             throw new NoSuchException("등록되지 않은 페이카드입니다.");
-        });
+        }
+        return findPayCard;
     }
 
     private PayAccount getPayAccount(Long payAccountId) {
-        return payAccountRepository.findById(payAccountId).orElseThrow(() -> {
+        PayAccount findPayAccount = payAccountRepository.findById(payAccountId).orElse(null);
+        if (findPayAccount == null) {
             throw new NoSuchException("등록되지 않은 페이계좌입니다.");
-        });
+        }
+        return findPayAccount;
+    }
+
+    public PayHistory createPayHistory(Pay pay, int price, String content, TransactionType type) {
+        return PayHistory.createPayHistory(pay, price, content, type);
+    }
+
+    private PayCard createPayCard(PayCard savePayCard, Pay findPay) {
+        PayCard payCard = new PayCard(findPay, savePayCard.getCard(), savePayCard.getCardNumber(), savePayCard.getExpirationDate(), savePayCard.getCvc(), savePayCard.getPassword());
+        return payCardRepository.save(payCard);
     }
 }

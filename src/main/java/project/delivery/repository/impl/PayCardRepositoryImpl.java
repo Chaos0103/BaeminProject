@@ -17,17 +17,4 @@ public class PayCardRepositoryImpl implements PayCardRepositoryCustom {
     public PayCardRepositoryImpl(EntityManager em) {
         this.queryFactory = new JPAQueryFactory(em);
     }
-
-    @Override
-    public List<PayCardDto> findPayCardPayId(Long payId) {
-        return queryFactory
-                .select(fields(PayCardDto.class,
-                        payCard.id,
-                        payCard.card,
-                        payCard.cardNumber,
-                        payCard.nickname))
-                .from(payCard)
-                .where(payCard.pay.id.eq(payId))
-                .fetch();
-    }
 }

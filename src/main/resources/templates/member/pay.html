@@ -82,7 +82,7 @@
                                                             </div>
                                                             <div class="modal-body">
                                                                 <h5 th:text="|${payAccount.bank.description} (${payAccount.accountNumber.substring(payAccount.accountNumber.length()-4, payAccount.accountNumber.length())})|"></h5>
-                                                                <form class="row g-3 mt-2" method="post" th:action="@{/pay/account/{accountId}/nickname(accountId=${payAccount.id})}">
+                                                                <form class="row g-3 mt-2" method="post" th:action="@{/members/pays/account/{accountId}/nickname(accountId=${payAccount.id})}">
                                                                     <div class="col-auto w-75">
                                                                         <label for="accountNickname" class="visually-hidden"></label>
                                                                         <input type="text" th:field="${nicknameUpdateForm.newNickname}" class="form-control" id="accountNickname" placeholder="" maxlength="20">
@@ -93,7 +93,7 @@
                                                                 </form>
                                                             </div>
                                                             <div class="modal-footer">
-                                                                <button type="button" class="btn btn-outline-danger w-100" th:onclick="|location.href='@{/pay/account/{accountId}/delete(accountId=${payAccount.id})}'|">결제수단 삭제</button>
+                                                                <button type="button" class="btn btn-outline-danger w-100" th:onclick="|location.href='@{/members/pays/account/{accountId}/delete(accountId=${payAccount.id})}'|">결제수단 삭제</button>
                                                             </div>
                                                         </div>
                                                     </div>
@@ -135,7 +135,7 @@
                                                             </div>
                                                             <div class="modal-body">
                                                                 <h5 th:text="|${payCard.card.description} (${payCard.cardNumber.substring(payCard.cardNumber.length()-4, payCard.cardNumber.length())})|"></h5>
-                                                                <form class="row g-3 mt-2" method="post" th:action="@{/pay/card/{cardId}/nickname(cardId=${payCard.id})}">
+                                                                <form class="row g-3 mt-2" method="post" th:action="@{/members/pays/card/{cardId}/nickname(cardId=${payCard.id})}">
                                                                     <div class="col-auto w-75">
                                                                         <label for="inputPassword2" class="visually-hidden"></label>
                                                                         <input type="text" th:field="${nicknameUpdateForm.newNickname}" class="form-control" id="inputPassword2" placeholder="" maxlength="20">
@@ -146,7 +146,7 @@
                                                                 </form>
                                                             </div>
                                                             <div class="modal-footer">
-                                                                <button type="button" class="btn btn-outline-danger w-100" th:onclick="|location.href='@{/pay/card/{cardId}/delete(cardId=${payCard.id})}'|">결제수단 삭제</button>
+                                                                <button type="button" class="btn btn-outline-danger w-100" th:onclick="|location.href='@{/members/pays/card/{cardId}/delete(cardId=${payCard.id})}'|">결제수단 삭제</button>
                                                             </div>
                                                         </div>
                                                     </div>
@@ -217,7 +217,7 @@
                 <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
             </div>
             <div class="modal-body">
-                <form method="post" th:action="@{/pay/charge}" th:object="${payMoneyUpdateForm}">
+                <form method="post" th:action="@{/members/pays/charge}" th:object="${payMoneyUpdateForm}">
                     <div class="mb-3">
                         <label for="chargePayMoney" class="form-label fw-bold">충전 금액</label>
                         <span class="float-end text-muted" th:text="|충전 가능 금액 ${#numbers.formatInteger(2000000 - pay.money, 0, 'COMMA')}원|"></span>
@@ -254,7 +254,7 @@
                 <h5 class="modal-title" id="refundLabel">배민페이머니 환불</h5>
                 <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
             </div>
-            <form class="modal-body" th:action="@{/pay/refund}" method="post" th:object="${payMoneyRefundForm}">
+            <form class="modal-body" th:action="@{/members/pays/refund}" method="post" th:object="${payMoneyRefundForm}">
                 <div class="mb-3">
                     <h5>환불 예정 금액</h5>
                     <h5 th:text="|${#numbers.formatInteger(pay.money, 0, 'COMMA')}원|">0원</h5>
@@ -292,7 +292,7 @@
                 <h5 class="modal-title" id="changePayPasswordLabel">비밀번호 변경하기</h5>
                 <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
             </div>
-            <form class="modal-body" method="post" th:action="@{/pay/changePassword}" th:object="${changePayPasswordForm}">
+            <form class="modal-body" method="post" th:action="@{/members/pays/changePassword}" th:object="${changePayPasswordForm}">
                 <div class="mb-3">
                     <label for="nowPassword" class="form-label">현재 비밀번호</label>
                     <input th:field="*{nowPassword}" type="password" class="form-control" id="nowPassword" placeholder="" maxlength="6" th:errorclass="field-error">
@@ -329,7 +329,7 @@
                 <h5 class="modal-title" id="addPayAccountLabel">계좌 등록하기</h5>
                 <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
             </div>
-            <form th:action="@{/pay/account/add}" method="post" th:object="${payAccountSaveForm}">
+            <form th:action="@{/members/pays/account/add}" method="post" th:object="${payAccountSaveForm}">
                 <div class="modal-body">
                     <h5>임우택님,<br>계좌정보를 입력해주세요.</h5>
                     <select class="form-select mt-3" aria-label="Default select example" th:field="*{bank}">
@@ -357,7 +357,7 @@
                 <h5 class="modal-title" id="addPayCardLabel">카드 등록하기</h5>
                 <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
             </div>
-            <form th:action="@{/pay/card/add}" method="post" th:object="${payCardSaveForm}">
+            <form th:action="@{/members/pays/card/add}" method="post" th:object="${payCardSaveForm}">
                 <div class="modal-body">
                     <h5>임우택님,<br>카드정보를 입력해주세요.</h5>
                     <select class="form-select mt-3" aria-label="Default select example" th:field="*{card}">
@@ -418,6 +418,7 @@
             $('#button-addPayCard').click();
         }
     }
+    $("#button-addPayCard").append()
 </script>
 </body>
 
