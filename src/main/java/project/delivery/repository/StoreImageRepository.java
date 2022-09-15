@@ -10,5 +10,5 @@ import java.util.List;
 public interface StoreImageRepository extends JpaRepository<StoreImage, Long> {
 
     @Query("select si from StoreImage si where si.store.id = :storeId")
-    List<StoreImage> findBannerByStoreId(@Param("storeId") Long storeId);
+    List<StoreImage> findStoreImages(@Param("storeId") Long storeId);
 }

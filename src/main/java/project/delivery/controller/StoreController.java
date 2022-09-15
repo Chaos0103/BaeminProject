@@ -1,5 +1,6 @@
 package project.delivery.controller;
 
+import lombok.Data;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Controller;
@@ -39,24 +40,50 @@ public class StoreController {
     public String stores(@RequestParam Category category, @Login Member loginMember, Model model) {
         headerInfo(model, loginMember);
 
-        List<Store> stores = storeService.findStoresByCategory(category);
+        List<StoreDto> stores = storeService.findStores(category).stream()
+                .map(StoreDto::new)
+                .toList();
         model.addAttribute("stores", stores);
 
         log.debug("category={}", category);
         return "/stores/stores";
     }
 
+    @Data
+    static class StoreDto {
+        private Long storeId;
+        private String storeFileName;
+        private String storeName;
+        private float rating;
+        private int reviewCount;
+        private int minOrderPrice;
+        private String deliveryTime;
+        private boolean packingInfo;
+
+        public StoreDto(Store store) {
+            this.storeId = store.getId();
+            this.storeFileName = store.getStoreIcon().getStoreFileName();
+            this.storeName = store.getStoreName();
+            this.rating = store.getRating();
+            this.reviewCount = store.getReviewCount();
+            this.minOrderPrice = store.getDeliveryInfo().getMinOrderPrice();
+            this.deliveryTime = store.getDeliveryInfo().getDeliveryTime();
+            this.packingInfo = store.getPackingInfo() != null;
+        }
+    }
+
     /**
-     * @URL: localhost:8080:/stores/{storeId}/detail
+     * @URL: localhost:8080/stores/{storeId}/detail
      */
     @GetMapping("/{storeId}/detail")
     public String store(@PathVariable Long storeId, Model model, @Login Member loginMember) {
         headerInfo(model, loginMember);
 
-        Store store = storeService.findStoreById(storeId);
+        Store store = storeService.findStoreDetail(storeId);
         List<DeliveryTipByAmount> deliveryTipByAmounts = storeService.findDeliveryTipByAmountByDeliveryId(store.getDeliveryInfo().getId());
         List<DeliveryTipByArea> deliveryTipByAreas = storeService.findDeliveryTipByAreaByDeliveryId(store.getDeliveryInfo().getId());
-        List<StoreImage> storeImages = storeService.findStoreBannerImages(storeId);
+        List<StoreImage> storeImages = storeService.findStoreImages(storeId);
+
         //MenuCategory join fetch Menu
         List<MenuCategory> categories = storeService.findMenuCategoryByStoreId(storeId);
         //Menu PK 조회
@@ -162,11 +189,5 @@ public class StoreController {
                     .toList());
         }
         return ids;
-    }
-
-    private static List<Long> getCategoryIds(List<MenuSubCategory> menuSubOptionCategorise) {
-        return menuSubOptionCategorise.stream()
-                .map(MenuSubCategory::getId)
-                .toList();
     }
 }

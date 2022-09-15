@@ -892,14 +892,12 @@
                         </tr>
                         </thead>
                         <tbody>
-                        <tr>
                         <tr th:each="deliveryTipByAmount : ${deliveryTipByAmounts}">
                             <td th:if="${deliveryTipByAmount.maxAmount} == null"
                                 th:text="|${#numbers.formatInteger(deliveryTipByAmount.minAmount, 0, 'COMMA')}원 이상|">100,000원 이상</td>
                             <td th:if="${deliveryTipByAmount.maxAmount} != null"
                                 th:text="|${#numbers.formatInteger(deliveryTipByAmount.minAmount, 0, 'COMMA')}원| +'~'+ |${#numbers.formatInteger(deliveryTipByAmount.maxAmount, 0, 'COMMA')}원 미만|">7,600원~14,000원 미만</td>
                             <td class="text-end" th:text="|${#numbers.formatInteger(deliveryTipByAmount.deliveryTip, 0, 'COMMA')}원|">0원</td>
-                        </tr>
                         </tr>
                         </tbody>
                     </table>

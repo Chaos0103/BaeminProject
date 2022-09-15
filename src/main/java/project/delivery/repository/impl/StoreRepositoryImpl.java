@@ -1,7 +1,9 @@
 package project.delivery.repository.impl;
 
 import com.querydsl.jpa.impl.JPAQueryFactory;
+import project.delivery.domain.QStoreImage;
 import project.delivery.domain.store.Category;
+import project.delivery.domain.store.DeliveryInfo;
 import project.delivery.domain.store.Store;
 import project.delivery.repository.custom.StoreRepositoryCustom;
 
@@ -10,7 +12,9 @@ import java.util.List;
 
 import static project.delivery.domain.QDeliveryInfo.*;
 import static project.delivery.domain.QDeliveryTipByAmount.*;
+import static project.delivery.domain.QPackingInfo.*;
 import static project.delivery.domain.QStore.*;
+import static project.delivery.domain.QStoreImage.*;
 
 public class StoreRepositoryImpl implements StoreRepositoryCustom {
 
@@ -20,17 +24,28 @@ public class StoreRepositoryImpl implements StoreRepositoryCustom {
         this.queryFactory = new JPAQueryFactory(em);
     }
 
-
     @Override
-    public List<Store> findAllByCondition(Category category) {
+    public List<Store> findStores(Category category) {
         return queryFactory
-                .selectDistinct(store)
-                .from(store)
-                .where(
-                        store.category.eq(category)
-                )
+                .selectFrom(store)
+                .join(store.deliveryInfo, deliveryInfo).fetchJoin()
+                .leftJoin(store.packingInfo, packingInfo).fetchJoin()
+                .where(store.category.eq(category))
                 .fetch();
     }
+
+    @Override
+    public Store findStoreDetail(Long storeId) {
+        return queryFactory
+                .select(store).distinct()
+                .from(store)
+                .join(store.deliveryInfo, deliveryInfo).fetchJoin()
+                .join(store.storeImages, storeImage).fetchJoin()
+                .leftJoin(store.packingInfo, packingInfo).fetchJoin()
+                .where(store.id.eq(storeId))
+                .fetchOne();
+    }
+
 
     @Override
     public Integer findDeliveryTip(Long storeId, Integer totalAmount) {
@@ -45,5 +60,13 @@ public class StoreRepositoryImpl implements StoreRepositoryCustom {
                                 .or(deliveryTipByAmount.maxAmount.isNull()))
                 )
                 .fetchOne();
+    }
+
+    @Override
+    public DeliveryInfo findDeliveryInfo(Long storeId) {
+//        queryFactory
+//                .select(deliveryInfo).distinct()
+//                .from()
+        return null;
     }
 }

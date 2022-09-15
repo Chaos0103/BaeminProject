@@ -21,21 +21,13 @@ public class StoreServiceImplV0 implements StoreService {
     private final DeliveryTipByAreaRepository deliveryTipByAreaRepository;
 
     @Override
-    public Long createNewStore(Store store) {
-        duplicatedBusinessNumber(store.getBusinessNumber());
-
-        Store savedStore = storeRepository.save(store);
-        return savedStore.getId();
+    public List<Store> findStores(Category category) {
+        return storeRepository.findStores(category);
     }
 
     @Override
-    public List<Store> findStoresByCategory(Category category) {
-        return storeRepository.findAllByCategory(category);
-    }
-
-    @Override
-    public Store findStoreById(Long storeId) {
-        return storeRepository.findDetailByStoreId(storeId);
+    public Store findStoreDetail(Long storeId) {
+        return storeRepository.findStoreDetail(storeId);
     }
 
     @Override
@@ -44,8 +36,13 @@ public class StoreServiceImplV0 implements StoreService {
     }
 
     @Override
-    public List<StoreImage> findStoreBannerImages(Long storeId) {
-        return storeImageRepository.findBannerByStoreId(storeId);
+    public List<StoreImage> findStoreImages(Long storeId) {
+        return storeImageRepository.findStoreImages(storeId);
+    }
+
+    @Override
+    public DeliveryInfo findDeliveryInfo(Long storeId) {
+        return null;
     }
 
     @Override
