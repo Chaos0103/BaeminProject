@@ -18,7 +18,7 @@ public class CouponQueryServiceImpl implements CouponQueryService {
     private final CouponRepository couponRepository;
 
     @Override
-    public List<CouponDto> findCouponByMemberId(Long memberId) {
+    public List<CouponDto> findCoupons(Long memberId) {
         LocalDateTime period = LocalDateTime.now().minusMonths(6);
         List<Coupon> coupons = couponRepository.findCouponByMemberId(memberId, period);
         return coupons.stream()
@@ -27,12 +27,12 @@ public class CouponQueryServiceImpl implements CouponQueryService {
     }
 
     @Override
-    public List<Coupon> findAvailableCouponsByMemberId(Long memberId) {
+    public List<Coupon> findAvailableCoupons(Long memberId) {
         return couponRepository.findAvailableCouponsByMemberId(memberId);
     }
 
     @Override
-    public Integer countAvailableCouponsByMemberId(Long memberId) {
+    public Integer countAvailableCoupons(Long memberId) {
         return couponRepository.countAvailableCouponsByMemberId(memberId);
     }
 

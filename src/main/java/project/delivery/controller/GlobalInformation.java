@@ -2,7 +2,7 @@ package project.delivery.controller;
 
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
-import org.springframework.stereotype.Controller;
+import org.springframework.stereotype.Component;
 import org.springframework.ui.Model;
 import project.delivery.domain.member.Member;
 import project.delivery.dto.BasketDto;
@@ -14,9 +14,9 @@ import java.util.List;
 import java.util.Map;
 
 @Slf4j
-@Controller
+@Component
 @RequiredArgsConstructor
-public class GlobalController {
+public class GlobalInformation {
 
     private final NotificationQueryService notificationQueryService;
     private final BasketQueryService basketQueryService;
@@ -25,6 +25,7 @@ public class GlobalController {
     private final PointQueryService pointQueryService;
 
     public void headerInfo(Member loginMember, Model model) {
+        log.debug("GlobalInformation headerInfo");
         List<NotificationDto> notifications = notificationQueryService.findNotifications(loginMember.getId());
         BasketDto basket = basketQueryService.findBasket(loginMember.getId());
         model.addAttribute("notifications", notifications);
@@ -33,9 +34,10 @@ public class GlobalController {
     }
 
     public void topInfo(Member loginMember, Model model) {
+        log.debug("GlobalInformation topInfo");
         Map<String, Object> topInfoMap = new HashMap<>();
         Integer payMoney = payQueryService.findMoney(loginMember.getId());
-        Integer countCoupon = couponQueryService.countAvailableCouponsByMemberId(loginMember.getId());
+        Integer countCoupon = couponQueryService.countAvailableCoupons(loginMember.getId());
         Integer totalPoint = pointQueryService.findTotalPoint(loginMember.getId());
 
         topInfoMap.put("grade", loginMember.getGrade().getDescription());

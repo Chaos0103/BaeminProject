@@ -19,15 +19,15 @@ import java.util.List;
 @RequestMapping("/members/bookmarks")
 public class BookmarkController {
 
-    private final GlobalController globalController;
+    private final GlobalInformation globalInfo;
 
     private final BookmarkService bookmarkService;
     private final BookmarkQueryService bookmarkQueryService;
 
     @GetMapping
     public String bookmarkHome(@Login Member loginMember, Model model) {
-        globalController.headerInfo(loginMember, model);
-        globalController.topInfo(loginMember, model);
+        globalInfo.headerInfo(loginMember, model);
+        globalInfo.topInfo(loginMember, model);
 
         List<BookmarkDto> bookmarks = bookmarkQueryService.findBookmarks(loginMember.getId());
         model.addAttribute("bookmarks", bookmarks);

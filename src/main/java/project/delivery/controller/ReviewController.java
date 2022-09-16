@@ -86,7 +86,7 @@ public class ReviewController {
         //페이머니 잔액 조회
         Integer payMoney = payQueryService.findMoney(loginMember.getId());
         //사용 가능한 쿠폰 갯수 조회
-        Integer countCoupon = couponQueryService.countAvailableCouponsByMemberId(loginMember.getId());
+        Integer countCoupon = couponQueryService.countAvailableCoupons(loginMember.getId());
         //포인트 잔액 조회
         Integer totalPoint = pointQueryService.findTotalPoint(loginMember.getId());
 

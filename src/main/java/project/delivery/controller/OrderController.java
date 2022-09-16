@@ -61,7 +61,7 @@ public class OrderController {
         deliveryAddForm.setPhone(loginMember.getPhone());
 
         Integer totalPoint = pointQueryService.findTotalPoint(loginMember.getId());
-        List<Coupon> coupons = couponQueryService.findAvailableCouponsByMemberId(loginMember.getId());
+        List<Coupon> coupons = couponQueryService.findAvailableCoupons(loginMember.getId());
         model.addAttribute("totalPoint", totalPoint);
         model.addAttribute("coupons", coupons);
         return "stores/deliveryOrder";
@@ -100,7 +100,7 @@ public class OrderController {
         deliveryAddForm.setDetailAddress(basket.getStore().getBusinessAddress().getDetailAddress());
         paymentAddForm.setOrderAmount(totalAmount);
         Integer totalPoint = pointQueryService.findTotalPoint(loginMember.getId());
-        List<Coupon> coupons = couponQueryService.findAvailableCouponsByMemberId(loginMember.getId());
+        List<Coupon> coupons = couponQueryService.findAvailableCoupons(loginMember.getId());
         model.addAttribute("store", basket.getStore());
         model.addAttribute("totalPoint", totalPoint);
         model.addAttribute("coupons", coupons);

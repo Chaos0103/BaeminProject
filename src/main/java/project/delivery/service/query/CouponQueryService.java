@@ -14,21 +14,21 @@ public interface CouponQueryService {
      * @param memberId 회원 PK
      * @return 쿠폰 DTO 리스트
      */
-    List<CouponDto> findCouponByMemberId(Long memberId);
+    List<CouponDto> findCoupons(Long memberId);
 
     /**
      * 이용 가능한 쿠폰정보를 조회하는 로직
      * @param memberId 회원 PK
      * @return
      */
-    List<Coupon> findAvailableCouponsByMemberId(Long memberId);
+    List<Coupon> findAvailableCoupons(Long memberId);
 
     /**
      * 이용 가능한 쿠폰갯수를 조회하는 로직
      * @param memberId 회원 PK
      * @return 이용 가능한 쿠폰갯수
      */
-    Integer countAvailableCouponsByMemberId(Long memberId);
+    Integer countAvailableCoupons(Long memberId);
 
     /**
      * 만료일이 하루 남은 쿠폰갯수를 조회하는 로직

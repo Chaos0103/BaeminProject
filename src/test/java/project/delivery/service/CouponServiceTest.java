@@ -94,7 +94,7 @@ class CouponServiceTest {
         couponRepository.save(coupon2);
 
         //when
-        List<CouponDto> coupons = couponQueryService.findCouponByMemberId(member.getId());
+        List<CouponDto> coupons = couponQueryService.findCoupons(member.getId());
 
         //then
         assertThat(coupons.size()).isEqualTo(1);

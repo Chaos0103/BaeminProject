@@ -12,18 +12,14 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import project.delivery.controller.form.CouponSaveForm;
 import project.delivery.domain.member.Member;
-import project.delivery.dto.BasketDto;
 import project.delivery.dto.CouponDto;
-import project.delivery.dto.NotificationDto;
 import project.delivery.exception.DuplicateException;
 import project.delivery.exception.NoSuchException;
 import project.delivery.login.Login;
 import project.delivery.service.*;
 import project.delivery.service.query.*;
 
-import java.util.HashMap;
 import java.util.List;
-import java.util.Map;
 
 @Slf4j
 @Controller
@@ -31,24 +27,21 @@ import java.util.Map;
 @RequestMapping("/members/coupons")
 public class CouponController {
 
-    private final CouponService couponService;
-    private final NotificationQueryService notificationQueryService;
+    private final GlobalInformation globalInfo;
 
-    private final BasketQueryService basketQueryService;
+    private final CouponService couponService;
     private final CouponQueryService couponQueryService;
-    private final PayQueryService payQueryService;
-    private final PointQueryService pointQueryService;
 
     /**
      * @URL: localhost:8080/members/coupons
      */
     @GetMapping
     public String couponHome(@Login Member loginMember, Model model) {
-        headerInfo(loginMember, model);
-        topInfo(loginMember, model);
+        globalInfo.headerInfo(loginMember, model);
+        globalInfo.topInfo(loginMember, model);
 
-        List<CouponDto> coupons = couponQueryService.findCouponByMemberId(loginMember.getId());
-        Integer possibleCoupon = couponQueryService.countAvailableCouponsByMemberId(loginMember.getId());
+        List<CouponDto> coupons = couponQueryService.findCoupons(loginMember.getId());
+        Integer possibleCoupon = couponQueryService.countAvailableCoupons(loginMember.getId());
         Integer dayPossibleCoupon = couponQueryService.countDayByMemberId(loginMember.getId());
 
         model.addAttribute("coupons", coupons);
@@ -58,6 +51,9 @@ public class CouponController {
         return "member/coupon";
     }
 
+    /**
+     * @URL: localhost:8080/members/coupons/addCoupon
+     */
     @PostMapping("/addCoupon")
     public String addCoupon(
             @Validated @ModelAttribute CouponSaveForm form,
@@ -65,7 +61,7 @@ public class CouponController {
             @Login Member loginMember, Model model) {
 
         if (bindingResult.hasErrors()) {
-            log.debug("필드 에러 발생: {}개", bindingResult.getErrorCount());
+            log.debug("CouponSaveForm 필드 에러 발생: {}개", bindingResult.getErrorCount());
             return "member/coupon";
         }
 
@@ -74,6 +70,7 @@ public class CouponController {
 
         try {
             Long couponId = couponService.couponRegistration(loginMember.getId(), couponCode);
+            log.debug("addCoupon Success: couponId={}", couponId);
         } catch (NoSuchException | DuplicateException e) {
             log.debug(e.getMessage());
             model.addAttribute("addCouponError", e.getMessage());
@@ -86,38 +83,6 @@ public class CouponController {
     @ModelAttribute("couponSaveForm")
     public CouponSaveForm couponSaveForm() {
         return new CouponSaveForm();
-    }
-
-    @ModelAttribute("loginMember")
-    public Member loginMember(@Login Member loginMember) {
-        return loginMember;
-    }
-
-    private void headerInfo(Member loginMember, Model model) {
-        //알림 조회
-        List<NotificationDto> notifications = notificationQueryService.findNotifications(loginMember.getId());
-        //장바구니 조회
-        BasketDto basket = basketQueryService.findBasket(loginMember.getId());
-
-        model.addAttribute("notifications", notifications);
-        model.addAttribute("basket", basket);
-    }
-
-    private void topInfo(Member loginMember, Model model) {
-        Map<String, Object> topInfoMap = new HashMap<>();
-        //페이머니 잔액 조회
-        Integer payMoney = payQueryService.findMoney(loginMember.getId());
-        //사용 가능한 쿠폰 갯수 조회
-        Integer countCoupon = couponQueryService.countAvailableCouponsByMemberId(loginMember.getId());
-        //포인트 잔액 조회
-        Integer totalPoint = pointQueryService.findTotalPoint(loginMember.getId());
-
-        topInfoMap.put("grade", loginMember.getGrade().getDescription());
-        topInfoMap.put("payMoney", payMoney);
-        topInfoMap.put("countCoupon", countCoupon);
-        topInfoMap.put("totalPoint", totalPoint);
-
-        model.addAttribute("topInfoMap", topInfoMap);
     }
 
     private static String makeCouponCode(CouponSaveForm form) {
