@@ -1,17 +1,17 @@
-package project.delivery.service.impl.v0;
+package project.delivery.service.query.impl;
 
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import project.delivery.dto.NotificationDto;
 import project.delivery.repository.NotificationRepository;
-import project.delivery.service.NotificationService;
+import project.delivery.service.query.NotificationQueryService;
 
 import java.time.LocalDateTime;
 import java.util.List;
 
 @Service
 @RequiredArgsConstructor
-public class NotificationServiceImplV0 implements NotificationService {
+public class NotificationQueryServiceImpl implements NotificationQueryService {
 
     private final NotificationRepository notificationRepository;
 

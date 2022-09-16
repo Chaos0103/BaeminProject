@@ -6,15 +6,12 @@ import project.delivery.domain.member.Member;
 import project.delivery.domain.member.Review;
 import project.delivery.domain.store.Store;
 import project.delivery.domain.order.Order;
-import project.delivery.dto.ReviewSearch;
 import project.delivery.exception.NoSuchException;
 import project.delivery.repository.MemberRepository;
 import project.delivery.repository.OrderRepository;
 import project.delivery.repository.ReviewRepository;
 import project.delivery.repository.StoreRepository;
 import project.delivery.service.ReviewService;
-
-import java.util.List;
 
 @Service
 @RequiredArgsConstructor
@@ -54,20 +51,5 @@ public class ReviewServiceImplV0 implements ReviewService {
     @Override
     public void removeReview(Long reviewId) {
         reviewRepository.deleteById(reviewId);
-    }
-
-    @Override
-    public List<Review> findAllByStoreId(ReviewSearch search) {
-        return reviewRepository.findAllByStoreId(search);
-    }
-
-    @Override
-    public List<Order> findReviewableByMemberId(Long memberId) {
-        return reviewRepository.findReviewableByMemberId(memberId);
-    }
-
-    @Override
-    public List<Review> findWroteReviewsByMemberId(Long memberId) {
-        return reviewRepository.findWroteReviewsByMemberId(memberId);
     }
 }

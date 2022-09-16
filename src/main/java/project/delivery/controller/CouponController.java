@@ -19,6 +19,7 @@ import project.delivery.exception.DuplicateException;
 import project.delivery.exception.NoSuchException;
 import project.delivery.login.Login;
 import project.delivery.service.*;
+import project.delivery.service.query.*;
 
 import java.util.HashMap;
 import java.util.List;
@@ -31,10 +32,12 @@ import java.util.Map;
 public class CouponController {
 
     private final CouponService couponService;
-    private final NotificationService notificationService;
-    private final PayService payService;
-    private final PointService pointService;
-    private final BasketService basketService;
+    private final NotificationQueryService notificationQueryService;
+
+    private final BasketQueryService basketQueryService;
+    private final CouponQueryService couponQueryService;
+    private final PayQueryService payQueryService;
+    private final PointQueryService pointQueryService;
 
     /**
      * @URL: localhost:8080/members/coupons
@@ -44,9 +47,9 @@ public class CouponController {
         headerInfo(loginMember, model);
         topInfo(loginMember, model);
 
-        List<CouponDto> coupons = couponService.findCouponByMemberId(loginMember.getId());
-        Integer possibleCoupon = couponService.countAvailableCouponsByMemberId(loginMember.getId());
-        Integer dayPossibleCoupon = couponService.countDayByMemberId(loginMember.getId());
+        List<CouponDto> coupons = couponQueryService.findCouponByMemberId(loginMember.getId());
+        Integer possibleCoupon = couponQueryService.countAvailableCouponsByMemberId(loginMember.getId());
+        Integer dayPossibleCoupon = couponQueryService.countDayByMemberId(loginMember.getId());
 
         model.addAttribute("coupons", coupons);
         model.addAttribute("possibleCoupon", possibleCoupon);
@@ -92,9 +95,9 @@ public class CouponController {
 
     private void headerInfo(Member loginMember, Model model) {
         //알림 조회
-        List<NotificationDto> notifications = notificationService.findNotifications(loginMember.getId());
+        List<NotificationDto> notifications = notificationQueryService.findNotifications(loginMember.getId());
         //장바구니 조회
-        BasketDto basket = basketService.findBasket(loginMember.getId());
+        BasketDto basket = basketQueryService.findBasket(loginMember.getId());
 
         model.addAttribute("notifications", notifications);
         model.addAttribute("basket", basket);
@@ -103,11 +106,11 @@ public class CouponController {
     private void topInfo(Member loginMember, Model model) {
         Map<String, Object> topInfoMap = new HashMap<>();
         //페이머니 잔액 조회
-        Integer payMoney = payService.findMoney(loginMember.getId());
+        Integer payMoney = payQueryService.findMoney(loginMember.getId());
         //사용 가능한 쿠폰 갯수 조회
-        Integer countCoupon = couponService.countAvailableCouponsByMemberId(loginMember.getId());
+        Integer countCoupon = couponQueryService.countAvailableCouponsByMemberId(loginMember.getId());
         //포인트 잔액 조회
-        Integer totalPoint = pointService.findTotalPoint(loginMember.getId());
+        Integer totalPoint = pointQueryService.findTotalPoint(loginMember.getId());
 
         topInfoMap.put("grade", loginMember.getGrade().getDescription());
         topInfoMap.put("payMoney", payMoney);

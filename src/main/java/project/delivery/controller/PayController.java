@@ -13,6 +13,7 @@ import project.delivery.domain.pay.*;
 import project.delivery.dto.*;
 import project.delivery.login.Login;
 import project.delivery.service.*;
+import project.delivery.service.query.*;
 
 import java.util.HashMap;
 import java.util.List;
@@ -24,11 +25,13 @@ import java.util.Map;
 @RequestMapping("/members/pays")
 public class PayController {
 
-    private final NotificationService notificationService;
     private final PayService payService;
-    private final BasketService basketService;
-    private final CouponService couponService;
-    private final PointService pointService;
+
+    private final NotificationQueryService notificationQueryService;
+    private final BasketQueryService basketQueryService;
+    private final CouponQueryService couponQueryService;
+    private final PayQueryService payQueryService;
+    private final PointQueryService pointQueryService;
 
     /**
      * @URL: localhost:8080/members/pays
@@ -92,7 +95,7 @@ public class PayController {
             return "member/pay";
         }
 
-        String password = payService.findPayPassword(loginMember.getId());
+        String password = payQueryService.findPayPassword(loginMember.getId());
         if (!password.equals(form.getNowPassword())) {
             bindingResult.reject("notEqualPassword");
             inputModel(loginMember, model);
@@ -209,9 +212,9 @@ public class PayController {
     }
 
     private void inputModel(Member loginMember, Model model) {
-        PayDto pay = payService.findPay(loginMember.getId());
-        List<PayAccountDto> payAccounts = payService.findPayAccount(pay.getId());
-        List<PayCardDto> payCards = payService.findPayCard(pay.getId());
+        PayDto pay = payQueryService.findPay(loginMember.getId());
+        List<PayAccountDto> payAccounts = payQueryService.findPayAccount(pay.getId());
+        List<PayCardDto> payCards = payQueryService.findPayCard(pay.getId());
         model.addAttribute("pay", pay);
         model.addAttribute("payHistories", pay.getPayHistories());
         model.addAttribute("payAccounts", payAccounts);
@@ -272,9 +275,9 @@ public class PayController {
 
     private void headerInfo(Member loginMember, Model model) {
         //알림 조회
-        List<NotificationDto> notifications = notificationService.findNotifications(loginMember.getId());
+        List<NotificationDto> notifications = notificationQueryService.findNotifications(loginMember.getId());
         //장바구니 조회
-        BasketDto basket = basketService.findBasket(loginMember.getId());
+        BasketDto basket = basketQueryService.findBasket(loginMember.getId());
 
         model.addAttribute("notifications", notifications);
         model.addAttribute("basket", basket);
@@ -283,11 +286,11 @@ public class PayController {
     private void topInfo(Member loginMember, Model model) {
         Map<String, Object> topInfoMap = new HashMap<>();
         //페이머니 잔액 조회
-        Integer payMoney = payService.findMoney(loginMember.getId());
+        Integer payMoney = payQueryService.findMoney(loginMember.getId());
         //사용 가능한 쿠폰 갯수 조회
-        Integer countCoupon = couponService.countAvailableCouponsByMemberId(loginMember.getId());
+        Integer countCoupon = couponQueryService.countAvailableCouponsByMemberId(loginMember.getId());
         //포인트 잔액 조회
-        Integer totalPoint = pointService.findTotalPoint(loginMember.getId());
+        Integer totalPoint = pointQueryService.findTotalPoint(loginMember.getId());
 
         topInfoMap.put("grade", loginMember.getGrade().getDescription());
         topInfoMap.put("payMoney", payMoney);

@@ -1,18 +1,16 @@
-package project.delivery.service.impl.v0;
+package project.delivery.service.query.impl;
 
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import project.delivery.domain.store.*;
-import project.delivery.exception.DuplicateException;
 import project.delivery.repository.*;
-import project.delivery.service.StoreService;
+import project.delivery.service.query.StoreQueryService;
 
 import java.util.List;
-import java.util.Optional;
 
 @Service
 @RequiredArgsConstructor
-public class StoreServiceImplV0 implements StoreService {
+public class StoreQueryServiceImpl implements StoreQueryService {
 
     private final StoreRepository storeRepository;
     private final MenuCategoryRepository menuCategoryRepository;
@@ -41,11 +39,6 @@ public class StoreServiceImplV0 implements StoreService {
     }
 
     @Override
-    public DeliveryInfo findDeliveryInfo(Long storeId) {
-        return null;
-    }
-
-    @Override
     public List<DeliveryTipByAmount> findDeliveryTipByAmountByDeliveryId(Long deliveryId) {
         return deliveryTipByAmountRepository.findAllByDeliveryId(deliveryId);
     }
@@ -58,12 +51,5 @@ public class StoreServiceImplV0 implements StoreService {
     @Override
     public Integer findDeliveryTip(Long storeId, Integer totalAmount) {
         return storeRepository.findDeliveryTip(storeId, totalAmount);
-    }
-
-    private void duplicatedBusinessNumber(String businessNumber) {
-        Optional<Store> findStore = storeRepository.findByBusinessNumber(businessNumber);
-        if (findStore.isPresent()) {
-            throw new DuplicateException("이미 등록된 사업자 번호입니다");
-        }
     }
 }

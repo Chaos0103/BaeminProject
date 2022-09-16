@@ -3,13 +3,8 @@ package project.delivery.service;
 import org.springframework.transaction.annotation.Transactional;
 import project.delivery.domain.pay.PayAccount;
 import project.delivery.domain.pay.PayCard;
-import project.delivery.dto.PayAccountDto;
-import project.delivery.dto.PayCardDto;
-import project.delivery.dto.PayDto;
 
-import java.util.List;
-
-@Transactional(readOnly = true)
+@Transactional
 public interface PayService {
 
     /**
@@ -20,7 +15,6 @@ public interface PayService {
      * @return 배민페이머니 사용내역 id
      * @exception project.delivery.exception.NoSuchException 배민페이 미가입자인 경우 예외 발생
      */
-    @Transactional
     Long chargePayMoney(Long memberId, int price, String content);
 
     /**
@@ -30,7 +24,6 @@ public interface PayService {
      * @return 배민페이머니 사용내역 id
      * @exception project.delivery.exception.NoSuchException 배민페이 미가입자인 경우 예외 발생
      */
-    @Transactional
     Long refundPayMoney(Long memberId, String content);
 
     /**
@@ -41,7 +34,6 @@ public interface PayService {
      * @return 배민페이머니 사용내역 id
      * @exception project.delivery.exception.NoSuchException 배민페이 미가입자인 경우 예외 발생
      */
-    @Transactional
     Long usePayMoney(Long memberId, int price, String content);
 
     /**
@@ -50,13 +42,11 @@ public interface PayService {
      * @param password 변경할 비밀번호
      * @exception project.delivery.exception.NoSuchException 배민페이 미가입자인 경우 예외 발생
      */
-    @Transactional
     void changePayPassword(Long memberId, String password);
 
     /**
      * 페이탈퇴
      */
-    @Transactional
     void deletePay(Long memberId);
 
     /**
@@ -66,7 +56,6 @@ public interface PayService {
      * @return 등록된 카드 id
      * @exception project.delivery.exception.NoSuchException 배민페이 미가입자인 경우 예외 발생
      */
-    @Transactional
     Long createPayCard(Long memberId, PayCard savePayCard);
 
     /**
@@ -75,7 +64,6 @@ public interface PayService {
      * @param nickname 변경할 닉네임
      * @exception project.delivery.exception.NoSuchException 등록되지 않은 배민페이 카드인 경우
      */
-    @Transactional
     void updatePayCardNickname(Long payCardId, String nickname);
 
     /**
@@ -83,7 +71,6 @@ public interface PayService {
      * @param payCardId 제거할 페이카드 id
      * @exception project.delivery.exception.NoSuchException 등록되지 않은 배민페이 카드인 경우
      */
-    @Transactional
     void deletePayCard(Long payCardId);
 
     /**
@@ -93,7 +80,6 @@ public interface PayService {
      * @return 등록된 계좌 id
      * @exception project.delivery.exception.NoSuchException 배민페이 미가입자인 경우
      */
-    @Transactional
     Long createPayAccount(Long memberId, PayAccount savePayAccount);
 
     /**
@@ -102,7 +88,6 @@ public interface PayService {
      * @param nickname 변경할 닉네임
      * @exception project.delivery.exception.NoSuchException 등록되지 않은 배민페이 계좌인 경우
      */
-    @Transactional
     void updatePayAccountNickname(Long payAccountId, String nickname);
 
     /**
@@ -110,42 +95,5 @@ public interface PayService {
      * @param payAccountId 제거할 페이계좌의 id
      * @exception project.delivery.exception.NoSuchException 등록되지 않은 배민페이 계좌인 경우
      */
-    @Transactional
     void deletePayAccount(Long payAccountId);
-
-    /**
-     * 배민페이 비밀번호를 조회하는 로직
-     * @param memberId 조회할 회원의 id
-     * @return 배민페이 비밀번호
-     * @exception project.delivery.exception.NoSuchException 배민페이 미가입자인 경우
-     */
-    String findPayPassword(Long memberId);
-
-    /**
-     * 배민페이 정보와 내역을 조회하는 로직
-     * @param memberId 조회할 회원의 id
-     * @return PayDto
-     */
-    PayDto findPay(Long memberId);
-
-    /**
-     * 배민페이 카드 정보를 조회하는 로직
-     * @param payId 조회할 페이의 id
-     * @return PayCardDto
-     */
-    List<PayCardDto> findPayCard(Long payId);
-
-    /**
-     * 배민페이 계좌 정보를 조회하는 로직
-     * @param payId 조회할 페이의 id
-     * @return PayAccountDto
-     */
-    List<PayAccountDto> findPayAccount(Long payId);
-
-    /**
-     * 배민페이 잔액을 조회하는 로직
-     * @param memberId 조회할 회원의 id
-     * @return 배민페이 잔액
-     */
-    Integer findMoney(Long memberId);
 }

@@ -14,9 +14,9 @@ import project.delivery.dto.BasketDto;
 import project.delivery.dto.NotificationDto;
 import project.delivery.exception.NoSuchException;
 import project.delivery.login.Login;
-import project.delivery.service.BasketService;
 import project.delivery.service.MemberService;
-import project.delivery.service.NotificationService;
+import project.delivery.service.query.NotificationQueryService;
+import project.delivery.service.query.BasketQueryService;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpSession;
@@ -29,8 +29,8 @@ import java.util.List;
 public class MemberController {
 
     private final MemberService memberService;
-    private final NotificationService notificationService;
-    private final BasketService basketService;
+    private final NotificationQueryService notificationQueryService;
+    private final BasketQueryService basketQueryService;
 
     @GetMapping
     public String memberInfo(
@@ -142,9 +142,9 @@ public class MemberController {
 
     private void headerInfo(Member loginMember, Model model) {
         //알림 조회
-        List<NotificationDto> notifications = notificationService.findNotifications(loginMember.getId());
+        List<NotificationDto> notifications = notificationQueryService.findNotifications(loginMember.getId());
         //장바구니 조회
-        BasketDto basket = basketService.findBasket(loginMember.getId());
+        BasketDto basket = basketQueryService.findBasket(loginMember.getId());
 
         model.addAttribute("notifications", notifications);
         model.addAttribute("basket", basket);

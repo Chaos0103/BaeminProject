@@ -15,6 +15,7 @@ import project.delivery.dto.NotificationDto;
 import project.delivery.dto.ReviewSearch;
 import project.delivery.login.Login;
 import project.delivery.service.*;
+import project.delivery.service.query.*;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -25,12 +26,14 @@ import java.util.List;
 @RequestMapping("/stores")
 public class StoreController {
 
-    private final StoreService storeService;
-    private final MenuService menuService;
+    private final StoreQueryService storeQueryService;
     private final BookmarkService bookmarkService;
-    private final NotificationService notificationService;
-    private final ReviewService reviewService;
     private final BasketService basketService;
+
+    private final MenuQueryService menuQueryService;
+    private final NotificationQueryService notificationQueryService;
+    private final BasketQueryService basketQueryService;
+    private final ReviewQueryService reviewQueryService;
 
     /**
      * @URL: localhost:8080/stores
@@ -39,7 +42,7 @@ public class StoreController {
     public String stores(@RequestParam Category category, @Login Member loginMember, Model model) {
         headerInfo(model, loginMember);
 
-        List<StoreDto> stores = storeService.findStores(category).stream()
+        List<StoreDto> stores = storeQueryService.findStores(category).stream()
                 .map(StoreDto::new)
                 .toList();
         model.addAttribute("stores", stores);
@@ -78,19 +81,19 @@ public class StoreController {
     public String store(@PathVariable Long storeId, Model model, @Login Member loginMember) {
         headerInfo(model, loginMember);
 
-        Store store = storeService.findStoreDetail(storeId);
-        List<DeliveryTipByAmount> deliveryTipByAmounts = storeService.findDeliveryTipByAmountByDeliveryId(store.getDeliveryInfo().getId());
-        List<DeliveryTipByArea> deliveryTipByAreas = storeService.findDeliveryTipByAreaByDeliveryId(store.getDeliveryInfo().getId());
-        List<StoreImage> storeImages = storeService.findStoreImages(storeId);
+        Store store = storeQueryService.findStoreDetail(storeId);
+        List<DeliveryTipByAmount> deliveryTipByAmounts = storeQueryService.findDeliveryTipByAmountByDeliveryId(store.getDeliveryInfo().getId());
+        List<DeliveryTipByArea> deliveryTipByAreas = storeQueryService.findDeliveryTipByAreaByDeliveryId(store.getDeliveryInfo().getId());
+        List<StoreImage> storeImages = storeQueryService.findStoreImages(storeId);
 
         //MenuCategory join fetch Menu
-        List<MenuCategory> categories = storeService.findMenuCategoryByStoreId(storeId);
+        List<MenuCategory> categories = storeQueryService.findMenuCategoryByStoreId(storeId);
         //Menu PK 조회
         List<Long> menuIds = getMenuIds(categories);
-        List<MenuOption> menuOptions = menuService.findMenuOptionByMenuIds(menuIds);
-        List<MenuSubCategory> menuSubOptionCategorise = menuService.findMenuSubOptionCategory(menuIds);
+        List<MenuOption> menuOptions = menuQueryService.findMenuOptionByMenuIds(menuIds);
+        List<MenuSubCategory> menuSubOptionCategorise = menuQueryService.findMenuSubOptionCategory(menuIds);
 
-        List<Review> reviews = reviewService.findAllByStoreId(new ReviewSearch(storeId, false, "recent"));
+        List<Review> reviews = reviewQueryService.findAllByStoreId(new ReviewSearch(storeId, false, "recent"));
 
         int[] ratingData = getRatingData(reviews);
         float[] ratingPercent = getRatingPercent(reviews, ratingData);
@@ -119,7 +122,7 @@ public class StoreController {
 
     @GetMapping("/review")
     public String searchReview(@ModelAttribute ReviewSearch search, Model model) {
-        List<Review> reviews = reviewService.findAllByStoreId(search);
+        List<Review> reviews = reviewQueryService.findAllByStoreId(search);
         model.addAttribute("reviews", reviews);
         return "/stores/detail :: #review";
     }
@@ -152,8 +155,8 @@ public class StoreController {
     }
 
     private void headerInfo(Model model, Member loginMember) {
-        List<NotificationDto> notifications = notificationService.findNotifications(loginMember.getId());
-        BasketDto basket = basketService.findBasket(loginMember.getId());
+        List<NotificationDto> notifications = notificationQueryService.findNotifications(loginMember.getId());
+        BasketDto basket = basketQueryService.findBasket(loginMember.getId());
 
         model.addAttribute("notifications", notifications);
         model.addAttribute("basket", basket);

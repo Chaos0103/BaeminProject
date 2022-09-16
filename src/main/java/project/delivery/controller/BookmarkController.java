@@ -11,6 +11,7 @@ import project.delivery.dto.BookmarkDto;
 import project.delivery.dto.NotificationDto;
 import project.delivery.login.Login;
 import project.delivery.service.*;
+import project.delivery.service.query.*;
 
 import java.util.HashMap;
 import java.util.List;
@@ -23,18 +24,20 @@ import java.util.Map;
 public class BookmarkController {
 
     private final BookmarkService bookmarkService;
-    private final NotificationService notificationService;
-    private final BasketService basketService;
-    private final PayService payService;
-    private final CouponService couponService;
-    private final PointService pointService;
+    private final NotificationQueryService notificationQueryService;
+
+    private final BasketQueryService basketQueryService;
+    private final BookmarkQueryService bookmarkQueryService;
+    private final CouponQueryService couponQueryService;
+    private final PayQueryService payQueryService;
+    private final PointQueryService pointQueryService;
 
     @GetMapping
     public String bookmarkHome(@Login Member loginMember, Model model) {
         headerInfo(loginMember, model);
         topInfo(loginMember, model);
 
-        List<BookmarkDto> bookmarks = bookmarkService.findBookmarksByMemberId(loginMember.getId());
+        List<BookmarkDto> bookmarks = bookmarkQueryService.findBookmarksByMemberId(loginMember.getId());
         model.addAttribute("bookmarks", bookmarks);
         return "member/bookmark";
     }
@@ -52,9 +55,9 @@ public class BookmarkController {
 
     private void headerInfo(Member loginMember, Model model) {
         //알림 조회
-        List<NotificationDto> notifications = notificationService.findNotifications(loginMember.getId());
+        List<NotificationDto> notifications = notificationQueryService.findNotifications(loginMember.getId());
         //장바구니 조회
-        BasketDto basket = basketService.findBasket(loginMember.getId());
+        BasketDto basket = basketQueryService.findBasket(loginMember.getId());
 
         model.addAttribute("notifications", notifications);
         model.addAttribute("basket", basket);
@@ -63,11 +66,11 @@ public class BookmarkController {
     private void topInfo(Member loginMember, Model model) {
         Map<String, Object> topInfoMap = new HashMap<>();
         //페이머니 잔액 조회
-        Integer payMoney = payService.findMoney(loginMember.getId());
+        Integer payMoney = payQueryService.findMoney(loginMember.getId());
         //사용 가능한 쿠폰 갯수 조회
-        Integer countCoupon = couponService.countAvailableCouponsByMemberId(loginMember.getId());
+        Integer countCoupon = couponQueryService.countAvailableCouponsByMemberId(loginMember.getId());
         //포인트 잔액 조회
-        Integer totalPoint = pointService.findTotalPoint(loginMember.getId());
+        Integer totalPoint = pointQueryService.findTotalPoint(loginMember.getId());
 
         topInfoMap.put("grade", loginMember.getGrade().getDescription());
         topInfoMap.put("payMoney", payMoney);

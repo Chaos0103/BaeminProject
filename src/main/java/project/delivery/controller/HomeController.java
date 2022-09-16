@@ -9,8 +9,8 @@ import project.delivery.domain.member.Member;
 import project.delivery.dto.BasketDto;
 import project.delivery.dto.NotificationDto;
 import project.delivery.login.Login;
-import project.delivery.service.BasketService;
-import project.delivery.service.NotificationService;
+import project.delivery.service.query.NotificationQueryService;
+import project.delivery.service.query.BasketQueryService;
 
 import java.util.List;
 
@@ -19,8 +19,8 @@ import java.util.List;
 @RequiredArgsConstructor
 public class HomeController {
 
-    private final NotificationService notificationService;
-    private final BasketService basketService;
+    private final NotificationQueryService notificationQueryService;
+    private final BasketQueryService basketQueryService;
 
     @GetMapping
     public String mainHome(@Login Member loginMember, Model model) {
@@ -29,8 +29,8 @@ public class HomeController {
             return "home";
         }
 
-        List<NotificationDto> notifications = notificationService.findNotifications(loginMember.getId());
-        BasketDto basket = basketService.findBasket(loginMember.getId());
+        List<NotificationDto> notifications = notificationQueryService.findNotifications(loginMember.getId());
+        BasketDto basket = basketQueryService.findBasket(loginMember.getId());
 
         model.addAttribute("notifications", notifications);
         model.addAttribute("basket", basket);

@@ -1,32 +1,21 @@
-package project.delivery.service.impl.v0;
+package project.delivery.service.query.impl;
 
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
-import project.delivery.domain.store.Menu;
 import project.delivery.domain.store.MenuOption;
 import project.delivery.domain.store.MenuSubCategory;
-import project.delivery.domain.store.MenuSubOption;
 import project.delivery.repository.MenuOptionRepository;
-import project.delivery.repository.MenuRepository;
 import project.delivery.repository.MenuSubCategoryRepository;
-import project.delivery.repository.MenuSubOptionRepository;
-import project.delivery.service.MenuService;
+import project.delivery.service.query.MenuQueryService;
 
 import java.util.List;
 
 @Service
 @RequiredArgsConstructor
-public class MenuServiceImplV0 implements MenuService {
+public class MenuQueryServiceImpl implements MenuQueryService {
 
-    private final MenuRepository menuRepository;
     private final MenuSubCategoryRepository menuSubOptionCategoryRepository;
-    private final MenuSubOptionRepository menuSubOptionRepository;
     private final MenuOptionRepository menuOptionRepository;
-
-    @Override
-    public List<Menu> findMenuByStoreId(Long storeId) {
-        return menuRepository.findAllByStoreId(storeId);
-    }
 
     @Override
     public List<MenuOption> findMenuOptionByMenuIds(List<Long> menuIds) {
@@ -36,10 +25,5 @@ public class MenuServiceImplV0 implements MenuService {
     @Override
     public List<MenuSubCategory> findMenuSubOptionCategory(List<Long> menuIds) {
         return menuSubOptionCategoryRepository.findAllByMenuIds(menuIds);
-    }
-
-    @Override
-    public List<MenuSubOption> findMenuSubOption(List<Long> categoryIds) {
-        return menuSubOptionRepository.findAllByMenuIds(categoryIds);
     }
 }

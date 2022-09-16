@@ -19,6 +19,7 @@ import project.delivery.domain.order.ReceiptType;
 import project.delivery.dto.*;
 import project.delivery.login.Login;
 import project.delivery.service.*;
+import project.delivery.service.query.*;
 
 import java.util.HashMap;
 import java.util.List;
@@ -30,12 +31,13 @@ import java.util.Map;
 @RequestMapping("/orders")
 public class OrderController {
 
-    private final NotificationService notificationService;
     private final OrderService orderService;
-    private final BasketService basketService;
-    private final StoreService storeService;
-    private final PointService pointService;
-    private final CouponService couponService;
+    private final StoreQueryService storeQueryService;
+
+    private final NotificationQueryService notificationQueryService;
+    private final BasketQueryService basketQueryService;
+    private final CouponQueryService couponQueryService;
+    private final PointQueryService pointQueryService;
 
     /**
      * @URL: localhost:8080/orders/{basketId}/delivery
@@ -48,18 +50,18 @@ public class OrderController {
             @Login Member loginMember, @PathVariable Long basketId, Model model) {
         headerInfo(loginMember, model);
 
-        Basket basket = basketService.findBasketById(basketId);
+        Basket basket = basketQueryService.findBasketById(basketId);
 
         Integer totalAmount = getTotalAmount(basket);
-        Integer deliveryTip = storeService.findDeliveryTip(basket.getStore().getId(), totalAmount);
+        Integer deliveryTip = storeQueryService.findDeliveryTip(basket.getStore().getId(), totalAmount);
 
         paymentAddForm.setOrderAmount(totalAmount);
         paymentAddForm.setDeliveryTip(deliveryTip);
         deliveryAddForm.setMainAddress(loginMember.getAddress().getMainAddress());
         deliveryAddForm.setPhone(loginMember.getPhone());
 
-        Integer totalPoint = pointService.findTotalPoint(loginMember.getId());
-        List<Coupon> coupons = couponService.findAvailableCouponsByMemberId(loginMember.getId());
+        Integer totalPoint = pointQueryService.findTotalPoint(loginMember.getId());
+        List<Coupon> coupons = couponQueryService.findAvailableCouponsByMemberId(loginMember.getId());
         model.addAttribute("totalPoint", totalPoint);
         model.addAttribute("coupons", coupons);
         return "stores/deliveryOrder";
@@ -91,14 +93,14 @@ public class OrderController {
             @Login Member loginMember, Model model, @PathVariable Long basketId) {
         headerInfo(loginMember, model);
         deliveryAddForm.setPhone(loginMember.getPhone());
-        Basket basket = basketService.findBasketById(basketId);
+        Basket basket = basketQueryService.findBasketById(basketId);
         deliveryAddForm.setZipcode(basket.getStore().getBusinessAddress().getZipcode());
         deliveryAddForm.setMainAddress(basket.getStore().getBusinessAddress().getMainAddress());
         Integer totalAmount = getTotalAmount(basket);
         deliveryAddForm.setDetailAddress(basket.getStore().getBusinessAddress().getDetailAddress());
         paymentAddForm.setOrderAmount(totalAmount);
-        Integer totalPoint = pointService.findTotalPoint(loginMember.getId());
-        List<Coupon> coupons = couponService.findAvailableCouponsByMemberId(loginMember.getId());
+        Integer totalPoint = pointQueryService.findTotalPoint(loginMember.getId());
+        List<Coupon> coupons = couponQueryService.findAvailableCouponsByMemberId(loginMember.getId());
         model.addAttribute("store", basket.getStore());
         model.addAttribute("totalPoint", totalPoint);
         model.addAttribute("coupons", coupons);
@@ -125,7 +127,7 @@ public class OrderController {
     @ResponseBody
     @PostMapping("/coupons")
     public Map<String, Object> usingCoupon(@RequestParam("couponId") Long couponId) {
-        Coupon coupon = couponService.findById(couponId);
+        Coupon coupon = couponQueryService.findById(couponId);
         Map<String, Object> couponData = new HashMap<>();
         couponData.put("couponId", coupon.getId());
         couponData.put("discountPrice", coupon.getDiscountPrice());
@@ -152,9 +154,9 @@ public class OrderController {
 
     private void headerInfo(Member loginMember, Model model) {
         //알림 조회
-        List<NotificationDto> notifications = notificationService.findNotifications(loginMember.getId());
+        List<NotificationDto> notifications = notificationQueryService.findNotifications(loginMember.getId());
         //장바구니 조회
-        BasketDto basket = basketService.findBasket(loginMember.getId());
+        BasketDto basket = basketQueryService.findBasket(loginMember.getId());
 
         model.addAttribute("notifications", notifications);
         model.addAttribute("basket", basket);

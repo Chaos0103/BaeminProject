@@ -35,9 +35,4 @@ public class BookmarkServiceImplV0 implements BookmarkService {
     public void removeBookmark(Long bookmarkId) {
         bookmarkRepository.deleteById(bookmarkId);
     }
-
-    @Override
-    public List<BookmarkDto> findBookmarksByMemberId(Long memberId) {
-        return bookmarkRepository.findBookmarksByMemberId(memberId);
-    }
 }

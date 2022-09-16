@@ -98,45 +98,6 @@ public class PayServiceImplV0 implements PayService {
         payAccountRepository.delete(findPayAccount);
     }
 
-    @Override
-    public String findPayPassword(Long memberId) {
-        String password = payRepository.findPayPasswordByMemberId(memberId).orElse(null);
-        if (password == null) {
-            throw new NoSuchException("배민페이 미가입자입니다");
-        }
-        return password;
-    }
-
-    @Override
-    public PayDto findPay(Long memberId) {
-        Pay pay = payRepository.findPayByMemberId(memberId).orElse(null);
-        if (pay == null) {
-            throw new NoSuchException("배민페이 미가입자입니다");
-        }
-        return new PayDto(pay);
-    }
-
-    @Override
-    public List<PayCardDto> findPayCard(Long payId) {
-        List<PayCard> payCards = payCardRepository.findPayCardPayId(payId);
-        return payCards.stream()
-                .map(PayCardDto::new)
-                .toList();
-    }
-
-    @Override
-    public List<PayAccountDto> findPayAccount(Long payId) {
-        List<PayAccount> payAccounts = payAccountRepository.findPayAccountByPayId(payId);
-        return payAccounts.stream()
-                .map(PayAccountDto::new)
-                .toList();
-    }
-
-    @Override
-    public Integer findMoney(Long memberId) {
-        return payRepository.findMoney(memberId);
-    }
-
     private Pay getPay(Long memberId) {
         Pay findPay = payRepository.findByMemberId(memberId).orElse(null);
         if (findPay == null) {

@@ -1,11 +1,11 @@
-package project.delivery.service;
+package project.delivery.service.query;
 
 import org.springframework.transaction.annotation.Transactional;
 import project.delivery.domain.member.Member;
 import project.delivery.dto.FindEmailDto;
 
 @Transactional(readOnly = true)
-public interface LoginService {
+public interface LoginQueryService {
 
     /**
      * 로그인

@@ -35,22 +35,6 @@ public class PointServiceImplV0 implements PointService {
         return findVoucher.getPointValue();
     }
 
-    @Override
-    public PointDto findPointByMemberId(Long memberId) {
-        Point findPoint = getPoint(memberId);
-        return new PointDto(findPoint);
-    }
-
-    @Override
-    public List<PointHistoryDto> findPointHistoryByPointId(Long pointId, PointHistorySearch search) {
-        return getPointHistoryDtos(pointId, search);
-    }
-
-    @Override
-    public Integer findTotalPoint(Long memberId) {
-        return pointRepository.findTotalPoint(memberId);
-    }
-
     private VoucherData getVoucherData(String voucherCode) {
         VoucherData findVoucher = voucherDataRepository.findByVoucherCode(voucherCode).orElse(null);
         if (findVoucher == null) {

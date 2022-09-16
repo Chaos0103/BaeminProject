@@ -1,4 +1,4 @@
-package project.delivery.service;
+package project.delivery.service.query;
 
 import org.springframework.transaction.annotation.Transactional;
 import project.delivery.dto.NotificationDto;
@@ -6,7 +6,7 @@ import project.delivery.dto.NotificationDto;
 import java.util.List;
 
 @Transactional(readOnly = true)
-public interface NotificationService {
+public interface NotificationQueryService {
 
     /**
      * 3일 전 알림까지 조회하는 로직

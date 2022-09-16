@@ -1,4 +1,4 @@
-package project.delivery.service;
+package project.delivery.service.query;
 
 import org.springframework.transaction.annotation.Transactional;
 import project.delivery.domain.store.*;
@@ -6,7 +6,7 @@ import project.delivery.domain.store.*;
 import java.util.List;
 
 @Transactional(readOnly = true)
-public interface StoreService {
+public interface StoreQueryService {
 
     /**
      * 카테고리 별 매장을 조회하는 로직
@@ -31,8 +31,6 @@ public interface StoreService {
      * @return 가게 사진
      */
     List<StoreImage> findStoreImages(Long storeId);
-
-    DeliveryInfo findDeliveryInfo(Long storeId);
 
     //---------------------
     //주문금액 별 배달팁 조회

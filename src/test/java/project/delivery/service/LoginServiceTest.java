@@ -9,6 +9,7 @@ import project.delivery.domain.Address;
 import project.delivery.domain.member.Member;
 import project.delivery.dto.FindEmailDto;
 import project.delivery.repository.MemberRepository;
+import project.delivery.service.query.LoginQueryService;
 
 import static org.assertj.core.api.Assertions.*;
 
@@ -16,7 +17,8 @@ import static org.assertj.core.api.Assertions.*;
 @Transactional
 class LoginServiceTest {
 
-    @Autowired LoginService loginService;
+    @Autowired
+    LoginQueryService loginService;
     @Autowired MemberRepository memberRepository;
 
     @Test

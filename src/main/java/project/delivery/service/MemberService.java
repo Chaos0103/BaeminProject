@@ -4,7 +4,7 @@ import org.springframework.transaction.annotation.Transactional;
 import project.delivery.domain.Address;
 import project.delivery.domain.member.Member;
 
-@Transactional(readOnly = true)
+@Transactional
 public interface MemberService {
 
     /**

@@ -93,11 +93,6 @@ public class OrderServiceImplV0 implements OrderService {
         orderRepository.deleteById(orderId);
     }
 
-    @Override
-    public List<Order> findOrdersByMemberId(Long memberId) {
-        return orderRepository.findOrdersByMemberId(memberId);
-    }
-
     private Order findOrder(Long orderId) {
         Order order = orderRepository.findById(orderId).orElse(null);
         if (order == null) {

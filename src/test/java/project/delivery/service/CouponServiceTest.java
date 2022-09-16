@@ -16,6 +16,7 @@ import project.delivery.exception.DuplicateException;
 import project.delivery.exception.NoSuchException;
 import project.delivery.repository.CouponRepository;
 import project.delivery.repository.MemberRepository;
+import project.delivery.service.query.CouponQueryService;
 
 import java.time.LocalDateTime;
 import java.util.List;
@@ -31,6 +32,7 @@ class CouponServiceTest {
     @Autowired CouponRepository couponRepository;
     @Autowired MemberRepository memberRepository;
     @Autowired CouponDataRepository couponDataRepository;
+    @Autowired CouponQueryService couponQueryService;
 
     private final static String COUPON_NUMBER = "1234123412341234";
 
@@ -92,7 +94,7 @@ class CouponServiceTest {
         couponRepository.save(coupon2);
 
         //when
-        List<CouponDto> coupons = couponService.findCouponByMemberId(member.getId());
+        List<CouponDto> coupons = couponQueryService.findCouponByMemberId(member.getId());
 
         //then
         assertThat(coupons.size()).isEqualTo(1);

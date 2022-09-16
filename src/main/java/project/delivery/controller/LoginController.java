@@ -15,7 +15,7 @@ import project.delivery.controller.form.LoginForm;
 import project.delivery.domain.member.Member;
 import project.delivery.dto.FindEmailDto;
 import project.delivery.exception.NoSuchException;
-import project.delivery.service.LoginService;
+import project.delivery.service.query.LoginQueryService;
 import project.delivery.service.MemberService;
 
 import javax.servlet.http.HttpServletRequest;
@@ -31,7 +31,7 @@ import java.util.Random;
 @RequestMapping("/login")
 public class LoginController {
 
-    private final LoginService loginService;
+    private final LoginQueryService loginQueryService;
     private final MemberService memberService;
 
     /**
@@ -62,7 +62,7 @@ public class LoginController {
             return "common/login";
         }
 
-        Member loginMember = loginService.login(form.getEmail(), form.getPassword());
+        Member loginMember = loginQueryService.login(form.getEmail(), form.getPassword());
 
         if (loginMember == null) {
             bindingResult.reject("loginFail", "계정 정보가 일치하지 않습니다.");
@@ -121,7 +121,7 @@ public class LoginController {
             return "common/findLoginIdForm";
         }
 
-        FindEmailDto findMemberInfo = loginService.findEmailByPhone(form.getPhone());
+        FindEmailDto findMemberInfo = loginQueryService.findEmailByPhone(form.getPhone());
 
         if (findMemberInfo == null) {
             bindingResult.reject("nonMember", "등록되지 않은 회원입니다.");
@@ -177,7 +177,7 @@ public class LoginController {
             return "common/findPasswordForm";
         }
 
-        Long memberId = loginService.findMemberIdByEmailAndPhone(form.getEmail(), form.getPhone());
+        Long memberId = loginQueryService.findMemberIdByEmailAndPhone(form.getEmail(), form.getPhone());
 
         if (memberId == null) {
             bindingResult.reject("nonMember", "등록되지 않은 회원입니다.");

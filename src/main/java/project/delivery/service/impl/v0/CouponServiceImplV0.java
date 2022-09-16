@@ -7,15 +7,11 @@ import project.delivery.admin.coupon.CouponDataRepository;
 import project.delivery.admin.coupon.CouponDateStatus;
 import project.delivery.domain.coupon.Coupon;
 import project.delivery.domain.member.Member;
-import project.delivery.dto.CouponDto;
 import project.delivery.exception.DuplicateException;
 import project.delivery.exception.NoSuchException;
 import project.delivery.repository.CouponRepository;
 import project.delivery.repository.MemberRepository;
 import project.delivery.service.CouponService;
-
-import java.time.LocalDateTime;
-import java.util.List;
 
 @Service
 @RequiredArgsConstructor
@@ -42,40 +38,6 @@ public class CouponServiceImplV0 implements CouponService {
         Coupon coupon = createCoupon(findMember, couponData);
         Coupon savedCoupon = couponRepository.save(coupon);
         return savedCoupon.getId();
-    }
-
-    @Override
-    public List<CouponDto> findCouponByMemberId(Long memberId) {
-        LocalDateTime period = LocalDateTime.now().minusMonths(6);
-        List<Coupon> coupons = couponRepository.findCouponByMemberId(memberId, period);
-        return coupons.stream()
-                .map(CouponDto::new)
-                .toList();
-    }
-
-    @Override
-    public List<Coupon> findAvailableCouponsByMemberId(Long memberId) {
-        return couponRepository.findAvailableCouponsByMemberId(memberId);
-    }
-
-    @Override
-    public Integer countAvailableCouponsByMemberId(Long memberId) {
-        return couponRepository.countAvailableCouponsByMemberId(memberId);
-    }
-
-    @Override
-    public Integer countDayByMemberId(Long memberId) {
-        LocalDateTime date = LocalDateTime.now().plusDays(1);
-        return couponRepository.countDayByMemberId(memberId, date);
-    }
-
-    @Override
-    public Coupon findById(Long couponId) {
-        Coupon coupon = couponRepository.findById(couponId).orElse(null);
-        if (coupon == null) {
-            throw new NoSuchException("등록되지 않은 쿠폰입니다");
-        }
-        return coupon;
     }
 
     private static Coupon createCoupon(Member member, CouponData couponData) {

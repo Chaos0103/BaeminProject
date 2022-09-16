@@ -1,15 +1,15 @@
-package project.delivery.service.impl.v0;
+package project.delivery.service.query.impl;
 
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import project.delivery.domain.member.Member;
 import project.delivery.dto.FindEmailDto;
 import project.delivery.repository.MemberRepository;
-import project.delivery.service.LoginService;
+import project.delivery.service.query.LoginQueryService;
 
 @Service
 @RequiredArgsConstructor
-public class LoginServiceImplV0 implements LoginService {
+public class LoginQueryServiceImpl implements LoginQueryService {
 
     private final MemberRepository memberRepository;
 
