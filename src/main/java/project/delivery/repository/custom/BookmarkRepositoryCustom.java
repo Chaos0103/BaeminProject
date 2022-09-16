@@ -1,10 +1,10 @@
 package project.delivery.repository.custom;
 
-import project.delivery.dto.BookmarkDto;
+import project.delivery.domain.member.Bookmark;
 
 import java.util.List;
 
 public interface BookmarkRepositoryCustom {
 
-    List<BookmarkDto> findBookmarksByMemberId(Long memberId);
+    List<Bookmark> findBookmarks(Long memberId);
 }

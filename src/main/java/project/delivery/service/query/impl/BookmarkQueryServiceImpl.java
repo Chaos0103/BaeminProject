@@ -15,7 +15,9 @@ public class BookmarkQueryServiceImpl implements BookmarkQueryService {
     private final BookmarkRepository bookmarkRepository;
 
     @Override
-    public List<BookmarkDto> findBookmarksByMemberId(Long memberId) {
-        return bookmarkRepository.findBookmarksByMemberId(memberId);
+    public List<BookmarkDto> findBookmarks(Long memberId) {
+        return bookmarkRepository.findBookmarks(memberId).stream()
+                .map(BookmarkDto::new)
+                .toList();
     }
 }

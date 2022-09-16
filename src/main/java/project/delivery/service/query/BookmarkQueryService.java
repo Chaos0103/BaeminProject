@@ -8,5 +8,5 @@ import java.util.List;
 @Transactional(readOnly = true)
 public interface BookmarkQueryService {
 
-    List<BookmarkDto> findBookmarksByMemberId(Long memberId);
+    List<BookmarkDto> findBookmarks(Long memberId);
 }

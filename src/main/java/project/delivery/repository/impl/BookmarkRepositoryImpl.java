@@ -2,7 +2,6 @@ package project.delivery.repository.impl;
 
 import com.querydsl.jpa.impl.JPAQueryFactory;
 import project.delivery.domain.member.Bookmark;
-import project.delivery.dto.BookmarkDto;
 import project.delivery.repository.custom.BookmarkRepositoryCustom;
 
 import javax.persistence.EntityManager;
@@ -23,8 +22,8 @@ public class BookmarkRepositoryImpl implements BookmarkRepositoryCustom {
     }
 
     @Override
-    public List<BookmarkDto> findBookmarksByMemberId(Long memberId) {
-        List<Bookmark> bookmarks = queryFactory
+    public List<Bookmark> findBookmarks(Long memberId) {
+        return queryFactory
                 .select(bookmark).distinct()
                 .from(bookmark)
                 .join(bookmark.store, store).fetchJoin()
@@ -35,9 +34,5 @@ public class BookmarkRepositoryImpl implements BookmarkRepositoryCustom {
                         bookmark.member.id.eq(memberId)
                 )
                 .fetch();
-
-        return bookmarks.stream()
-                .map(BookmarkDto::new)
-                .toList();
     }
 }
