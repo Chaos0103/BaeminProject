@@ -12,8 +12,8 @@ import project.delivery.controller.form.PasswordChangeForm;
 import project.delivery.controller.form.EmailFindForm;
 import project.delivery.controller.form.PasswordFindForm;
 import project.delivery.controller.form.LoginForm;
-import project.delivery.domain.member.Member;
 import project.delivery.dto.FindEmailDto;
+import project.delivery.dto.LoginMember;
 import project.delivery.exception.NoSuchException;
 import project.delivery.service.query.LoginQueryService;
 import project.delivery.service.MemberService;
@@ -31,8 +31,8 @@ import java.util.Random;
 @RequestMapping("/login")
 public class LoginController {
 
-    private final LoginQueryService loginQueryService;
     private final MemberService memberService;
+    private final LoginQueryService loginQueryService;
 
     /**
      * 로그인 화면 호출
@@ -62,7 +62,7 @@ public class LoginController {
             return "common/login";
         }
 
-        Member loginMember = loginQueryService.login(form.getEmail(), form.getPassword());
+        LoginMember loginMember = loginQueryService.login(form.getEmail(), form.getPassword());
 
         if (loginMember == null) {
             bindingResult.reject("loginFail", "계정 정보가 일치하지 않습니다.");

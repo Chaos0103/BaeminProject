@@ -8,6 +8,7 @@ import org.springframework.transaction.annotation.Transactional;
 import project.delivery.domain.Address;
 import project.delivery.domain.member.Member;
 import project.delivery.dto.FindEmailDto;
+import project.delivery.dto.LoginMember;
 import project.delivery.repository.MemberRepository;
 import project.delivery.service.query.LoginQueryService;
 
@@ -30,10 +31,10 @@ class LoginServiceTest {
         String password = member.getPassword();
 
         //when
-        Member loginMember = loginService.login(email, password);
+        LoginMember loginMember = loginService.login(email, password);
 
         //then
-        assertThat(loginMember).isEqualTo(member);
+        assertThat(loginMember.getEmail()).isEqualTo(member.getEmail());
     }
 
     @Test
@@ -44,7 +45,7 @@ class LoginServiceTest {
         String password = "pw1234!@";
 
         //when
-        Member loginMember = loginService.login(email, password);
+        LoginMember loginMember = loginService.login(email, password);
 
         //then
         assertThat(loginMember).isNull();

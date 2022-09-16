@@ -5,8 +5,8 @@ import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
-import project.delivery.domain.member.Member;
 import project.delivery.dto.BookmarkDto;
+import project.delivery.dto.LoginMember;
 import project.delivery.login.Login;
 import project.delivery.service.*;
 import project.delivery.service.query.*;
@@ -25,7 +25,7 @@ public class BookmarkController {
     private final BookmarkQueryService bookmarkQueryService;
 
     @GetMapping
-    public String bookmarkHome(@Login Member loginMember, Model model) {
+    public String bookmarkHome(@Login LoginMember loginMember, Model model) {
         globalInfo.headerInfo(loginMember, model);
         globalInfo.topInfo(loginMember, model);
 

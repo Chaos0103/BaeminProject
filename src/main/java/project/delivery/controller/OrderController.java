@@ -10,7 +10,6 @@ import project.delivery.controller.form.OrderAddForm;
 import project.delivery.controller.form.PaymentAddForm;
 import project.delivery.domain.Address;
 import project.delivery.domain.coupon.Coupon;
-import project.delivery.domain.member.Member;
 import project.delivery.domain.basket.Basket;
 import project.delivery.domain.basket.BasketMenu;
 import project.delivery.domain.order.Delivery;
@@ -31,10 +30,11 @@ import java.util.Map;
 @RequestMapping("/orders")
 public class OrderController {
 
+    private final GlobalInformation globalInformation;
+
     private final OrderService orderService;
     private final StoreQueryService storeQueryService;
 
-    private final NotificationQueryService notificationQueryService;
     private final BasketQueryService basketQueryService;
     private final CouponQueryService couponQueryService;
     private final PointQueryService pointQueryService;
@@ -47,8 +47,9 @@ public class OrderController {
             @ModelAttribute("deliveryAddForm") DeliveryAddForm deliveryAddForm,
             @ModelAttribute("orderAddForm") OrderAddForm orderAddForm,
             @ModelAttribute("paymentAddForm") PaymentAddForm paymentAddForm,
-            @Login Member loginMember, @PathVariable Long basketId, Model model) {
-        headerInfo(loginMember, model);
+            @Login LoginMember loginMember, @PathVariable Long basketId, Model model) {
+
+        globalInformation.headerInfo(loginMember, model);
 
         Basket basket = basketQueryService.findBasketById(basketId);
 
@@ -68,7 +69,7 @@ public class OrderController {
     }
 
     @PostMapping("/{basketId}/delivery")
-    public String delivery(DeliveryAddForm deliveryAddForm, OrderAddForm orderAddForm, PaymentAddForm paymentAddForm, @Login Member loginMember) {
+    public String delivery(DeliveryAddForm deliveryAddForm, OrderAddForm orderAddForm, PaymentAddForm paymentAddForm, @Login LoginMember loginMember) {
         log.debug("paymentAddForm = {}", paymentAddForm);
         String safeNumber = deliveryAddForm.getPhone();
         if (deliveryAddForm.getSafeNumber()) {
@@ -90,8 +91,8 @@ public class OrderController {
             @ModelAttribute("deliveryAddForm") DeliveryAddForm deliveryAddForm,
             @ModelAttribute("orderAddForm") OrderAddForm orderAddForm,
             @ModelAttribute("paymentAddForm") PaymentAddForm paymentAddForm,
-            @Login Member loginMember, Model model, @PathVariable Long basketId) {
-        headerInfo(loginMember, model);
+            @Login LoginMember loginMember, Model model, @PathVariable Long basketId) {
+        globalInformation.headerInfo(loginMember, model);
         deliveryAddForm.setPhone(loginMember.getPhone());
         Basket basket = basketQueryService.findBasketById(basketId);
         deliveryAddForm.setZipcode(basket.getStore().getBusinessAddress().getZipcode());
@@ -108,7 +109,7 @@ public class OrderController {
     }
 
     @PostMapping("/{basketId}/packing")
-    public String packing(DeliveryAddForm deliveryAddForm, OrderAddForm orderAddForm, PaymentAddForm paymentAddForm, @Login Member loginMember, @PathVariable Long basketId) {
+    public String packing(DeliveryAddForm deliveryAddForm, OrderAddForm orderAddForm, PaymentAddForm paymentAddForm, @Login LoginMember loginMember, @PathVariable Long basketId) {
         String safeNumber = deliveryAddForm.getPhone();
         if (deliveryAddForm.getSafeNumber()) {
             safeNumber = "010-9999-9999";
@@ -134,11 +135,6 @@ public class OrderController {
         return couponData;
     }
 
-    @ModelAttribute("loginMember")
-    public Member loginMember(@Login Member loginMember) {
-        return loginMember;
-    }
-
     @ModelAttribute("paymentMethods")
     public PaymentMethod[] paymentMethods() {
         return PaymentMethod.values();
@@ -150,15 +146,5 @@ public class OrderController {
                 .toList();
         return orderPrices.stream()
                 .mapToInt(orderPrice -> orderPrice).sum();
-    }
-
-    private void headerInfo(Member loginMember, Model model) {
-        //알림 조회
-        List<NotificationDto> notifications = notificationQueryService.findNotifications(loginMember.getId());
-        //장바구니 조회
-        BasketDto basket = basketQueryService.findBasket(loginMember.getId());
-
-        model.addAttribute("notifications", notifications);
-        model.addAttribute("basket", basket);
     }
 }

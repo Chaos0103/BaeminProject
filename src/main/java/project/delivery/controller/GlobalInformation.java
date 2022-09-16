@@ -4,8 +4,8 @@ import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Component;
 import org.springframework.ui.Model;
-import project.delivery.domain.member.Member;
 import project.delivery.dto.BasketDto;
+import project.delivery.dto.LoginMember;
 import project.delivery.dto.NotificationDto;
 import project.delivery.service.query.*;
 
@@ -24,7 +24,7 @@ public class GlobalInformation {
     private final PayQueryService payQueryService;
     private final PointQueryService pointQueryService;
 
-    public void headerInfo(Member loginMember, Model model) {
+    public void headerInfo(LoginMember loginMember, Model model) {
         log.debug("GlobalInformation headerInfo");
         List<NotificationDto> notifications = notificationQueryService.findNotifications(loginMember.getId());
         BasketDto basket = basketQueryService.findBasket(loginMember.getId());
@@ -33,7 +33,7 @@ public class GlobalInformation {
         model.addAttribute("loginMember", loginMember);
     }
 
-    public void topInfo(Member loginMember, Model model) {
+    public void topInfo(LoginMember loginMember, Model model) {
         log.debug("GlobalInformation topInfo");
         Map<String, Object> topInfoMap = new HashMap<>();
         Integer payMoney = payQueryService.findMoney(loginMember.getId());

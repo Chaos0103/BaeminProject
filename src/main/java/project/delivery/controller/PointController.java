@@ -11,7 +11,6 @@ import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import project.delivery.controller.form.VoucherSaveForm;
-import project.delivery.domain.member.Member;
 import project.delivery.domain.point.PointType;
 import project.delivery.dto.*;
 import project.delivery.exception.DuplicateException;
@@ -20,9 +19,7 @@ import project.delivery.login.Login;
 import project.delivery.service.*;
 import project.delivery.service.query.*;
 
-import java.util.HashMap;
 import java.util.List;
-import java.util.Map;
 
 @Slf4j
 @Controller
@@ -30,12 +27,9 @@ import java.util.Map;
 @RequestMapping("/members/points")
 public class PointController {
 
-    private final PointService pointService;
+    private final GlobalInformation globalInformation;
 
-    private final NotificationQueryService notificationQueryService;
-    private final BasketQueryService basketQueryService;
-    private final CouponQueryService couponQueryService;
-    private final PayQueryService payQueryService;
+    private final PointService pointService;
     private final PointQueryService pointQueryService;
     
     /**
@@ -44,9 +38,9 @@ public class PointController {
     @GetMapping
     public String pointHome(
             @ModelAttribute("search") PointHistorySearch search,
-            @Login Member loginMember, Model model) {
-        headerInfo(loginMember, model);
-        topInfo(loginMember, model);
+            @Login LoginMember loginMember, Model model) {
+        globalInformation.headerInfo(loginMember, model);
+        globalInformation.topInfo(loginMember, model);
 
         //포인트 데이터 조회
         PointDto point = pointQueryService.findPointByMemberId(loginMember.getId());
@@ -68,7 +62,7 @@ public class PointController {
             @ModelAttribute("search") PointHistorySearch search,
             @Validated @ModelAttribute VoucherSaveForm form,
             BindingResult bindingResult,
-            @Login Member loginMember, Model model) {
+            @Login LoginMember loginMember, Model model) {
 
         try {
             Integer pointValue = pointService.voucherRegistration(loginMember.getId(), form.getVoucherCode());
@@ -86,11 +80,6 @@ public class PointController {
         }
     }
 
-    @ModelAttribute("loginMember")
-    public Member loginMember(@Login Member loginMember) {
-        return loginMember;
-    }
-
     @ModelAttribute("pointTypes")
     public PointType[] pointTypes() {
         return PointType.values();
@@ -99,32 +88,5 @@ public class PointController {
     @ModelAttribute("voucherSaveForm")
     public VoucherSaveForm voucherSaveForm() {
         return new VoucherSaveForm();
-    }
-
-    private void headerInfo(Member loginMember, Model model) {
-        //알림 조회
-        List<NotificationDto> notifications = notificationQueryService.findNotifications(loginMember.getId());
-        //장바구니 조회
-        BasketDto basket = basketQueryService.findBasket(loginMember.getId());
-
-        model.addAttribute("notifications", notifications);
-        model.addAttribute("basket", basket);
-    }
-
-    private void topInfo(Member loginMember, Model model) {
-        Map<String, Object> topInfoMap = new HashMap<>();
-        //페이머니 잔액 조회
-        Integer payMoney = payQueryService.findMoney(loginMember.getId());
-        //사용 가능한 쿠폰 갯수 조회
-        Integer countCoupon = couponQueryService.countAvailableCoupons(loginMember.getId());
-        //포인트 잔액 조회
-        Integer totalPoint = pointQueryService.findTotalPoint(loginMember.getId());
-
-        topInfoMap.put("grade", loginMember.getGrade().getDescription());
-        topInfoMap.put("payMoney", payMoney);
-        topInfoMap.put("countCoupon", countCoupon);
-        topInfoMap.put("totalPoint", totalPoint);
-
-        model.addAttribute("topInfoMap", topInfoMap);
     }
 }

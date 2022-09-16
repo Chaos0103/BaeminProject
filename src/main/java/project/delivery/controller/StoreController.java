@@ -7,11 +7,9 @@ import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
 import project.delivery.controller.form.BasketAddForm;
-import project.delivery.domain.member.Member;
 import project.delivery.domain.member.Review;
 import project.delivery.domain.store.*;
-import project.delivery.dto.BasketDto;
-import project.delivery.dto.NotificationDto;
+import project.delivery.dto.LoginMember;
 import project.delivery.dto.ReviewSearch;
 import project.delivery.login.Login;
 import project.delivery.service.*;
@@ -26,21 +24,21 @@ import java.util.List;
 @RequestMapping("/stores")
 public class StoreController {
 
+    private final GlobalInformation globalInformation;
+
     private final StoreQueryService storeQueryService;
     private final BookmarkService bookmarkService;
     private final BasketService basketService;
 
     private final MenuQueryService menuQueryService;
-    private final NotificationQueryService notificationQueryService;
-    private final BasketQueryService basketQueryService;
     private final ReviewQueryService reviewQueryService;
 
     /**
      * @URL: localhost:8080/stores
      */
     @GetMapping
-    public String stores(@RequestParam Category category, @Login Member loginMember, Model model) {
-        headerInfo(model, loginMember);
+    public String stores(@RequestParam Category category, @Login LoginMember loginMember, Model model) {
+        globalInformation.headerInfo(loginMember, model);
 
         List<StoreDto> stores = storeQueryService.findStores(category).stream()
                 .map(StoreDto::new)
@@ -78,8 +76,8 @@ public class StoreController {
      * @URL: localhost:8080/stores/{storeId}/detail
      */
     @GetMapping("/{storeId}/detail")
-    public String store(@PathVariable Long storeId, Model model, @Login Member loginMember) {
-        headerInfo(model, loginMember);
+    public String store(@PathVariable Long storeId, Model model, @Login LoginMember loginMember) {
+        globalInformation.headerInfo(loginMember, model);
 
         Store store = storeQueryService.findStoreDetail(storeId);
         List<DeliveryTipByAmount> deliveryTipByAmounts = storeQueryService.findDeliveryTipByAmountByDeliveryId(store.getDeliveryInfo().getId());
@@ -129,13 +127,13 @@ public class StoreController {
 
 
     @PostMapping("/{storeId}/bookmark")
-    public String addBookmark(@PathVariable Long storeId, @Login Member loginMember) {
-        bookmarkService.addBookmark(loginMember, storeId);
+    public String addBookmark(@PathVariable Long storeId, @Login LoginMember loginMember) {
+        bookmarkService.addBookmark(loginMember.getId(), storeId);
         return "redirect:/stores/{storeId}/detail";
     }
 
     @PostMapping("/{storeId}/basket")
-    public String addBasket(@PathVariable Long storeId, BasketAddForm form, @Login Member loginMember) {
+    public String addBasket(@PathVariable Long storeId, BasketAddForm form, @Login LoginMember loginMember) {
         Long basketId = basketService.addBasket(loginMember.getId(), storeId, form.getMenuOptionId(), form.getMenuSubOptionIds(), form.getCount());
         log.debug("장바구니 담기 성공 = {}", basketId);
         return "redirect:/stores/{storeId}/detail";
@@ -152,14 +150,6 @@ public class StoreController {
     @ModelAttribute("basketAddForm")
     public BasketAddForm basketAddForm() {
         return new BasketAddForm();
-    }
-
-    private void headerInfo(Model model, Member loginMember) {
-        List<NotificationDto> notifications = notificationQueryService.findNotifications(loginMember.getId());
-        BasketDto basket = basketQueryService.findBasket(loginMember.getId());
-
-        model.addAttribute("notifications", notifications);
-        model.addAttribute("basket", basket);
     }
 
     private static float[] getRatingPercent(List<Review> reviews, int[] ratingData) {

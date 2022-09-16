@@ -9,18 +9,14 @@ import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
 import project.delivery.controller.form.NicknameUpdateForm;
 import project.delivery.controller.form.PasswordUpdateForm;
-import project.delivery.domain.member.Member;
-import project.delivery.dto.BasketDto;
-import project.delivery.dto.NotificationDto;
+import project.delivery.dto.LoginMember;
 import project.delivery.exception.NoSuchException;
 import project.delivery.login.Login;
 import project.delivery.service.MemberService;
-import project.delivery.service.query.NotificationQueryService;
-import project.delivery.service.query.BasketQueryService;
+import project.delivery.service.query.MemberQueryService;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpSession;
-import java.util.List;
 
 @Slf4j
 @Controller
@@ -28,32 +24,34 @@ import java.util.List;
 @RequestMapping("/members")
 public class MemberController {
 
+    private final GlobalInformation globalInformation;
+
     private final MemberService memberService;
-    private final NotificationQueryService notificationQueryService;
-    private final BasketQueryService basketQueryService;
+    private final MemberQueryService memberQueryService;
 
     @GetMapping
     public String memberInfo(
-            @ModelAttribute("nicknameUpdateForm") NicknameUpdateForm changeNicknameForm,
-            @ModelAttribute("passwordUpdateForm") PasswordUpdateForm changePasswordForm,
-            @Login Member loginMember, Model model) {
-        headerInfo(loginMember, model);
-        changeNicknameForm.setNewNickname(loginMember.getNickname());
+            @ModelAttribute("nicknameUpdateForm") NicknameUpdateForm nicknameUpdateForm,
+            @ModelAttribute("passwordUpdateForm") PasswordUpdateForm passwordUpdateForm,
+            @Login LoginMember loginMember, Model model) {
+        globalInformation.headerInfo(loginMember, model);
+        nicknameUpdateForm.setNewNickname(loginMember.getNickname());
         return "member/updateMemberForm";
     }
 
     @PostMapping("/nickname")
     public String changeNickname(
-            @Validated @ModelAttribute NicknameUpdateForm changeNicknameForm,
+            @Validated @ModelAttribute NicknameUpdateForm form,
             BindingResult bindingResult,
-            @Login Member loginMember, Model model) {
+            HttpServletRequest request,
+            @Login LoginMember loginMember, Model model) {
 
         if (bindingResult.hasErrors()) {
             log.debug("폼 데이터 검증시 예외 발생: {}개", bindingResult.getErrorCount());
             return "member/updateMemberForm";
         }
 
-        String nickname = changeNicknameForm.getNewNickname();
+        String nickname = form.getNewNickname();
 
         if (loginMember.getNickname().equals(nickname)) {
             log.debug("기존 닉네임과 동일합니다");
@@ -63,9 +61,9 @@ public class MemberController {
 
         try {
             memberService.changeNickname(loginMember.getId(), nickname);
+            updateSession(request, loginMember.getId());
             log.debug("회원번호 {} 닉네임 변경: {} -> {}", loginMember.getId(), loginMember.getNickname(), nickname);
             log.info("회원번호 {} 닉네임 변경", loginMember.getId());
-            loginMember.changeNickname(nickname);
         } catch (NoSuchException e) {
             log.error("잘못된 접근이 발생하였습니다: {}", e.getMessage());
             return "redirect:/";
@@ -78,7 +76,8 @@ public class MemberController {
     public String changePassword(
             @Validated @ModelAttribute PasswordUpdateForm changePasswordForm,
             BindingResult bindingResult,
-            @Login Member loginMember, Model model) {
+            HttpServletRequest request,
+            @Login LoginMember loginMember, Model model) {
 
         String nowPassword = changePasswordForm.getNowPassword();
         String newPassword = changePasswordForm.getNewPassword();
@@ -102,6 +101,7 @@ public class MemberController {
 
         try {
             memberService.changePassword(loginMember.getId(), newPassword);
+            updateSession(request, loginMember.getId());
             log.debug("회원번호 {} 비밀번호 변경: {} -> {}", loginMember.getId(), nowPassword, newPassword);
             log.info("회원번호 {} 비밀번호 변경", loginMember.getId());
         } catch (NoSuchException e) {
@@ -113,7 +113,7 @@ public class MemberController {
     }
 
     @GetMapping("/delete")
-    public String deleteMember(@Login Member loginMember, HttpServletRequest request) {
+    public String deleteMember(@Login LoginMember loginMember, HttpServletRequest request) {
         try {
             memberService.deleteMember(loginMember.getId());
             log.info("회원번호 {} 탈퇴", loginMember.getId());
@@ -123,11 +123,6 @@ public class MemberController {
             log.error("잘못된 접근이 발생하였습니다: {}", e.getMessage());
         }
         return "redirect:/";
-    }
-
-    @ModelAttribute("loginMember")
-    public Member loginMember(@Login Member loginMember){
-        return loginMember;
     }
 
     @ModelAttribute("nicknameUpdateForm")
@@ -140,20 +135,16 @@ public class MemberController {
         return new PasswordUpdateForm();
     }
 
-    private void headerInfo(Member loginMember, Model model) {
-        //알림 조회
-        List<NotificationDto> notifications = notificationQueryService.findNotifications(loginMember.getId());
-        //장바구니 조회
-        BasketDto basket = basketQueryService.findBasket(loginMember.getId());
-
-        model.addAttribute("notifications", notifications);
-        model.addAttribute("basket", basket);
-    }
-
     private static void expiredSession(HttpServletRequest request) {
         HttpSession httpSession = request.getSession(false);
         if (httpSession != null) {
             httpSession.invalidate();
         }
+    }
+
+    private void updateSession(HttpServletRequest request, Long memberId) {
+        LoginMember findLoginMember = memberQueryService.findLoginMember(memberId);
+        HttpSession session = request.getSession();
+        session.setAttribute("loginMember", findLoginMember);
     }
 }

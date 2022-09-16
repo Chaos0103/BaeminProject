@@ -3,17 +3,19 @@ package project.delivery.service.query;
 import org.springframework.transaction.annotation.Transactional;
 import project.delivery.domain.member.Member;
 import project.delivery.dto.FindEmailDto;
+import project.delivery.dto.LoginMember;
 
 @Transactional(readOnly = true)
 public interface LoginQueryService {
 
     /**
      * 로그인
+     *
      * @param email
      * @param password
      * @return 회원 엔티티
      */
-    Member login(String email, String password);
+    LoginMember login(String email, String password);
 
     /**
      * 이메일(아이디)찾기

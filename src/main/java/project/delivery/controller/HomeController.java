@@ -5,7 +5,7 @@ import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
-import project.delivery.domain.member.Member;
+import project.delivery.dto.LoginMember;
 import project.delivery.login.Login;
 
 @Slf4j
@@ -19,7 +19,7 @@ public class HomeController {
      * @URL: localhost:8080
      */
     @GetMapping
-    public String mainHome(@Login Member loginMember, Model model) {
+    public String mainHome(@Login LoginMember loginMember, Model model) {
 
         if (loginMember == null) {
             return "home";

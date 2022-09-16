@@ -11,8 +11,8 @@ import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import project.delivery.controller.form.CouponSaveForm;
-import project.delivery.domain.member.Member;
 import project.delivery.dto.CouponDto;
+import project.delivery.dto.LoginMember;
 import project.delivery.exception.DuplicateException;
 import project.delivery.exception.NoSuchException;
 import project.delivery.login.Login;
@@ -36,7 +36,7 @@ public class CouponController {
      * @URL: localhost:8080/members/coupons
      */
     @GetMapping
-    public String couponHome(@Login Member loginMember, Model model) {
+    public String couponHome(@Login LoginMember loginMember, Model model) {
         globalInfo.headerInfo(loginMember, model);
         globalInfo.topInfo(loginMember, model);
 
@@ -58,7 +58,7 @@ public class CouponController {
     public String addCoupon(
             @Validated @ModelAttribute CouponSaveForm form,
             BindingResult bindingResult,
-            @Login Member loginMember, Model model) {
+            @Login LoginMember loginMember, Model model) {
 
         if (bindingResult.hasErrors()) {
             log.debug("CouponSaveForm 필드 에러 발생: {}개", bindingResult.getErrorCount());
