@@ -11,7 +11,6 @@ import project.delivery.domain.member.Member;
 import project.delivery.domain.member.Review;
 import project.delivery.domain.store.*;
 import project.delivery.dto.BasketDto;
-import project.delivery.dto.BasketMenuDto;
 import project.delivery.dto.NotificationDto;
 import project.delivery.dto.ReviewSearch;
 import project.delivery.login.Login;
@@ -153,12 +152,10 @@ public class StoreController {
     }
 
     private void headerInfo(Model model, Member loginMember) {
-        List<NotificationDto> notifications = notificationService.findNotificationByMemberId(loginMember.getId());
-        List<BasketMenuDto> basketMenus = basketService.findAllByMemberId(loginMember.getId());
-        BasketDto basket = basketService.findBasketDto(loginMember.getId());
+        List<NotificationDto> notifications = notificationService.findNotifications(loginMember.getId());
+        BasketDto basket = basketService.findBasket(loginMember.getId());
 
         model.addAttribute("notifications", notifications);
-        model.addAttribute("basketMenus", basketMenus);
         model.addAttribute("basket", basket);
     }
 

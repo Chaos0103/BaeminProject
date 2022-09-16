@@ -1,7 +1,7 @@
 <!DOCTYPE html>
 <html lang="ko" xmlns:th="http://www.thymeleaf.org">
 <!-- 장바구니 -->
-<section th:fragment="basket (basket, basketMenus)">
+<section th:fragment="basket (basket)">
     <div class="modal fade" id="cartList" data-bs-keyboard="false" tabindex="-1" aria-labelledby="staticBackdropLabel" aria-hidden="true">
         <div class="modal-dialog">
             <div class="modal-content">
@@ -23,7 +23,7 @@
                             </div>
                         </div>
                         <!-- 주문 내역 -->
-                        <div class="card mt-3" th:each="basketMenu : ${basketMenus}">
+                        <div class="card mt-3" th:each="basketMenu : ${basket.basketMenus}">
                             <div class="card-body">
                                 <div class="row mb-3">
                                     <div class="col fw-bolder" th:text="${basketMenu.menuMainTitle}">
@@ -36,7 +36,7 @@
                                 <div class="row">
                                     <div class="col">
                                         <div class="d-flex position-relative">
-                                            <img src="https://via.placeholder.com/100x100" th:src="${basketMenu.storeFileName}" class="flex-shrink-0 border" alt="img" style="height: 100px;">
+                                            <img src="https://via.placeholder.com/100x100" th:src="${basketMenu.menuStoreFileName}" class="flex-shrink-0 border" alt="img" style="height: 100px;">
                                             <div>
                                                 <ul class="text-muted fs-custom">
                                                     <li th:if="${basketMenu.optionName} == null">가격 : <span th:text="|${#numbers.formatInteger(basketMenu.optionPrice, 0, 'COMMA')}원|">22,000원</span></li>

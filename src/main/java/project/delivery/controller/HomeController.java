@@ -7,7 +7,6 @@ import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
 import project.delivery.domain.member.Member;
 import project.delivery.dto.BasketDto;
-import project.delivery.dto.BasketMenuDto;
 import project.delivery.dto.NotificationDto;
 import project.delivery.login.Login;
 import project.delivery.service.BasketService;
@@ -30,12 +29,10 @@ public class HomeController {
             return "home";
         }
 
-        List<NotificationDto> notifications = notificationService.findNotificationByMemberId(loginMember.getId());
-        List<BasketMenuDto> basketMenus = basketService.findAllByMemberId(loginMember.getId());
-        BasketDto basket = basketService.findBasketDto(loginMember.getId());
+        List<NotificationDto> notifications = notificationService.findNotifications(loginMember.getId());
+        BasketDto basket = basketService.findBasket(loginMember.getId());
 
         model.addAttribute("notifications", notifications);
-        model.addAttribute("basketMenus", basketMenus);
         model.addAttribute("basket", basket);
         return "loginHome";
     }

@@ -9,9 +9,9 @@ import java.util.List;
 public interface NotificationService {
 
     /**
-     * 3일 전 알림까지 조회 가능
-     * @param memberId
-     * @return 회원의 알림 리스트
+     * 3일 전 알림까지 조회하는 로직
+     * @param memberId 조회할 회원의 id
+     * @return NotificationDto
      */
-    List<NotificationDto> findNotificationByMemberId(Long memberId);
+    List<NotificationDto> findNotifications(Long memberId);
 }

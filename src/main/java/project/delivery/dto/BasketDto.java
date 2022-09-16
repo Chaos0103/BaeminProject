@@ -1,15 +1,22 @@
 package project.delivery.dto;
 
-import lombok.AllArgsConstructor;
 import lombok.Data;
-import lombok.NoArgsConstructor;
+import project.delivery.domain.basket.Basket;
+
+import java.util.List;
 
 @Data
-@NoArgsConstructor
-@AllArgsConstructor
 public class BasketDto {
 
     private Long basketId;
     private String storeName;
     private String storeFileName;
+    private List<BasketMenuDto> basketMenus;
+
+    public BasketDto(Basket basket, List<BasketMenuDto> basketMenus) {
+        this.basketId = basket.getId();
+        this.storeName = basket.getStore().getStoreName();
+        this.storeFileName = basket.getStore().getStoreIcon().getStoreFileName();
+        this.basketMenus = basketMenus;
+    }
 }

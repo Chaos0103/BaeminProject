@@ -28,7 +28,7 @@ public class BasketServiceImplV0 implements BasketService {
 
     @Override
     public Long addBasket(Long memberId, Long storeId, Long menuOptionId, List<Long> menuSubOptionIds, Integer count) {
-        Basket basket = findBasket(memberId);
+        Basket basket = basketRepository.findByMemberId(memberId);
 
         MenuOption menuOption = findMenuOption(menuOptionId);
         List<MenuSubOption> menuSubOptions = findMenuSubOptions(menuSubOptionIds);
@@ -68,18 +68,22 @@ public class BasketServiceImplV0 implements BasketService {
     }
 
     @Override
-    public List<BasketMenuDto> findAllByMemberId(Long memberId) {
-        return basketRepository.findBasketMenuByMemberId(memberId);
-    }
-
-    @Override
-    public BasketDto findBasketDto(Long memberId) {
-        return basketRepository.findStoreInfo(memberId);
-    }
-
-    @Override
     public Basket findBasketById(Long basketId) {
         return basketRepository.findBasketById(basketId);
+    }
+
+    @Override
+    public BasketDto findBasket(Long memberId) {
+        Basket findBasket = basketRepository.findWithStore(memberId);
+        List<Long> ids = findBasket.getBasketMenus().stream()
+                .map(BasketMenu::getId)
+                .toList();
+        List<BasketMenu> basketMenus = basketRepository.findBasketMenus(ids);
+
+        List<BasketMenuDto> basketMenuDtos = basketMenus.stream()
+                .map(BasketMenuDto::new)
+                .toList();
+        return new BasketDto(findBasket, basketMenuDtos);
     }
 
     private Member findMember(Long memberId) {
@@ -118,7 +122,5 @@ public class BasketServiceImplV0 implements BasketService {
         return orderPrice;
     }
 
-    private Basket findBasket(Long memberId) {
-        return basketRepository.findByMemberId(memberId);
-    }
+
 }

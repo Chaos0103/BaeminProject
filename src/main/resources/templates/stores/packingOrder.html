@@ -6,7 +6,7 @@
 <body>
 <header th:replace="fragments/loginHeader::loginHeader"></header>
 <section th:replace="fragments/notifications::notifications(${notifications})"></section>
-<section th:replace="stores/fragments/basket::basket(${basket}, ${basketMenus})"></section>
+<section th:replace="stores/fragments/basket::basket(${basket})"></section>
 
 <article>
     <form class="container px-4 py-3 w-50 border rounded mt-3 bg-sub" method="post" th:action>

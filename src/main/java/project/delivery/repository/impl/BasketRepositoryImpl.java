@@ -1,22 +1,19 @@
 package project.delivery.repository.impl;
 
-import com.querydsl.core.types.Projections;
 import com.querydsl.jpa.impl.JPAQueryFactory;
-import project.delivery.domain.QStore;
-import project.delivery.domain.QStoreImage;
+import project.delivery.domain.basket.Basket;
 import project.delivery.domain.basket.BasketMenu;
-import project.delivery.dto.BasketDto;
-import project.delivery.dto.BasketMenuDto;
 import project.delivery.repository.custom.BasketRepositoryCustom;
 
 import javax.persistence.EntityManager;
 import java.util.List;
 
+import static project.delivery.domain.QDeliveryInfo.*;
 import static project.delivery.domain.QMenu.*;
 import static project.delivery.domain.QMenuOption.*;
 import static project.delivery.domain.QMenuSubOption.*;
+import static project.delivery.domain.QPackingInfo.*;
 import static project.delivery.domain.QStore.*;
-import static project.delivery.domain.QStoreImage.*;
 import static project.delivery.domain.basket.QBasket.*;
 import static project.delivery.domain.basket.QBasketMenu.*;
 import static project.delivery.domain.basket.QBasketSubOptionInfo.*;
@@ -29,37 +26,8 @@ public class BasketRepositoryImpl implements BasketRepositoryCustom {
         this.queryFactory = new JPAQueryFactory(em);
     }
 
-
     @Override
-    public List<BasketMenuDto> findBasketMenuByMemberId(Long memberId) {
-
-        List<Long> ids = queryFactory
-                .select(basketMenu.id)
-                .from(basketMenu)
-                .join(basketMenu.basket, basket)
-                .where(basket.member.id.eq(memberId))
-                .fetch();
-
-
-        return queryFactory
-                .select(Projections.fields(BasketMenuDto.class,
-                        basketMenu.id.as("basketMenuId"),
-                        menu.mainTitle.as("menuMainTitle"),
-                        menu.uploadFile.storeFileName,
-                        menuOption.optionName,
-                        menuOption.price.as("optionPrice"),
-                        basketMenu.orderPrice))
-                .from(basketMenu)
-                .join(basketMenu.menuOption, menuOption)
-                .join(menuOption.menu, menu)
-                .leftJoin(basketMenu.basketSubOptionInfos, basketSubOptionInfo)
-                .join(basketSubOptionInfo.menuSubOption, menuSubOption)
-                .where(basketMenu.id.in(ids))
-                .fetch();
-    }
-
-    @Override
-    public List<BasketMenu> findBasketMenus(Long basketId) {
+    public List<BasketMenu> findBasketMenusdd(Long basketId) {
         return queryFactory
                 .selectFrom(basketMenu)
                 .join(basketMenu.menuOption, menuOption)
@@ -71,20 +39,6 @@ public class BasketRepositoryImpl implements BasketRepositoryCustom {
     }
 
     @Override
-    public BasketDto findStoreInfo(Long memberId) {
-        return queryFactory
-                .select(Projections.fields(BasketDto.class,
-                        basket.id.as("basketId"),
-                        store.storeName))
-                .from(basket)
-                .join(basket.store, store)
-                .where(
-                        basket.member.id.eq(memberId)
-                )
-                .fetchOne();
-    }
-
-    @Override
     public BasketMenu findBasketMenuById(Long basketMenuId) {
         return queryFactory
                 .selectFrom(basketMenu)
@@ -92,5 +46,30 @@ public class BasketRepositoryImpl implements BasketRepositoryCustom {
                 .leftJoin(basketMenu.basketSubOptionInfos, basketSubOptionInfo).fetchJoin()
                 .where(basketMenu.id.eq(basketMenuId))
                 .fetchOne();
+    }
+
+    @Override
+    public Basket findWithStore(Long memberId) {
+        return queryFactory
+                .select(basket).distinct()
+                .from(basket)
+                .join(basket.store, store).fetchJoin()
+                .join(store.deliveryInfo, deliveryInfo).fetchJoin()
+                .join(store.packingInfo, packingInfo).fetchJoin()
+                .join(basket.basketMenus, basketMenu).fetchJoin()
+                .where(basket.member.id.eq(memberId))
+                .fetchOne();
+    }
+
+    @Override
+    public List<BasketMenu> findBasketMenus(List<Long> ids) {
+        return queryFactory
+                .select(basketMenu).distinct()
+                .from(basketMenu)
+                .join(basketMenu.menuOption, menuOption).fetchJoin()
+                .join(menuOption.menu, menu).fetchJoin()
+                .leftJoin(basketMenu.basketSubOptionInfos, basketSubOptionInfo).fetchJoin()
+                .where(basketMenu.id.in(ids))
+                .fetch();
     }
 }

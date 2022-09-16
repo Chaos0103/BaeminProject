@@ -1,18 +1,17 @@
 package project.delivery.repository.custom;
 
+import project.delivery.domain.basket.Basket;
 import project.delivery.domain.basket.BasketMenu;
-import project.delivery.dto.BasketDto;
-import project.delivery.dto.BasketMenuDto;
 
 import java.util.List;
 
 public interface BasketRepositoryCustom {
 
-    List<BasketMenuDto> findBasketMenuByMemberId(Long memberId);
-
-    List<BasketMenu> findBasketMenus(Long basketId);
-
-    BasketDto findStoreInfo(Long memberId);
+    List<BasketMenu> findBasketMenusdd(Long basketId);
 
     BasketMenu findBasketMenuById(Long basketMenuId);
+
+    Basket findWithStore(Long memberId);
+
+    List<BasketMenu> findBasketMenus(List<Long> ids);
 }

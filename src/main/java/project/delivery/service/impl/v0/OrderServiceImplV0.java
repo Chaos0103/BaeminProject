@@ -43,7 +43,7 @@ public class OrderServiceImplV0 implements OrderService {
         Member member = findMember(memberId);
         Basket basket = findBasket(memberId);
 
-        List<BasketMenu> basketMenus = basketRepository.findBasketMenus(basket.getId());
+        List<BasketMenu> basketMenus = basketRepository.findBasketMenusdd(basket.getId());
         List<MenuOrder> menuOrders = getMenuOrders(basketMenus);
 
         Payment payment;

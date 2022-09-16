@@ -16,9 +16,7 @@ public interface BasketService {
     @Transactional
     Long removeBasketMenu(Long basketMenuId);
 
-    List<BasketMenuDto> findAllByMemberId(Long memberId);
-
-    BasketDto findBasketDto(Long memberId);
-
     Basket findBasketById(Long basketId);
+
+    BasketDto findBasket(Long memberId);
 }

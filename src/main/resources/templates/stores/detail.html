@@ -6,7 +6,7 @@
 <body>
 <header th:replace="fragments/loginHeader::loginHeader"></header>
 <section th:replace="fragments/notifications::notifications(${notifications})"></section>
-<section th:replace="stores/fragments/basket::basket(${basket}, ${basketMenus})"></section>
+<section th:replace="stores/fragments/basket::basket(${basket})"></section>
 
 <div onclick="scrollToTop()" id="top-btn" style="position: fixed; cursor: pointer;" class="border bottom-0 end-0 m-4 p-2">top</div>
 <article>

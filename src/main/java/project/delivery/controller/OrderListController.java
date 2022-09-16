@@ -57,13 +57,11 @@ public class OrderListController {
 
     private void headerInfo(Member loginMember, Model model) {
         //알림 조회
-        List<NotificationDto> notifications = notificationService.findNotificationByMemberId(loginMember.getId());
+        List<NotificationDto> notifications = notificationService.findNotifications(loginMember.getId());
         //장바구니 조회
-        List<BasketMenuDto> basketMenus = basketService.findAllByMemberId(loginMember.getId());
-        BasketDto basket = basketService.findBasketDto(loginMember.getId());
+        BasketDto basket = basketService.findBasket(loginMember.getId());
 
         model.addAttribute("notifications", notifications);
-        model.addAttribute("basketMenus", basketMenus);
         model.addAttribute("basket", basket);
     }
 
