@@ -24,14 +24,13 @@ public class ReviewController {
     private final GlobalInformation globalInformation;
 
     private final ReviewService reviewService;
-
     private final ReviewQueryService reviewQueryService;
 
+    // TODO: 2022/09/17 DTO로 변경하는 작업 진행
     @GetMapping("/reviewable")
     public String reviewable(@Login LoginMember loginMember, Model model) {
-        globalInformation.headerInfo(loginMember, model);
-        globalInformation.topInfo(loginMember, model);
-        List<Order> orders = reviewQueryService.findReviewableByMemberId(loginMember.getId());
+        information(loginMember, model);
+        List<Order> orders = reviewQueryService.findReviewable(loginMember.getId());
         model.addAttribute("orders", orders);
         return "member/review/reviewable";
     }
@@ -47,9 +46,8 @@ public class ReviewController {
 
     @GetMapping("/wroteReviews")
     public String wroteReviews(@Login LoginMember loginMember, Model model) {
-        globalInformation.headerInfo(loginMember, model);
-        globalInformation.topInfo(loginMember, model);
-        List<Review> reviews = reviewQueryService.findWroteReviewsByMemberId(loginMember.getId());
+        information(loginMember, model);
+        List<Review> reviews = reviewQueryService.findWroteReviews(loginMember.getId());
         model.addAttribute("reviews", reviews);
         return "member/review/wroteReviews";
     }
@@ -57,5 +55,10 @@ public class ReviewController {
     @ModelAttribute("reviewAddForm")
     public ReviewAddForm reviewAddForm() {
         return new ReviewAddForm();
+    }
+
+    private void information(LoginMember loginMember, Model model) {
+        globalInformation.headerInfo(loginMember, model);
+        globalInformation.topInfo(loginMember, model);
     }
 }

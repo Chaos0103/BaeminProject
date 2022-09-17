@@ -17,17 +17,17 @@ public class ReviewQueryServiceImpl implements ReviewQueryService {
     private final ReviewRepository reviewRepository;
 
     @Override
-    public List<Review> findAllByStoreId(ReviewSearch search) {
+    public List<Review> findAll(ReviewSearch search) {
         return reviewRepository.findAllByStoreId(search);
     }
 
     @Override
-    public List<Order> findReviewableByMemberId(Long memberId) {
+    public List<Order> findReviewable(Long memberId) {
         return reviewRepository.findReviewableByMemberId(memberId);
     }
 
     @Override
-    public List<Review> findWroteReviewsByMemberId(Long memberId) {
+    public List<Review> findWroteReviews(Long memberId) {
         return reviewRepository.findWroteReviewsByMemberId(memberId);
     }
 }

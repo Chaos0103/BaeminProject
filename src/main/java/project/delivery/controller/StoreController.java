@@ -91,7 +91,7 @@ public class StoreController {
         List<MenuOption> menuOptions = menuQueryService.findMenuOptionByMenuIds(menuIds);
         List<MenuSubCategory> menuSubOptionCategorise = menuQueryService.findMenuSubOptionCategory(menuIds);
 
-        List<Review> reviews = reviewQueryService.findAllByStoreId(new ReviewSearch(storeId, false, "recent"));
+        List<Review> reviews = reviewQueryService.findAll(new ReviewSearch(storeId, false, "recent"));
 
         int[] ratingData = getRatingData(reviews);
         float[] ratingPercent = getRatingPercent(reviews, ratingData);
@@ -120,7 +120,7 @@ public class StoreController {
 
     @GetMapping("/review")
     public String searchReview(@ModelAttribute ReviewSearch search, Model model) {
-        List<Review> reviews = reviewQueryService.findAllByStoreId(search);
+        List<Review> reviews = reviewQueryService.findAll(search);
         model.addAttribute("reviews", reviews);
         return "/stores/detail :: #review";
     }

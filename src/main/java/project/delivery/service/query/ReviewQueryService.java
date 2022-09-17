@@ -10,9 +10,9 @@ import java.util.List;
 @Transactional(readOnly = true)
 public interface ReviewQueryService {
 
-    List<Review> findAllByStoreId(ReviewSearch search);
+    List<Review> findAll(ReviewSearch search);
 
-    List<Order> findReviewableByMemberId(Long memberId);
+    List<Order> findReviewable(Long memberId);
 
-    List<Review> findWroteReviewsByMemberId(Long memberId);
+    List<Review> findWroteReviews(Long memberId);
 }
