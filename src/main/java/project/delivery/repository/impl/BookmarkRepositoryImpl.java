@@ -7,11 +7,11 @@ import project.delivery.repository.custom.BookmarkRepositoryCustom;
 import javax.persistence.EntityManager;
 import java.util.List;
 
-import static project.delivery.domain.QBookmark.*;
-import static project.delivery.domain.QDeliveryInfo.*;
-import static project.delivery.domain.QPackingInfo.*;
-import static project.delivery.domain.QStore.*;
-import static project.delivery.domain.QStoreImage.*;
+import static project.delivery.domain.member.QBookmark.*;
+import static project.delivery.domain.store.QDeliveryInfo.*;
+import static project.delivery.domain.store.QPackingInfo.*;
+import static project.delivery.domain.store.QStore.*;
+import static project.delivery.domain.store.QStoreImage.*;
 
 public class BookmarkRepositoryImpl implements BookmarkRepositoryCustom {
 

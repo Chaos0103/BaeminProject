@@ -12,11 +12,11 @@ import javax.persistence.EntityManager;
 import java.time.LocalDateTime;
 import java.util.List;
 
-import static project.delivery.domain.QDeliveryInfo.*;
-import static project.delivery.domain.QMember.*;
-import static project.delivery.domain.QPackingInfo.*;
-import static project.delivery.domain.QReview.*;
-import static project.delivery.domain.QStore.*;
+import static project.delivery.domain.store.QDeliveryInfo.*;
+import static project.delivery.domain.member.QMember.*;
+import static project.delivery.domain.store.QPackingInfo.*;
+import static project.delivery.domain.member.QReview.*;
+import static project.delivery.domain.store.QStore.*;
 import static project.delivery.domain.order.QDelivery.*;
 import static project.delivery.domain.order.QOrder.*;
 

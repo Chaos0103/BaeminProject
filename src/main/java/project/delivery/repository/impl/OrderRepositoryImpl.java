@@ -1,19 +1,17 @@
 package project.delivery.repository.impl;
 
 import com.querydsl.jpa.impl.JPAQueryFactory;
-import project.delivery.domain.QDeliveryInfo;
-import project.delivery.domain.QPackingInfo;
 import project.delivery.domain.order.Order;
 import project.delivery.repository.custom.OrderRepositoryCustom;
 
 import javax.persistence.EntityManager;
 import java.util.List;
 
-import static project.delivery.domain.QDeliveryInfo.*;
-import static project.delivery.domain.QMenu.*;
-import static project.delivery.domain.QMenuOption.*;
-import static project.delivery.domain.QPackingInfo.*;
-import static project.delivery.domain.QStore.*;
+import static project.delivery.domain.store.QDeliveryInfo.*;
+import static project.delivery.domain.store.QMenu.*;
+import static project.delivery.domain.store.QMenuOption.*;
+import static project.delivery.domain.store.QPackingInfo.*;
+import static project.delivery.domain.store.QStore.*;
 import static project.delivery.domain.order.QDelivery.*;
 import static project.delivery.domain.order.QMenuOrder.*;
 import static project.delivery.domain.order.QOrder.*;

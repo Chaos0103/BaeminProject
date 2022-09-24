@@ -8,15 +8,15 @@ import project.delivery.repository.custom.BasketRepositoryCustom;
 import javax.persistence.EntityManager;
 import java.util.List;
 
-import static project.delivery.domain.QDeliveryInfo.*;
-import static project.delivery.domain.QMenu.*;
-import static project.delivery.domain.QMenuOption.*;
-import static project.delivery.domain.QMenuSubOption.*;
-import static project.delivery.domain.QPackingInfo.*;
-import static project.delivery.domain.QStore.*;
 import static project.delivery.domain.basket.QBasket.*;
 import static project.delivery.domain.basket.QBasketMenu.*;
 import static project.delivery.domain.basket.QBasketSubOptionInfo.*;
+import static project.delivery.domain.store.QDeliveryInfo.*;
+import static project.delivery.domain.store.QMenu.*;
+import static project.delivery.domain.store.QMenuOption.*;
+import static project.delivery.domain.store.QMenuSubOption.*;
+import static project.delivery.domain.store.QPackingInfo.*;
+import static project.delivery.domain.store.QStore.*;
 
 public class BasketRepositoryImpl implements BasketRepositoryCustom {
 

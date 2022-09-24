@@ -11,7 +11,7 @@ import java.time.LocalDateTime;
 import java.util.List;
 
 import static com.querydsl.core.types.Projections.*;
-import static project.delivery.domain.QPointHistory.*;
+import static project.delivery.domain.point.QPointHistory.*;
 
 public class PointRepositoryImpl implements PointRepositoryCustom {
 

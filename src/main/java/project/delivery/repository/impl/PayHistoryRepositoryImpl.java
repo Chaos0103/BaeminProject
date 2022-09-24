@@ -8,7 +8,7 @@ import project.delivery.repository.custom.PayHistoryRepositoryCustom;
 import javax.persistence.EntityManager;
 import java.util.List;
 
-import static project.delivery.domain.QPayHistory.*;
+import static project.delivery.domain.pay.QPayHistory.*;
 
 public class PayHistoryRepositoryImpl implements PayHistoryRepositoryCustom {
 

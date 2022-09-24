@@ -1,7 +1,6 @@
 package project.delivery.repository.impl;
 
 import com.querydsl.jpa.impl.JPAQueryFactory;
-import project.delivery.domain.QStoreImage;
 import project.delivery.domain.store.Category;
 import project.delivery.domain.store.DeliveryInfo;
 import project.delivery.domain.store.Store;
@@ -10,11 +9,11 @@ import project.delivery.repository.custom.StoreRepositoryCustom;
 import javax.persistence.EntityManager;
 import java.util.List;
 
-import static project.delivery.domain.QDeliveryInfo.*;
-import static project.delivery.domain.QDeliveryTipByAmount.*;
-import static project.delivery.domain.QPackingInfo.*;
-import static project.delivery.domain.QStore.*;
-import static project.delivery.domain.QStoreImage.*;
+import static project.delivery.domain.store.QDeliveryInfo.*;
+import static project.delivery.domain.store.QDeliveryTipByAmount.*;
+import static project.delivery.domain.store.QPackingInfo.*;
+import static project.delivery.domain.store.QStore.*;
+import static project.delivery.domain.store.QStoreImage.*;
 
 public class StoreRepositoryImpl implements StoreRepositoryCustom {
 
